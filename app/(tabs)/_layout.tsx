@@ -20,18 +20,13 @@ const tabConfig: TabConfig[] = [
     icon: 'house.fill',
   },
   {
-    name: 'explore',
-    title: 'Explore',
-    icon: 'paperplane.fill',
-  },
-  {
-    name: 'sign-in',
-    title: 'Sign In',
-    icon: 'person.fill',
+    name: 'invoice-report',
+    title: '發票報表',
+    icon: 'doc.text.fill',
   },
   {
     name: 'scan',
-    title: 'Scan',
+    title: '掃描發票',
     icon: 'camera.fill',
   },
 ]
