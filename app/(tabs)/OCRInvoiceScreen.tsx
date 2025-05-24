@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { launchCamera } from 'react-native-image-picker';
 import MlkitOcr from 'react-native-mlkit-ocr';
 
@@ -9,7 +17,7 @@ const OCRInvoiceScreen = () => {
   const [rawText, setRawText] = useState<string>('');
 
   const handleTakePhoto = () => {
-    launchCamera({ mediaType: 'photo' }, async (response) => {
+    launchCamera({ mediaType: 'photo' }, async response => {
       if (response.assets && response.assets.length > 0) {
         const uri = response.assets[0].uri;
         setImageUri(uri);
@@ -21,7 +29,7 @@ const OCRInvoiceScreen = () => {
   const runOcr = async (uri: string) => {
     try {
       const results = await MlkitOcr.detectFromUri(uri);
-      const fullText = results.map((block) => block.text).join('\n');
+      const fullText = results.map(block => block.text).join('\n');
       setRawText(fullText);
       const parsed = parseInvoiceText(fullText);
       setInvoiceData(parsed);
@@ -32,8 +40,11 @@ const OCRInvoiceScreen = () => {
 
   const parseInvoiceText = (text: string) => {
     const companyMatch = text.match(/公司[:：]?\s*(.+)/);
-    const dateMatch = text.match(/(日期|開立日期)[:：]?\s*(\d{4}[-\/.]\d{1,2}[-\/.]\d{1,2})/);
-    const itemRegex = /項目[:：]?\s*(.+?)\s+數量[:：]?\s*(\d+)\s+單價[:：]?\s*(\d+)\s+總價[:：]?\s*(\d+)/g;
+    const dateMatch = text.match(
+      /(日期|開立日期)[:：]?\s*(\d{4}[-\/.]\d{1,2}[-\/.]\d{1,2})/
+    );
+    const itemRegex =
+      /項目[:：]?\s*(.+?)\s+數量[:：]?\s*(\d+)\s+單價[:：]?\s*(\d+)\s+總價[:：]?\s*(\d+)/g;
 
     const items = [];
     let match;
@@ -68,10 +79,26 @@ const OCRInvoiceScreen = () => {
           <Text>項目：</Text>
           {invoiceData.items.map((item: any, idx: number) => (
             <View key={idx} style={styles.itemBlock}>
-              <TextInput value={item.name} style={styles.input} placeholder="名稱" />
-              <TextInput value={item.quantity.toString()} style={styles.input} placeholder="數量" />
-              <TextInput value={item.unit_price.toString()} style={styles.input} placeholder="單價" />
-              <TextInput value={item.total.toString()} style={styles.input} placeholder="總價" />
+              <TextInput
+                value={item.name}
+                style={styles.input}
+                placeholder="名稱"
+              />
+              <TextInput
+                value={item.quantity.toString()}
+                style={styles.input}
+                placeholder="數量"
+              />
+              <TextInput
+                value={item.unit_price.toString()}
+                style={styles.input}
+                placeholder="單價"
+              />
+              <TextInput
+                value={item.total.toString()}
+                style={styles.input}
+                placeholder="總價"
+              />
             </View>
           ))}
         </View>
@@ -91,7 +118,11 @@ const styles = StyleSheet.create({
   image: { width: '100%', height: 300, marginVertical: 12 },
   result: { marginTop: 20 },
   input: {
-    borderWidth: 1, borderColor: '#ccc', padding: 6, marginBottom: 8, borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 6,
+    marginBottom: 8,
+    borderRadius: 6,
   },
   itemBlock: { marginBottom: 16 },
 });

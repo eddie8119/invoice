@@ -38,7 +38,11 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
 }) => {
   const [editedData, setEditedData] = useState<InvoiceData>(data);
 
-  const updateItem = (index: number, field: keyof InvoiceItem, value: string) => {
+  const updateItem = (
+    index: number,
+    field: keyof InvoiceItem,
+    value: string
+  ) => {
     const newItems = [...editedData.items];
     const item = { ...newItems[index] };
 
@@ -52,7 +56,7 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
     }
 
     newItems[index] = item;
-    
+
     setEditedData({
       ...editedData,
       items: newItems,
@@ -65,14 +69,14 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
       <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>確認發票資訊</Text>
-          
+
           <ScrollView style={styles.scrollView}>
             <View style={styles.section}>
               <Text style={styles.label}>公司名稱:</Text>
               <TextInput
                 style={styles.input}
                 value={editedData.companyName}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   setEditedData({ ...editedData, companyName: text })
                 }
               />
@@ -83,7 +87,7 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
               <TextInput
                 style={styles.input}
                 value={editedData.date}
-                onChangeText={(text) =>
+                onChangeText={text =>
                   setEditedData({ ...editedData, date: text })
                 }
               />
@@ -95,14 +99,14 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
                 <TextInput
                   style={styles.itemInput}
                   value={item.name}
-                  onChangeText={(text) => updateItem(index, 'name', text)}
+                  onChangeText={text => updateItem(index, 'name', text)}
                   placeholder="項目名稱"
                 />
                 <View style={styles.itemDetails}>
                   <TextInput
                     style={styles.numberInput}
                     value={item.amount.toString()}
-                    onChangeText={(text) => updateItem(index, 'amount', text)}
+                    onChangeText={text => updateItem(index, 'amount', text)}
                     keyboardType="numeric"
                     placeholder="單價"
                   />
@@ -110,7 +114,7 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
                   <TextInput
                     style={styles.numberInput}
                     value={item.quantity.toString()}
-                    onChangeText={(text) => updateItem(index, 'quantity', text)}
+                    onChangeText={text => updateItem(index, 'quantity', text)}
                     keyboardType="numeric"
                     placeholder="數量"
                   />

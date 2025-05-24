@@ -42,7 +42,7 @@ export default function InvoiceReportScreen() {
       <View style={styles.header}>
         <Text style={styles.title}>發票報表</Text>
       </View>
-      {mockInvoices.map((invoice) => (
+      {mockInvoices.map(invoice => (
         <View key={invoice.id} style={styles.invoiceCard}>
           <View style={styles.invoiceHeader}>
             <Text style={styles.companyName}>{invoice.companyName}</Text>
@@ -60,7 +60,12 @@ export default function InvoiceReportScreen() {
           </View>
           <View style={styles.footer}>
             <Text style={styles.total}>總計: ${invoice.totalAmount}</Text>
-            <Text style={[styles.status, invoice.paid ? styles.paid : styles.unpaid]}>
+            <Text
+              style={[
+                styles.status,
+                invoice.paid ? styles.paid : styles.unpaid,
+              ]}
+            >
               {invoice.paid ? '已付款' : '未付款'}
             </Text>
           </View>

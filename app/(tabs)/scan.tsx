@@ -34,38 +34,34 @@ export default function ScanScreen() {
   const processImage = async (uri: string) => {
     try {
       setProcessing(true);
-      
+
       // Optimize image for OCR
       const manipulatedImage = await ImageManipulator.manipulateAsync(
         uri,
-        [
-          { resize: { width: 1200 } },
-          { grayscale: true },
-          { contrast: 1.5 },
-        ],
+        [{ resize: { width: 1200 } }, { grayscale: true }, { contrast: 1.5 }],
         { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
       );
 
       // Mock OCR result for testing
       // In production, you would integrate with a real OCR service
       const mockData: InvoiceData = {
-        companyName: "測試公司",
+        companyName: '測試公司',
         date: new Date().toISOString().split('T')[0],
         items: [
           {
-            name: "測試商品",
+            name: '測試商品',
             amount: 100,
             quantity: 2,
-            totalPrice: 200
-          }
+            totalPrice: 200,
+          },
         ],
-        totalAmount: 200
+        totalAmount: 200,
       };
 
       setScannedData(mockData);
       router.push({
         pathname: '/confirm-invoice',
-        params: { data: JSON.stringify(mockData) }
+        params: { data: JSON.stringify(mockData) },
       });
     } catch (error) {
       console.error('Error processing image:', error);
@@ -95,7 +91,7 @@ export default function ScanScreen() {
       </View>
     );
   }
-  
+
   if (hasPermission === false) {
     return (
       <View style={styles.container}>
@@ -119,9 +115,7 @@ export default function ScanScreen() {
             <View style={styles.cornerBL} />
             <View style={styles.cornerBR} />
           </View>
-          <Text style={styles.guideText}>
-            請將發票對準框框內
-          </Text>
+          <Text style={styles.guideText}>請將發票對準框框內</Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity

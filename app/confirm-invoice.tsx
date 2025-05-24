@@ -1,6 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface InvoiceItem {
   name: string;
@@ -51,7 +57,7 @@ export default function ConfirmInvoicePage() {
     <ScrollView style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.title}>確認發票資訊</Text>
-        
+
         <View style={styles.section}>
           <Text style={styles.label}>公司名稱</Text>
           <Text style={styles.value}>{invoiceData.companyName}</Text>
@@ -68,15 +74,9 @@ export default function ConfirmInvoicePage() {
             <View key={index} style={styles.itemCard}>
               <Text style={styles.itemName}>{item.name}</Text>
               <View style={styles.itemDetails}>
-                <Text style={styles.itemText}>
-                  單價: ${item.amount}
-                </Text>
-                <Text style={styles.itemText}>
-                  數量: {item.quantity}
-                </Text>
-                <Text style={styles.itemText}>
-                  小計: ${item.totalPrice}
-                </Text>
+                <Text style={styles.itemText}>單價: ${item.amount}</Text>
+                <Text style={styles.itemText}>數量: {item.quantity}</Text>
+                <Text style={styles.itemText}>小計: ${item.totalPrice}</Text>
               </View>
             </View>
           ))}

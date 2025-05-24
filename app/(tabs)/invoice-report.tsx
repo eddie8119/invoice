@@ -10,16 +10,16 @@ interface InvoiceItem {
 const invoiceData: InvoiceItem[] = [
   { month: '2020/10', amount: 0 },
   { month: '2020/09', amount: 1085.37 },
-  { month: '2020/08', amount: 205.00 },
-  { month: '2020/07', amount: 130727.30 },
-  { month: '2020/06', amount: 8511.00 },
-  { month: '2020/05', amount: 253377.00 },
-  { month: '2020/04', amount: 5600.00 },
-  { month: '2020/03', amount: 110.00 },
+  { month: '2020/08', amount: 205.0 },
+  { month: '2020/07', amount: 130727.3 },
+  { month: '2020/06', amount: 8511.0 },
+  { month: '2020/05', amount: 253377.0 },
+  { month: '2020/04', amount: 5600.0 },
+  { month: '2020/03', amount: 110.0 },
   { month: '2020/02', amount: 0 },
   { month: '2020/01', amount: 0 },
   { month: '2019/12', amount: 0 },
-  { month: '2019/11', amount: 1208.90 },
+  { month: '2019/11', amount: 1208.9 },
 ];
 
 export default function InvoiceReport() {
@@ -29,9 +29,7 @@ export default function InvoiceReport() {
   const renderItem = ({ item }: { item: InvoiceItem }) => (
     <View style={styles.invoiceItem}>
       <Text style={styles.month}>{item.month}</Text>
-      <Text style={styles.amount}>
-        ${item.amount.toFixed(2)}
-      </Text>
+      <Text style={styles.amount}>${item.amount.toFixed(2)}</Text>
     </View>
   );
 
@@ -44,7 +42,7 @@ export default function InvoiceReport() {
           headerStyle: { backgroundColor: '#FFF5F5' },
         }}
       />
-      
+
       <View style={styles.header}>
         <Text style={styles.dateRange}>1 Nov, 2019 - 31 Oct, 2020</Text>
         <Text style={styles.overdueText}>Overdue</Text>

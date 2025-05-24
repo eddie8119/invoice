@@ -7,12 +7,12 @@ import TesseractOcr from 'react-native-tesseract-ocr';
 interface InvoiceData {
   companyName: string;
   date: string;
-  items: Array<{
+  items: {
     name: string;
     amount: number;
     quantity: number;
     totalPrice: number;
-  }>;
+  }[];
   totalAmount: number;
 }
 
@@ -35,26 +35,20 @@ export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
   const processImage = async (uri: string) => {
     try {
       setProcessing(true);
-      
+
       // Optimize image for OCR
       const manipulatedImage = await ImageManipulator.manipulateAsync(
         uri,
-        [
-          { resize: { width: 1200 } },
-          { grayscale: true },
-          { contrast: 1.5 },
-        ],
+        [{ resize: { width: 1200 } }, { grayscale: true }, { contrast: 1.5 }],
         { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
       );
 
       // Perform OCR
-      const ocrResult = await TesseractOcr.recognize(
-        manipulatedImage.uri,
-        {
-          whitelist: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$,.:/-',
-          language: 'eng+chi_tra',
-        }
-      );
+      const ocrResult = await TesseractOcr.recognize(manipulatedImage.uri, {
+        whitelist:
+          '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$,.:/-',
+        language: 'eng+chi_tra',
+      });
 
       // Parse OCR result
       const data = parseInvoiceText(ocrResult);
@@ -73,11 +67,11 @@ export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
       companyName: '',
       date: '',
       items: [],
-      totalAmount: 0
+      totalAmount: 0,
     };
 
     let currentSection = '';
-    
+
     lines.forEach(line => {
       // Try to find company name (usually in the first few lines)
       if (!data.companyName && line.length > 5) {
@@ -95,25 +89,31 @@ export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
       // Try to find items and prices
       const priceMatch = line.match(/\$?\s*(\d+([,.]\d{2})?)/);
       const quantityMatch = line.match(/x\s*(\d+)/i);
-      
+
       if (priceMatch && line.length > 10) {
         const price = parseFloat(priceMatch[1].replace(',', ''));
         const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 1;
-        const name = line.replace(priceMatch[0], '').replace(quantityMatch?.[0] ?? '', '').trim();
-        
+        const name = line
+          .replace(priceMatch[0], '')
+          .replace(quantityMatch?.[0] ?? '', '')
+          .trim();
+
         if (name) {
           data.items.push({
             name,
             amount: price,
             quantity,
-            totalPrice: price * quantity
+            totalPrice: price * quantity,
           });
         }
       }
     });
 
     // Calculate total amount
-    data.totalAmount = data.items.reduce((sum, item) => sum + item.totalPrice, 0);
+    data.totalAmount = data.items.reduce(
+      (sum, item) => sum + item.totalPrice,
+      0
+    );
 
     return data;
   };

@@ -7,12 +7,12 @@ import { StyleSheet, View } from 'react-native';
 interface InvoiceData {
   companyName: string;
   date: string;
-  items: Array<{
+  items: {
     name: string;
     amount: number;
     quantity: number;
     totalPrice: number;
-  }>;
+  }[];
   totalAmount: number;
 }
 
