@@ -8,9 +8,9 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const SignIn = () => {
+const SignInScreen = () => {
   const handleGoogleSignIn = () => {
     // Google 登入邏輯
     console.log('Google Sign In pressed');
@@ -273,4 +273,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignIn;
+export default SignInScreen;
