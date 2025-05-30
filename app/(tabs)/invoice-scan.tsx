@@ -11,7 +11,7 @@ import {
 import { launchCamera } from 'react-native-image-picker';
 import MlkitOcr from 'react-native-mlkit-ocr';
 
-const OCRInvoiceScreen = () => {
+export const InvoiceScanScreen = () => {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [invoiceData, setInvoiceData] = useState<any>(null);
   const [rawText, setRawText] = useState<string>('');
@@ -126,5 +126,3 @@ const styles = StyleSheet.create({
   },
   itemBlock: { marginBottom: 16 },
 });
-
-export default OCRInvoiceScreen;
