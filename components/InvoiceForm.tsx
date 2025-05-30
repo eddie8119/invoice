@@ -1,4 +1,4 @@
-import type { InvoiceFields } from '@/types';
+import type { InvoiceFields } from '@/types/types';
 import React, { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 

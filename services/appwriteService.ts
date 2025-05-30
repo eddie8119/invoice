@@ -1,5 +1,5 @@
 // services/appwriteService.ts
-import type { InvoiceFields } from '@/types';
+import type { InvoiceFields } from '@/types/types';
 import { Client, Databases, ID, Storage } from 'appwrite';
 
 const client = new Client()

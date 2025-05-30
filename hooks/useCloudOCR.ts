@@ -1,4 +1,4 @@
-import type { InvoiceFields } from '@/types';
+import type { InvoiceFields } from '@/types/types';
 import { useState } from 'react';
 
 export function useCloudOCR() {
