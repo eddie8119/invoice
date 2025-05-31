@@ -1,26 +1,110 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * App color theme
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// Primary colors
+const primary = {
+  main: '#00A0FF', // 主要藍色
+  light: '#4DB8FF', // 較淺藍色
+  dark: '#0080CC', // 較深藍色
+};
+
+// Neutral colors
+const neutral = {
+  white: '#FFFFFF',
+  background: '#F5F8FA', // 背景色
+  gray100: '#F0F4F8',
+  gray200: '#E1E8ED',
+  gray300: '#CFD8DC',
+  gray400: '#B0BEC5',
+  gray500: '#90A4AE',
+  gray600: '#607D8B',
+  gray700: '#455A64',
+  gray800: '#263238',
+  black: '#000000',
+};
+
+// Status colors
+const status = {
+  success: '#4CAF50',
+  warning: '#FFC107',
+  error: '#F44336',
+  info: primary.main,
+};
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    // Primary
+    primary: primary.main,
+    primaryLight: primary.light,
+    primaryDark: primary.dark,
+
+    // Background
+    background: neutral.white,
+    surface: neutral.background,
+
+    // Text
+    text: neutral.gray800,
+    textSecondary: neutral.gray600,
+    textDisabled: neutral.gray400,
+
+    // Border
+    border: neutral.gray200,
+    divider: neutral.gray100,
+
+    // Status
+    success: status.success,
+    warning: status.warning,
+    error: status.error,
+    info: status.info,
+
+    // Components
+    buttonPrimary: primary.main,
+    buttonSecondary: neutral.white,
+    inputBackground: neutral.white,
+    inputBorder: neutral.gray200,
+    cardBackground: neutral.white,
+
+    // Navigation
+    tabIconDefault: neutral.gray400,
+    tabIconSelected: primary.main,
+    headerBackground: neutral.white,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    // Primary
+    primary: primary.light,
+    primaryLight: primary.main,
+    primaryDark: primary.dark,
+
+    // Background
+    background: neutral.gray800,
+    surface: neutral.gray700,
+
+    // Text
+    text: neutral.white,
+    textSecondary: neutral.gray300,
+    textDisabled: neutral.gray500,
+
+    // Border
+    border: neutral.gray600,
+    divider: neutral.gray700,
+
+    // Status
+    success: status.success,
+    warning: status.warning,
+    error: status.error,
+    info: status.info,
+
+    // Components
+    buttonPrimary: primary.light,
+    buttonSecondary: neutral.gray700,
+    inputBackground: neutral.gray700,
+    inputBorder: neutral.gray600,
+    cardBackground: neutral.gray700,
+
+    // Navigation
+    tabIconDefault: neutral.gray500,
+    tabIconSelected: primary.light,
+    headerBackground: neutral.gray800,
   },
-};
+} as const;
