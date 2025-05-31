@@ -13,6 +13,7 @@ interface TabConfig {
   title: string;
   icon: string;
 }
+
 const tabConfig: TabConfig[] = [
   {
     name: 'index',
@@ -20,14 +21,19 @@ const tabConfig: TabConfig[] = [
     icon: 'house.fill',
   },
   {
+    name: 'invoice-upload',
+    title: '上傳發票',
+    icon: 'arrow.up.doc.fill',
+  },
+  {
+    name: 'invoice-scan',
+    title: '掃描發票',
+    icon: 'camera.fill',
+  },
+  {
     name: 'invoice-report',
     title: '發票報表',
     icon: 'doc.text.fill',
-  },
-  {
-    name: 'scan',
-    title: '掃描發票',
-    icon: 'camera.fill',
   },
 ];
 
