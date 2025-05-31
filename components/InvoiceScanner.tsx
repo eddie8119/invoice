@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
 import { Camera } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
-import TesseractOcr from 'react-native-tesseract-ocr';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface InvoiceData {
   companyName: string;
@@ -20,7 +20,7 @@ interface Props {
   onScanComplete: (data: InvoiceData) => void;
 }
 
-export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
+export default function InvoiceScanner({ onScanComplete }: Props) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [camera, setCamera] = useState<Camera | null>(null);
   const [processing, setProcessing] = useState(false);
@@ -43,15 +43,12 @@ export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
         { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
       );
 
-      // Perform OCR
-      const ocrResult = await TesseractOcr.recognize(manipulatedImage.uri, {
-        whitelist:
-          '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz$,.:/-',
-        language: 'eng+chi_tra',
-      });
+      // 使用 ML Kit 識別文字
+      const result = await TextRecognition.recognize(manipulatedImage.uri);
+      const text = result.blocks.map(block => block.text).join('\n');
 
       // Parse OCR result
-      const data = parseInvoiceText(ocrResult);
+      const data = parseInvoiceText(text);
       onScanComplete(data);
     } catch (error) {
       console.error('Error processing image:', error);
@@ -154,7 +151,7 @@ export const InvoiceScanner: React.FC<Props> = ({ onScanComplete }) => {
       </Camera>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

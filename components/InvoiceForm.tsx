@@ -2,13 +2,13 @@ import type { InvoiceFields } from '@/types/types';
 import React, { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 
-export const InvoiceForm = ({
+export default function InvoiceForm({
   defaultValues,
   onSubmit,
 }: {
   defaultValues: InvoiceFields;
   onSubmit: (formData: InvoiceFields) => void;
-}) => {
+}) {
   const [form, setForm] = useState<InvoiceFields>(defaultValues);
 
   return (
@@ -32,4 +32,4 @@ export const InvoiceForm = ({
       <Button title="提交發票" onPress={() => onSubmit(form)} />
     </View>
   );
-};
+}

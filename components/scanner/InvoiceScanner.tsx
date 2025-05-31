@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-export const InvoiceScanner: React.FC = () => {
+export default function InvoiceScanner() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const cameraRef = useRef<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -87,7 +87,7 @@ export const InvoiceScanner: React.FC = () => {
       </Camera>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

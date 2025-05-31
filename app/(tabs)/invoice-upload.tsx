@@ -1,11 +1,11 @@
-import { InvoiceForm } from '@/components/InvoiceForm';
+import InvoiceForm from '@/components/InvoiceForm';
 import { useCloudOCR } from '@/hooks/useCloudOCR';
 import { uploadInvoiceToAppwrite } from '@/services/appwriteService';
 import { pickImageAndConvertBase64 } from '@/utils/pickImage';
 import React, { useState } from 'react';
 import { ActivityIndicator, Button, Image, View } from 'react-native';
 
-export const InvoiceUploadScreen = () => {
+export default function InvoiceUploadScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const { result, loading, runOcr } = useCloudOCR();
 
@@ -36,4 +36,4 @@ export const InvoiceUploadScreen = () => {
       {result && <InvoiceForm defaultValues={result} onSubmit={handleSubmit} />}
     </View>
   );
-};
+}
