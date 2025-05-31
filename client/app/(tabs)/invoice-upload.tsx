@@ -1,13 +1,13 @@
 import InvoiceForm from '@/components/InvoiceForm';
-import { useCloudOCR } from '@/hooks/useCloudOCR';
+import useCloudOCR from '@/hooks/useCloudOCR';
 import { uploadInvoiceToAppwrite } from '@/services/appwriteService';
 import { pickImageAndConvertBase64 } from '@/utils/pickImage';
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Image, View } from 'react-native';
+import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
 
 export default function InvoiceUploadScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
-  const { result, loading, runOcr } = useCloudOCR();
+  const { result, loading, error, runOcr } = useCloudOCR();
 
   const handlePickImage = async () => {
     const res = await pickImageAndConvertBase64();
@@ -33,6 +33,9 @@ export default function InvoiceUploadScreen() {
         />
       )}
       {loading && <ActivityIndicator />}
+      {error && (
+        <Text style={{ color: 'red', marginVertical: 10 }}>Error: {error}</Text>
+      )}
       {result && <InvoiceForm defaultValues={result} onSubmit={handleSubmit} />}
     </View>
   );
