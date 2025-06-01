@@ -7,7 +7,7 @@ export const registerSchema = z
       .string()
       .min(6, 'Password must be at least 6 characters')
       .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\W]{6,}$/,
         'Password must contain at least one uppercase letter, one lowercase letter, and one number'
       ),
     confirmPassword: z.string().min(1, 'Please confirm your password'),

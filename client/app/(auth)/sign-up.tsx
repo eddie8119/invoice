@@ -1,27 +1,36 @@
 import { Button } from '@/components/core/Button';
 import { Input } from '@/components/core/Input';
 import { Colors } from '@/constants/Colors';
+import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { Ionicons } from '@expo/vector-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [emailError, setEmailError] = useState<string>('');
+export default function SignUpScreen() {
   const colors = Colors.light;
 
-  const handleLogin = () => {
-    // 簡單的郵件格式驗證
-    if (!email.includes('@')) {
-      setEmailError('Please enter a valid email address');
-      return;
-    }
-    setEmailError('');
-    // TODO: 實現登入邏輯
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  const onSubmit = handleSubmit(data => {
+    console.log('Form data:', data);
+    // TODO: 實現註冊邏輯
+  });
 
   return (
     <SafeAreaView
@@ -40,51 +49,76 @@ export default function LoginScreen() {
       {/* Content */}
       <View style={styles.content}>
         <Text style={[styles.title, { color: colors.text }]}>
-          Welcome aboard
+          Create your account
         </Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Get paid faster than ever before with our hassle-free invoicing
-          system.
+          Start creating professional invoices in minutes
         </Text>
 
         {/* Form */}
         <View style={styles.form}>
-          <Input
-            label="Email"
-            placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            error={emailError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoComplete="email"
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label="Email"
+                placeholder="Enter your email"
+                value={value}
+                onChangeText={onChange}
+                error={errors.email?.message}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoComplete="email"
+              />
+            )}
           />
 
-          <Input
-            label="Password"
-            placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
-            isPassword
-            autoCapitalize="none"
-            autoComplete="password"
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label="Password"
+                placeholder="Enter your password"
+                value={value}
+                onChangeText={onChange}
+                error={errors.password?.message}
+                isPassword
+                autoCapitalize="none"
+                autoComplete="password"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="confirmPassword"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label="Confirm Password"
+                placeholder="Confirm your password"
+                value={value}
+                onChangeText={onChange}
+                error={errors.confirmPassword?.message}
+                isPassword
+                autoCapitalize="none"
+                autoComplete="password"
+              />
+            )}
           />
 
           <Button
-            text="Sign up"
+            text="Create Account"
             variant="filled"
             size="medium"
-            onPress={handleLogin}
+            disabled={!isValid}
+            onPress={onSubmit}
           />
 
-          {/* Create Account Link */}
-          <View style={styles.createAccountContainer}>
-            <Text
-              style={[
-                styles.createAccountText,
-                { color: colors.textSecondary },
-              ]}
-            >
+          {/* Login Link */}
+          <View style={styles.loginContainer}>
+            <Text style={[styles.loginText, { color: colors.textSecondary }]}>
               Already have an account?{' '}
             </Text>
             <Link href="/login" asChild>
@@ -113,29 +147,30 @@ const styles = StyleSheet.create({
   backButton: {
     marginRight: 8,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
   content: {
     flex: 1,
     padding: 24,
   },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     marginBottom: 32,
   },
   form: {
     gap: 12,
     marginTop: 32,
   },
-  createAccountContainer: {
+  loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 12,
   },
-  createAccountText: {
+  loginText: {
     fontSize: 14,
   },
   link: {

@@ -1,27 +1,34 @@
 import { Button } from '@/components/core/Button';
 import { Input } from '@/components/core/Input';
 import { Colors } from '@/constants/Colors';
+import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { Ionicons } from '@expo/vector-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [emailError, setEmailError] = useState<string>('');
   const colors = Colors.light;
 
-  const handleLogin = () => {
-    // 簡單的郵件格式驗證
-    if (!email.includes('@')) {
-      setEmailError('Please enter a valid email address');
-      return;
-    }
-    setEmailError('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = handleSubmit(data => {
+    console.log('Form data:', data);
     // TODO: 實現登入邏輯
-  };
+  });
 
   return (
     <SafeAreaView
@@ -39,12 +46,9 @@ export default function LoginScreen() {
 
       {/* Content */}
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Welcome aboard
-        </Text>
+        <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Get paid faster than ever before with our hassle-free invoicing
-          system.
+          Sign in to continue creating invoices
         </Text>
 
         {/* Form */}
@@ -52,45 +56,39 @@ export default function LoginScreen() {
           <Input
             label="Email"
             placeholder="Enter your email"
-            value={email}
-            onChangeText={setEmail}
-            error={emailError}
+            error={errors.email?.message}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
+            {...register('email')}
           />
 
           <Input
             label="Password"
             placeholder="Enter your password"
-            value={password}
-            onChangeText={setPassword}
+            error={errors.password?.message}
             isPassword
             autoCapitalize="none"
             autoComplete="password"
+            {...register('password')}
           />
 
           <Button
-            text="Log in"
+            text="Sign In"
             variant="filled"
             size="medium"
-            onPress={handleLogin}
+            onPress={onSubmit}
           />
 
-          {/* Create Account Link */}
-          <View style={styles.createAccountContainer}>
-            <Text
-              style={[
-                styles.createAccountText,
-                { color: colors.textSecondary },
-              ]}
-            >
+          {/* Sign Up Link */}
+          <View style={styles.signUpContainer}>
+            <Text style={[styles.signUpText, { color: colors.textSecondary }]}>
               Don't have an account?{' '}
             </Text>
             <Link href="/sign-up" asChild>
               <TouchableOpacity>
                 <Text style={[styles.link, { color: colors.primary }]}>
-                  Create one
+                  Sign up
                 </Text>
               </TouchableOpacity>
             </Link>
@@ -113,29 +111,30 @@ const styles = StyleSheet.create({
   backButton: {
     marginRight: 8,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
   content: {
     flex: 1,
     padding: 24,
   },
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 12,
+  },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     marginBottom: 32,
   },
   form: {
     gap: 12,
     marginTop: 32,
   },
-  createAccountContainer: {
+  signUpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 12,
   },
-  createAccountText: {
+  signUpText: {
     fontSize: 14,
   },
   link: {
