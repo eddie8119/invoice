@@ -1,6 +1,6 @@
 import { Button } from '@/components/core/Button';
 import { Colors } from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,7 +38,12 @@ export default function WelcomeScreen() {
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
-          <Button text="Sign up via Email" variant="filled" size="medium" />
+          <Button
+            text="Sign up via Email"
+            variant="filled"
+            size="medium"
+            onPress={() => router.push('/sign-up')}
+          />
 
           <Button
             text="Sign up via Google"
