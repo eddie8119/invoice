@@ -11,18 +11,18 @@ export const formStyles = StyleSheet.create({
   input: {
     height: 48,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 999,
     paddingHorizontal: 16,
     fontSize: 16,
   },
-  passwordContainer: {
+  inputWrapper: {
     height: 48,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 999,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  passwordInput: {
+  inputField: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 16,
