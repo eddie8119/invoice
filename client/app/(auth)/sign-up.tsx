@@ -2,6 +2,7 @@ import { Button } from '@/components/core/Button';
 import { Input } from '@/components/core/Input';
 import { Colors } from '@/constants/Colors';
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
+import { authApi } from '@/services/api/auth';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, router } from 'expo-router';
@@ -27,9 +28,14 @@ export default function SignUpScreen() {
     },
   });
 
-  const onSubmit = handleSubmit(data => {
+  const onSubmit = handleSubmit(async data => {
     console.log('Form data:', data);
-    // TODO: 實現註冊邏輯
+    try {
+      const response = await authApi.register(data);
+      console.log('Register response:', response);
+    } catch (error) {
+      console.error('Register error:', error);
+    }
   });
 
   return (
