@@ -1,3 +1,4 @@
+import { Button } from '@/components/core/Button';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Link, router } from 'expo-router';
@@ -110,16 +111,12 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        {/* Sign up Button */}
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: colors.buttonPrimary }]}
+        <Button
+          text="Sign up"
+          variant="filled"
+          size="medium"
           onPress={handleLogin}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.buttonText, { color: colors.background }]}>
-            Sign up
-          </Text>
-        </TouchableOpacity>
+        />
 
         {/* Create Account Link */}
         <View style={styles.createAccountContainer}>
@@ -210,17 +207,6 @@ const styles = StyleSheet.create({
   passwordStrength: {
     fontSize: 12,
     marginTop: 4,
-  },
-  button: {
-    height: 48,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 24,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
   },
   createAccountContainer: {
     flexDirection: 'row',

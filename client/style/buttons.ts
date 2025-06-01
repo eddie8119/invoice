@@ -5,7 +5,7 @@ export const buttonStyles = StyleSheet.create({
   base: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 9999,
   },
 
   // === Button Sizes ===
@@ -35,7 +35,7 @@ export const buttonStyles = StyleSheet.create({
     flexDirection: 'row',
     borderWidth: 1,
     height: 48,
-    borderRadius: 30,
+    borderRadius: 9999,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,

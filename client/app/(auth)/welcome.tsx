@@ -1,7 +1,8 @@
+import { Button } from '@/components/core/Button';
 import { Colors } from '@/constants/Colors';
 import { Link } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
@@ -37,54 +38,21 @@ export default function WelcomeScreen() {
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: colors.buttonPrimary }]}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.buttonText, { color: colors.background }]}>
-              Sign up via Email
-            </Text>
-          </TouchableOpacity>
+          <Button text="Sign up via Email" variant="filled" size="medium" />
 
-          <TouchableOpacity
-            style={[
-              styles.button,
-              styles.socialButton,
-              {
-                backgroundColor: colors.buttonSecondary,
-                borderColor: colors.border,
-              },
-            ]}
-            activeOpacity={0.8}
-          >
-            <Image
-              source={require('@/assets/images/logo.png')}
-              style={styles.socialIcon}
-            />
-            <Text style={[styles.buttonText, { color: colors.text }]}>
-              Sign up via Google
-            </Text>
-          </TouchableOpacity>
+          <Button
+            text="Sign up via Google"
+            variant="outlined"
+            size="medium"
+            icon={require('@/assets/images/logo.png')}
+          />
 
-          <TouchableOpacity
-            style={[
-              styles.button,
-              styles.socialButton,
-              {
-                backgroundColor: colors.buttonSecondary,
-                borderColor: colors.border,
-              },
-            ]}
-            activeOpacity={0.8}
-          >
-            <Image
-              source={require('@/assets/images/logo.png')}
-              style={styles.socialIcon}
-            />
-            <Text style={[styles.buttonText, { color: colors.text }]}>
-              Sign up via Apple
-            </Text>
-          </TouchableOpacity>
+          <Button
+            text="Sign up via Apple"
+            variant="outlined"
+            size="medium"
+            icon={require('@/assets/images/logo.png')}
+          />
         </View>
 
         {/* Login Link */}
@@ -93,11 +61,7 @@ export default function WelcomeScreen() {
             Already have an account?{' '}
           </Text>
           <Link href="/login" asChild>
-            <TouchableOpacity>
-              <Text style={[styles.loginLink, { color: colors.primary }]}>
-                Log in
-              </Text>
-            </TouchableOpacity>
+            <Button text="Log in" variant="text" size="small" />
           </Link>
         </View>
       </View>
@@ -142,25 +106,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     gap: 12,
   },
-  button: {
-    borderRadius: 8,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  socialButton: {
-    flexDirection: 'row',
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  socialIcon: {
-    width: 24,
-    height: 24,
-    marginRight: 12,
-  },
+
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
