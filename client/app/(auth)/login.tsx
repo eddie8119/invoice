@@ -1,192 +1,237 @@
-import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-const { height } = Dimensions.get('window');
+import { Colors } from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
+import { Link, router } from 'expo-router';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const LoginScreen = () => {
+export default function LoginScreen() {
+  const colors = Colors.light;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = () => {
+    // TODO: Implement login logic
+    console.log('Login with:', email, password);
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Login</Text>
-    </View>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={[styles.backButton, { backgroundColor: colors.surface }]}
+        >
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Content */}
+      <View style={styles.content}>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Welcome aboard
+        </Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          Get paid faster than ever before with our hassle-free invoicing
+          system.
+        </Text>
+
+        {/* Form */}
+        <View style={styles.form}>
+          {/* Email Input */}
+          <View style={styles.inputContainer}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>
+              Email
+            </Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.inputBackground,
+                  borderColor: colors.inputBorder,
+                  color: colors.text,
+                },
+              ]}
+              placeholder="email"
+              placeholderTextColor={colors.textDisabled}
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          </View>
+
+          {/* Password Input */}
+          <View style={styles.inputContainer}>
+            <Text style={[styles.label, { color: colors.textSecondary }]}>
+              Password
+            </Text>
+            <View
+              style={[
+                styles.passwordContainer,
+                {
+                  backgroundColor: colors.inputBackground,
+                  borderColor: colors.inputBorder,
+                },
+              ]}
+            >
+              <TextInput
+                style={[styles.passwordInput, { color: colors.text }]}
+                placeholder="password"
+                placeholderTextColor={colors.textDisabled}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={styles.eyeIcon}
+              >
+                <Ionicons
+                  name={showPassword ? 'eye-off' : 'eye'}
+                  size={24}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text style={[styles.passwordStrength, { color: colors.success }]}>
+              Your password is strong, well done
+            </Text>
+          </View>
+        </View>
+
+        {/* Sign up Button */}
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: colors.buttonPrimary }]}
+          onPress={handleLogin}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.buttonText, { color: colors.background }]}>
+            Sign up
+          </Text>
+        </TouchableOpacity>
+
+        {/* Create Account Link */}
+        <View style={styles.createAccountContainer}>
+          <Text
+            style={[styles.createAccountText, { color: colors.textSecondary }]}
+          >
+            Already have an account?{' '}
+          </Text>
+          <Link href="/sign-in" asChild>
+            <TouchableOpacity>
+              <Text
+                style={[styles.createAccountLink, { color: colors.primary }]}
+              >
+                Log in
+              </Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  safeArea: {
-    flex: 1,
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 8,
   },
-  scrollContent: {
-    flexGrow: 1,
-    minHeight: height * 0.9,
-  },
-  topDecoration: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: '100%',
-    height: 200,
-    overflow: 'hidden',
-  },
-  decorationCircle1: {
-    position: 'absolute',
-    top: -50,
-    right: -50,
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: 'rgba(51, 122, 183, 0.1)',
-  },
-  decorationCircle2: {
-    position: 'absolute',
-    top: -80,
-    right: 20,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(51, 122, 183, 0.05)',
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
-    paddingHorizontal: 32,
-    paddingTop: 60,
-    justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 32,
   },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 40,
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 12,
   },
-  logoPlaceholder: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#337ab7',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  logoText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  welcomeText: {
+  subtitle: {
     fontSize: 16,
-    textAlign: 'center',
-    color: '#6c757d',
-    marginBottom: 8,
-    fontWeight: '500',
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  brandText: {
-    fontSize: 32,
-    textAlign: 'center',
-    color: '#212529',
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  subtitleText: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#495057',
-    lineHeight: 28,
-    marginBottom: 48,
-  },
-  highlightText: {
-    color: '#337ab7',
-    fontWeight: '600',
-  },
-  buttonContainer: {
+    lineHeight: 24,
     marginBottom: 32,
   },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-    borderWidth: 1,
-    borderColor: '#e9ecef',
+  form: {
+    gap: 24,
+    marginBottom: 32,
   },
-  googleIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#4285f4',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+  inputContainer: {
+    gap: 8,
   },
-  googleIconText: {
-    color: 'white',
+  label: {
     fontSize: 14,
-    fontWeight: 'bold',
-  },
-  googleButtonText: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#212529',
-  },
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#dee2e6',
-  },
-  dividerText: {
-    marginHorizontal: 16,
-    fontSize: 14,
-    color: '#6c757d',
     fontWeight: '500',
   },
-  createAccountButton: {
-    backgroundColor: '#337ab7',
-    borderRadius: 12,
-    paddingVertical: 18,
-    alignItems: 'center',
-    shadowColor: '#337ab7',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+  input: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    fontSize: 16,
   },
-  createAccountText: {
-    color: 'white',
+  passwordContainer: {
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordInput: {
+    flex: 1,
+    height: '100%',
+    paddingHorizontal: 16,
+    fontSize: 16,
+  },
+  eyeIcon: {
+    paddingHorizontal: 16,
+  },
+  passwordStrength: {
+    fontSize: 12,
+    marginTop: 4,
+  },
+  button: {
+    height: 48,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  buttonText: {
     fontSize: 16,
     fontWeight: '600',
   },
-  bottomTextContainer: {
+  createAccountContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 32,
   },
-  bottomText: {
+  createAccountText: {
     fontSize: 14,
-    color: '#6c757d',
-    textAlign: 'center',
   },
-  linkText: {
-    color: '#337ab7',
+  createAccountLink: {
+    fontSize: 14,
     fontWeight: '600',
   },
 });
-
-export default LoginScreen;
