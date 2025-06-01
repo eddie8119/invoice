@@ -16,6 +16,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@google-cloud/vision": "^5.1.0",
+    "@hookform/resolvers": "^5.0.1",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-ml-kit/text-recognition": "^1.5.2",
     "@react-navigation/bottom-tabs": "^7.3.10",
@@ -43,6 +44,7 @@
     "or": "^0.2.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.56.4",
     "react-native": "0.79.2",
     "react-native-appwrite": "^0.9.2",
     "react-native-gesture-handler": "~2.24.0",
@@ -57,7 +59,8 @@
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5",
     "tailwindcss": "3.4.17",
-    "write": "^2.0.0"
+    "write": "^2.0.0",
+    "zod": "^3.25.45"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
