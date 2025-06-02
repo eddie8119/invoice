@@ -1,8 +1,8 @@
+import { LoginSchema, RegisterSchema } from "@/schemas/auth";
+import { account, userService } from "@/services/appwrite";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppwriteException } from "node-appwrite";
-import { LoginSchema, RegisterSchema } from "../schemas/auth";
-import { account, userService } from "../services/appwrite";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 

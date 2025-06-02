@@ -1,5 +1,5 @@
+import { analyzeImage } from "@/services/visionService";
 import express from "express";
-import { analyzeImage } from "../services/visionService";
 
 const router = express.Router();
 
