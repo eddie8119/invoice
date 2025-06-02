@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { loginSchema, registerSchema } from "../schemas/auth";
+import { loginSchema } from "../../../shared/schemas/loginSchema";
+import { registerSchema } from "../../../shared/schemas/registerSchema";
 
 export const validateAuth = async (
   req: Request,

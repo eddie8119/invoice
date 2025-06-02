@@ -1,7 +1,7 @@
 import axiosInstance from '@/lib/axios';
-import { LoginSchema } from '@/lib/schemas/loginSchema';
-import { RegisterSchema } from '@/lib/schemas/registerSchema';
 import { ApiResponse } from '@/types/api';
+import { LoginSchema } from '../../../shared/schemas/loginSchema';
+import { RegisterSchema } from '../../../shared/schemas/registerSchema';
 
 export const authApi = {
   // 註冊
