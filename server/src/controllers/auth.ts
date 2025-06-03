@@ -1,5 +1,6 @@
 import { LoginSchema, RegisterSchema } from "@/schemas/auth";
 import { userService } from "@/services/appwrite/userService";
+import { handleAppwriteError } from "@/utils/errorHandler";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppwriteException } from "node-appwrite";
@@ -9,27 +10,6 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 // 生成 JWT token 的輔助函數
 const generateToken = (userId: string): string => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
-};
-
-// 處理 Appwrite 錯誤的輔助函數
-const handleAppwriteError = (
-  error: any,
-  res: Response,
-  defaultMessage: string
-) => {
-  if (error instanceof AppwriteException) {
-    return res.status(400).json({
-      success: false,
-      message: error.message,
-      code: error.code,
-    });
-  }
-
-  console.error("Unexpected error:", error);
-  return res.status(500).json({
-    success: false,
-    message: defaultMessage,
-  });
 };
 
 export const register = async (req: Request, res: Response) => {
