@@ -1,5 +1,5 @@
 import { LoginSchema, RegisterSchema } from "@/schemas/auth";
-import { userService } from "@/services/userService";
+import { userService } from "@/services/appwrite/userService";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { AppwriteException } from "node-appwrite";
