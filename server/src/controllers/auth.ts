@@ -1,5 +1,5 @@
 import { LoginSchema, RegisterSchema } from "@/schemas/auth";
-import { userService } from "@/services/appwrite/userService";
+import { accountService } from "@/services/appwrite/accountService";
 import { handleAppwriteError } from "@/utils/errorHandler";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response) => {
     const { email, password, name } = req.body as RegisterSchema;
 
     // 檢查用戶是否已存在
-    const existingUser = await userService.userExists(email);
+    const existingUser = await accountService.userExists(email);
     if (existingUser) {
       return res.status(409).json({
         success: false,
@@ -25,8 +25,8 @@ export const register = async (req: Request, res: Response) => {
       });
     }
 
-    // 使用 userService 創建用戶
-    const { user, userDoc } = await userService.createUser(
+    // 使用 accountService 創建用戶
+    const { user, userDoc } = await accountService.createUser(
       email,
       password,
       name
@@ -64,11 +64,11 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as LoginSchema;
 
-    // 使用 userService 登入
-    const { session, user } = await userService.loginUser(email, password);
+    // 使用 accountService 登入
+    const { session, user } = await accountService.loginUser(email, password);
 
     // 獲取用戶文檔信息
-    const userDoc = await userService.getUserById(user.$id);
+    const userDoc = await accountService.getUserById(user.$id);
 
     // 生成 JWT token
     const token = generateToken(user.$id);
@@ -112,8 +112,8 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    // 使用 userService 登出
-    await userService.logoutUser();
+    // 使用 accountService 登出
+    await accountService.logoutUser();
 
     res.json({
       success: true,
@@ -131,7 +131,7 @@ export const logout = async (req: Request, res: Response) => {
 // 獲取當前用戶信息
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {
-    const user = await userService.getCurrentUser();
+    const user = await accountService.getCurrentUser();
 
     if (!user) {
       return res.status(401).json({
@@ -141,7 +141,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     }
 
     // 獲取用戶文檔信息
-    const userDoc = await userService.getUserById(user.$id);
+    const userDoc = await accountService.getUserById(user.$id);
 
     res.json({
       success: true,
@@ -180,7 +180,7 @@ export const updateUser = async (req: Request, res: Response) => {
     // 移除敏感字段
     const { password, userId, ...safeUpdates } = updates;
 
-    const updatedUserDoc = await userService.updateUser(
+    const updatedUserDoc = await accountService.updateUser(
       documentId,
       safeUpdates
     );
@@ -203,7 +203,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { documentId } = req.params;
 
-    await userService.deleteUser(documentId);
+    await accountService.deleteUser(documentId);
 
     res.json({
       success: true,
@@ -219,7 +219,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const checkUserExists = async (req: Request, res: Response) => {
   try {
     const { email } = req.params;
-    const exists = await userService.userExists(email);
+    const exists = await accountService.userExists(email);
 
     res.json({
       success: true,

@@ -22,7 +22,7 @@ interface LoginResponse {
   user: User;
 }
 
-export const userService = {
+export const accountService = {
   // 創建用戶
   async createUser(
     email: string,
