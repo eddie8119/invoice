@@ -16,7 +16,7 @@ interface InvoiceData {
   totalAmount: number;
 }
 
-export default function ScanScreen() {
+export default function ScannScreen() {
   const [scannedData, setScannedData] = useState<InvoiceData | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
 

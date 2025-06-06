@@ -1,5 +1,5 @@
 import { ID, Query } from "node-appwrite";
-import { COLLECTIONS, DATABASE_ID, account, database } from "./appwrite";
+import { COLLECTIONS, DATABASE_ID, account, database } from "@/utils/appwrite";
 
 interface User {
   $id: string;
