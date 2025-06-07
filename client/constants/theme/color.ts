@@ -1,16 +1,16 @@
-/**
- * App color theme
- */
-
 // Primary colors
-const primary = {
+export const primary = {
   main: '#00A0FF', // 主要藍色
   light: '#4DB8FF', // 較淺藍色
   dark: '#0080CC', // 較深藍色
 };
 
+export const shadow = {
+  main: '#7E22CE',
+};
+
 // Neutral colors
-const neutral = {
+export const neutral = {
   white: '#FFFFFF',
   background: '#F5F8FA', // 背景色
   gray100: '#F0F4F8',
@@ -25,14 +25,14 @@ const neutral = {
 };
 
 // Status colors
-const status = {
+export const status = {
   success: '#4CAF50',
   warning: '#FFC107',
   error: '#F44336',
   info: primary.main,
 };
 
-export const Colors = {
+export const colors = {
   light: {
     // Primary
     primary: primary.main,
@@ -42,6 +42,7 @@ export const Colors = {
     // Background
     background: neutral.white,
     surface: neutral.background,
+    activeBackground: neutral.gray200,
 
     // Text
     text: neutral.gray800,
