@@ -10,39 +10,7 @@ import {
   View,
 } from 'react-native';
 
-type BottomBarItem = {
-  name: string;
-  icon: string | number;
-  route: string;
-};
-
-const bottomBarItems: BottomBarItem[] = [
-  {
-    name: 'Home',
-    icon: require('@/assets/icons/Home.png'),
-    route: '/',
-  },
-  {
-    name: 'Analytics',
-    icon: require('@/assets/icons/User.png'),
-    route: '/invoice-report',
-  },
-  {
-    name: 'Scan',
-    icon: require('@/assets/icons/User.png'),
-    route: '/scanner',
-  },
-  {
-    name: 'List',
-    icon: require('@/assets/icons/User.png'),
-    route: '/invoice-upload',
-  },
-  {
-    name: 'Profile',
-    icon: require('@/assets/icons/User.png'),
-    route: '/profile',
-  },
-];
+import { tabConfig } from '@/constants/navigation';
 
 export default function BottomBar() {
   const router = useRouter();
@@ -54,7 +22,7 @@ export default function BottomBar() {
 
   return (
     <View style={styles.container}>
-      {bottomBarItems.map((item, index) => {
+      {tabConfig.map((item, index) => {
         const isActive = pathname === item.route;
         const isMiddleItem = index === 2; // Scan button in the middle
 
