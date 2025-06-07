@@ -1,11 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
 
+import BottomBar from '@/components/core/BottomBar';
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
+import { colors } from '@/constants/theme/color';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 interface TabConfig {
@@ -44,18 +44,13 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         // tabBarShowLabel: false,
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            backgroundColor: 'white',
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarStyle: { display: 'none' }, // Hide the default tab bar
       }}
+      tabBar={() => <BottomBar />}
     >
       {tabConfig.map(({ name, title, icon }) => (
         <Tabs.Screen

@@ -1,12 +1,12 @@
 import { Button } from '@/components/core/Button';
-import { Colors } from '@/constants/Colors';
+import { theme } from '@/constants/theme';
 import { Link, router } from 'expo-router';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
-  const colors = Colors.light;
+  const colors = theme.colors.light;
 
   return (
     <SafeAreaView

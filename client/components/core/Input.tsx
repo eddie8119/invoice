@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/Colors';
+import { theme } from '@/constants/theme';
 import { formStyles } from '@/style/forms';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
@@ -39,7 +39,7 @@ export function Input({
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const colors = Colors.light;
+  const colors = theme.colors.light;
 
   const getHelperColor = () => {
     if (error) return colors.error;

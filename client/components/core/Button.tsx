@@ -1,4 +1,4 @@
-import { Colors } from '@/constants/Colors';
+import { theme } from '@/constants/theme';
 import { buttonStyles } from '@/style/buttons';
 import React from 'react';
 import {
@@ -32,7 +32,7 @@ export function Button({
   style,
   disabled = false,
 }: ButtonProps) {
-  const colors = Colors.light;
+  const colors = theme.colors.light;
 
   // 根據 variant 決定背景色和文字顏色
   const getColors = () => {
@@ -91,7 +91,11 @@ export function Button({
       activeOpacity={0.8}
     >
       {icon && (
-        <Image source={icon} style={buttonStyles.socialIcon} resizeMode="contain" />
+        <Image
+          source={icon}
+          style={buttonStyles.socialIcon}
+          resizeMode="contain"
+        />
       )}
       <Text
         style={[

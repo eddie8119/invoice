@@ -1,6 +1,6 @@
 import { Button } from '@/components/core/Button';
 import { Input } from '@/components/core/Input';
-import { Colors } from '@/constants/Colors';
+import { theme } from '@/constants/theme';
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +11,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
-  const colors = Colors.light;
+  const colors = theme.colors.light;
 
   const {
     register,

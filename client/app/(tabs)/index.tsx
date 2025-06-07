@@ -7,7 +7,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>發票管理系統</Text>
       <View style={styles.buttonContainer}>
-        <Link href="/scan" asChild>
+        <Link href="/scanner" asChild>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>掃描發票</Text>
           </TouchableOpacity>

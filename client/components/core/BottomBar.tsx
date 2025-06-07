@@ -1,7 +1,14 @@
-import { Colors } from '@/constants/Colors';
+import { theme } from '@/constants/theme';
 import { usePathname, useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 type BottomBarItem = {
   name: string;
@@ -23,7 +30,7 @@ const bottomBarItems: BottomBarItem[] = [
   {
     name: 'Scan',
     icon: require('@/assets/icons/User.png'),
-    route: '/invoice-scanner',
+    route: '/scanner',
   },
   {
     name: 'List',
@@ -42,7 +49,7 @@ export default function BottomBar() {
   const pathname = usePathname();
 
   const handleNavigation = (route: string) => {
-    router.push(route);
+    router.push(route as any);
   };
 
   return (
@@ -86,12 +93,24 @@ export default function BottomBar() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: 70,
+    height: 80,
     borderTopWidth: 1,
-    borderTopColor: '#F3F4F6',
+    borderTopColor: theme.colors.light.divider,
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
+    backgroundColor: '#FFFFFF',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   itemContainer: {
     flex: 1,
@@ -102,36 +121,35 @@ const styles = StyleSheet.create({
     marginTop: -50,
   },
   iconContainer: {
-    width: 35,
-    height: 35,
-    borderRadius: 17,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent', // 預設透明
+    backgroundColor: 'transparent',
+    marginBottom: 2,
   },
   activeIconContainer: {
-    backgroundColor: '#F3E8FF',
+    backgroundColor: theme.colors.light.activeBackground,
+    ...theme.shadows.small,
   },
   middleIconContainer: {
-    backgroundColor: Colors.light.primary,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    backgroundColor: theme.colors.light.primary,
+    width: 65,
+    height: 65,
+    borderRadius: 32.5,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: Colors.light.shadowColor,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 5,
+    ...theme.shadows.medium,
   },
   itemLabel: {
-    fontSize: 12,
-    marginTop: 2,
-    color: '#9CA3AF',
+    fontSize: 11,
+    marginTop: 3,
+    color: theme.colors.light.textSecondary,
+    fontWeight: '400',
   },
   activeItemLabel: {
-    color: Colors.light.primary,
+    color: theme.colors.light.primary,
     fontWeight: '500',
   },
 });
