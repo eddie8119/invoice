@@ -1,5 +1,7 @@
 import { theme } from '@/constants/theme';
 import { pannelStyles } from '@/style/pannel';
+import { textStyles } from '@/style/text';
+import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -21,32 +23,6 @@ interface InvoiceListProps {
 
 export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
   const colors = theme.colors.light;
-
-  const getStatusColor = (status: Invoice['status']) => {
-    switch (status) {
-      case 'paid':
-        return colors.success;
-      case 'unpaid':
-        return colors.primaryOceanBlue;
-      case 'overdue':
-        return colors.error;
-      default:
-        return colors.text;
-    }
-  };
-
-  const getStatusText = (status: Invoice['status']) => {
-    switch (status) {
-      case 'paid':
-        return '已付';
-      case 'unpaid':
-        return '未付';
-      case 'overdue':
-        return '逾期';
-      default:
-        return '';
-    }
-  };
 
   const getStatusMessage = (
     status: Invoice['status'],
@@ -80,7 +56,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       {invoices.map(invoice => (
         <TouchableOpacity
           key={invoice.id}
@@ -106,7 +82,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
                       { color: getStatusColor(invoice.status) },
                     ]}
                   >
-                    {getStatusMessage(invoice.status, invoice.createdAt)}
+                    {getStatusMessage(invoice.status, invoice.expectPaidAt)}
                   </Text>
                 </View>
               )}
@@ -117,7 +93,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
                 TWD$
                 <Text style={styles.amount}>{invoice.amount}</Text>
               </Text>
-              <Text style={styles.date}>
+              <Text style={textStyles.date}>
                 建立日期: {invoice.createdAt.toLocaleDateString()}
               </Text>
 
@@ -133,7 +109,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
                     { backgroundColor: getStatusColor(invoice.status) },
                   ]}
                 >
-                  <Text style={styles.statusButtonText}>
+                  <Text style={textStyles.statusButton}>
                     {getStatusText(invoice.status)}
                   </Text>
                 </TouchableOpacity>
@@ -147,10 +123,6 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
   cardContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -194,20 +166,11 @@ const styles = StyleSheet.create({
     color: theme.colors.light.primaryOceanBlue,
     marginBottom: 4,
   },
-  date: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
+
   statusButton: {
     paddingVertical: 6,
     paddingHorizontal: 16,
     borderRadius: 16,
-  },
-  statusButtonText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '500',
   },
   paidDateAndStatusContainer: {
     flexDirection: 'row',

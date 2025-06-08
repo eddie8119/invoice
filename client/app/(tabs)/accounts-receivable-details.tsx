@@ -1,10 +1,21 @@
+import H3 from '@/components/core/H3';
+import Loading from '@/components/core/Loading';
+import NotFound from '@/components/core/Loading copy';
+import { EditInvoiceModal } from '@/components/invoice/EditInvoiceModal';
+import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { theme } from '@/constants/theme';
+import { containerStyles } from '@/style/containers';
 import { pannelStyles } from '@/style/pannel';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-// 發票項目類型定義
 interface InvoiceItem {
   id: string;
   name: string;
@@ -13,7 +24,6 @@ interface InvoiceItem {
   totalPrice: number;
 }
 
-// 發票詳細資訊類型
 interface InvoiceDetail {
   id: string;
   invoiceNumber: string;
@@ -28,11 +38,9 @@ interface InvoiceDetail {
 }
 
 const AccountsReceivableDetailsScreen = () => {
-  const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const colors = theme.colors.light;
 
   // 模擬從 API 獲取發票詳細資訊
   useEffect(() => {
@@ -82,32 +90,22 @@ const AccountsReceivableDetailsScreen = () => {
     fetchInvoiceDetails();
   }, [id]);
 
-  // 獲取狀態顏色
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return colors.success;
-      case 'unpaid':
-        return colors.primaryOceanBlue;
-      case 'overdue':
-        return colors.error;
-      default:
-        return colors.text;
-    }
-  };
+  const [editVisible, setEditVisible] = useState(false);
 
-  // 獲取狀態文字
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'paid':
-        return '已付';
-      case 'unpaid':
-        return '未付';
-      case 'overdue':
-        return '逾期';
-      default:
-        return status;
-    }
+  // 編輯完成時，更新本地 invoice 狀態
+  const handleEditSave = (data: {
+    company: string;
+    invoiceNumber: string;
+    amount: number;
+    note?: string;
+  }) => {
+    setInvoice(prev => ({
+      ...prev!,
+      company: data.company,
+      invoiceNumber: data.invoiceNumber,
+      amount: data.amount,
+      note: data.note,
+    }));
   };
 
   // 計算總金額
@@ -116,133 +114,117 @@ const AccountsReceivableDetailsScreen = () => {
   };
 
   if (loading) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text>載入中...</Text>
-        </View>
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!invoice) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text>找不到發票資訊</Text>
-        </View>
-      </View>
-    );
+    return <NotFound message="發票" />;
   }
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
-        {/* 發票基本資訊 */}
-        <View style={[pannelStyles.card, styles.section]}>
-          <View style={styles.header}>
-            <View>
-              <Text style={styles.companyName}>{invoice.company}</Text>
-              <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
-            </View>
-            <View
-              style={[
-                styles.statusBadge,
-                { backgroundColor: getStatusColor(invoice.status) },
-              ]}
-            >
-              <Text style={styles.statusText}>
-                {getStatusText(invoice.status)}
-              </Text>
-            </View>
-          </View>
+      {/* 發票基本資訊區塊 + 編輯按鈕 */}
+      <View style={[containerStyles.upperSection, { position: 'relative' }]}>
+        <InvoiceBaseInfo invoice={invoice} />
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 32,
+            zIndex: 2,
+            backgroundColor: 'white',
+            borderRadius: 16,
+            padding: 6,
+            elevation: 2,
+          }}
+          onPress={() => setEditVisible(true)}
+        >
+          <Text
+            style={{ fontSize: 18, color: theme.colors.light.primaryOceanBlue }}
+          >
+            ✏️
+          </Text>
+        </TouchableOpacity>
+      </View>
 
-          <View style={styles.amountContainer}>
-            <Text style={styles.amountLabel}>總金額</Text>
-            <Text style={styles.amount}>
-              <Text style={styles.currency}>TWD$</Text>
-              <Text style={styles.amountValue}>{invoice.amount}</Text>
-            </Text>
-          </View>
+      <EditInvoiceModal
+        visible={editVisible}
+        invoice={{
+          company: invoice.company,
+          invoiceNumber: invoice.invoiceNumber,
+          amount: invoice.amount,
+          note: invoice.note || '',
+        }}
+        onClose={() => setEditVisible(false)}
+        onSave={handleEditSave}
+      />
 
-          <View style={styles.dateInfo}>
-            <View style={styles.dateItem}>
-              <Text style={styles.dateLabel}>建立日期</Text>
-              <Text style={styles.dateValue}>
-                {invoice.createdAt.toLocaleDateString()}
+      <View style={pannelStyles.contentCard}>
+        <ScrollView>
+          {/* 發票項目明細 */}
+          <View style={[pannelStyles.card, styles.section]}>
+            <H3 title="項目明細" />
+
+            <View style={styles.itemsHeader}>
+              <Text style={[styles.itemHeaderText, { flex: 2 }]}>項目名稱</Text>
+              <Text
+                style={[
+                  styles.itemHeaderText,
+                  { flex: 1, textAlign: 'center' },
+                ]}
+              >
+                數量
+              </Text>
+              <Text
+                style={[styles.itemHeaderText, { flex: 1, textAlign: 'right' }]}
+              >
+                單價
+              </Text>
+              <Text
+                style={[styles.itemHeaderText, { flex: 1, textAlign: 'right' }]}
+              >
+                小計
               </Text>
             </View>
-            <View style={styles.dateItem}>
-              <Text style={styles.dateLabel}>預計付款日</Text>
-              <Text style={styles.dateValue}>
-                {invoice.expectPaidAt.toLocaleDateString()}
-              </Text>
-            </View>
-            {invoice.paidAt && (
-              <View style={styles.dateItem}>
-                <Text style={styles.dateLabel}>實際付款日</Text>
-                <Text style={styles.dateValue}>
-                  {invoice.paidAt.toLocaleDateString()}
+
+            {invoice.items.map(item => (
+              <View key={item.id} style={styles.itemRow}>
+                <Text style={[styles.itemText, { flex: 2 }]}>{item.name}</Text>
+                <Text
+                  style={[styles.itemText, { flex: 1, textAlign: 'center' }]}
+                >
+                  {item.quantity}
+                </Text>
+                <Text
+                  style={[styles.itemText, { flex: 1, textAlign: 'right' }]}
+                >
+                  {item.unitPrice}
+                </Text>
+                <Text
+                  style={[styles.itemText, { flex: 1, textAlign: 'right' }]}
+                >
+                  {item.totalPrice}
                 </Text>
               </View>
-            )}
-          </View>
-        </View>
+            ))}
 
-        {/* 發票項目明細 */}
-        <View style={[pannelStyles.card, styles.section]}>
-          <Text style={styles.sectionTitle}>項目明細</Text>
-
-          <View style={styles.itemsHeader}>
-            <Text style={[styles.itemHeaderText, { flex: 2 }]}>項目名稱</Text>
-            <Text
-              style={[styles.itemHeaderText, { flex: 1, textAlign: 'center' }]}
-            >
-              數量
-            </Text>
-            <Text
-              style={[styles.itemHeaderText, { flex: 1, textAlign: 'right' }]}
-            >
-              單價
-            </Text>
-            <Text
-              style={[styles.itemHeaderText, { flex: 1, textAlign: 'right' }]}
-            >
-              小計
-            </Text>
-          </View>
-
-          {invoice.items.map(item => (
-            <View key={item.id} style={styles.itemRow}>
-              <Text style={[styles.itemText, { flex: 2 }]}>{item.name}</Text>
-              <Text style={[styles.itemText, { flex: 1, textAlign: 'center' }]}>
-                {item.quantity}
-              </Text>
-              <Text style={[styles.itemText, { flex: 1, textAlign: 'right' }]}>
-                {item.unitPrice}
-              </Text>
-              <Text style={[styles.itemText, { flex: 1, textAlign: 'right' }]}>
-                {item.totalPrice}
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>總計</Text>
+              <Text style={styles.totalValue}>
+                TWD$ {calculateTotal(invoice.items)}
               </Text>
             </View>
-          ))}
-
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>總計</Text>
-            <Text style={styles.totalValue}>
-              TWD$ {calculateTotal(invoice.items)}
-            </Text>
           </View>
-        </View>
 
-        {/* 備註 */}
-        {invoice.note && (
-          <View style={[pannelStyles.card, styles.section]}>
-            <Text style={styles.sectionTitle}>備註</Text>
-            <Text style={styles.noteText}>{invoice.note}</Text>
-          </View>
-        )}
-      </ScrollView>
+          {/* 備註 */}
+          {invoice.note && (
+            <View style={[pannelStyles.card, styles.section]}>
+              <H3 title="備註" />
+              <Text style={styles.noteText}>{invoice.note}</Text>
+            </View>
+          )}
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -251,15 +233,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.light.primary,
-  },
-  scrollContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   section: {
     marginBottom: 16,
@@ -328,12 +301,6 @@ const styles = StyleSheet.create({
   dateValue: {
     fontSize: 14,
     color: theme.colors.light.text,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: theme.colors.light.text,
-    marginBottom: 12,
   },
   itemsHeader: {
     flexDirection: 'row',

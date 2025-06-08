@@ -3,6 +3,8 @@ import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { theme } from '@/constants/theme';
+import { containerStyles } from '@/style/containers';
+import { pannelStyles } from '@/style/pannel';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -109,11 +111,11 @@ export default function AccountsReceivable() {
 
   return (
     <View style={styles.container}>
-      <View style={{ paddingHorizontal: 24 }}>
+      <View style={containerStyles.upperSection}>
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
 
-      <View style={styles.contentCard}>
+      <View style={pannelStyles.contentCard}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
         <InvoiceFilter onFilterChange={handleFilterChange} />
         <View style={styles.listContainer}>
@@ -136,15 +138,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  contentCard: {
-    flex: 1,
-    backgroundColor: theme.colors.light.primaryGreenWhite,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    overflow: 'hidden',
   },
   listContainer: {
     flex: 1,
