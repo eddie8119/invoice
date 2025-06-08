@@ -3,6 +3,7 @@ import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { theme } from '@/constants/theme';
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -50,7 +51,7 @@ const mockInvoices = [
   },
 ];
 
-export default function Invoice() {
+export default function AccountsReceivable() {
   const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState(() => {
@@ -92,8 +93,7 @@ export default function Invoice() {
   };
 
   const handleInvoicePress = (invoice: any) => {
-    console.log('Invoice pressed:', invoice);
-    // 導航到發票詳情頁面
+    router.push(`/accounts-receivable-details?id=${invoice.id}`);
   };
 
   // 計算總額
@@ -109,7 +109,9 @@ export default function Invoice() {
 
   return (
     <View style={styles.container}>
-      <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
+      <View style={{ paddingHorizontal: 24 }}>
+        <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
+      </View>
 
       <View style={styles.contentCard}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
@@ -140,8 +142,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.light.primaryGreenWhite,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    paddingHorizontal: 12,
-    paddingTop: 16,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     overflow: 'hidden',
   },
   listContainer: {

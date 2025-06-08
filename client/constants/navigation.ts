@@ -13,10 +13,10 @@ export const tabConfig: TabConfig[] = [
     route: '/',
   },
   {
-    name: 'invoice',
-    title: 'invoice',
+    name: '應收帳款',
+    title: '應收帳款',
     icon: require('@/assets/icons/user.png'),
-    route: '/invoice',
+    route: '/accounts-receivable',
   },
   {
     name: 'scanner',
