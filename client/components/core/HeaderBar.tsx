@@ -5,13 +5,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderBarProps {
   title: string;
-  showBackButton?: boolean;
+  showBack?: boolean;
   rightComponent?: React.ReactNode;
 }
 
 export const HeaderBar = ({
   title,
-  showBackButton = true,
+  showBack = true,
   rightComponent,
 }: HeaderBarProps) => {
   const navigation = useNavigation();
@@ -22,7 +22,7 @@ export const HeaderBar = ({
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
         <View style={styles.leftContainer}>
-          {showBackButton && (
+          {showBack && (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={styles.backButton}
