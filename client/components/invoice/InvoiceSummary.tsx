@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { pannelStyles } from '@/style/pannel';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -15,15 +16,19 @@ export const InvoiceSummary = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.summaryCard}>
+      <View style={[pannelStyles.summaryCard]}>
         <Text style={styles.summaryLabel}>未付總額</Text>
-        <Text style={styles.summaryAmount}>TWD${unpaidTotal}</Text>
+        <Text style={styles.summaryAmount}>
+          <Text style={styles.dollarSign}>TWD$</Text>
+          <Text style={styles.summaryAmount}>{unpaidTotal}</Text>
+        </Text>
       </View>
 
-      <View style={styles.summaryCard}>
-        <Text style={styles.summaryLabel}>逾期總額</Text>
+      <View style={[pannelStyles.summaryCard]}>
+        <Text style={[styles.summaryLabel]}>逾期總額</Text>
         <Text style={[styles.summaryAmount, { color: colors.error }]}>
-          TWD${overdueTotal}
+          <Text style={styles.dollarSign}>TWD$</Text>
+          {overdueTotal}
         </Text>
       </View>
     </View>
@@ -37,18 +42,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
   },
-  summaryCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    width: '48%',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
+
   summaryLabel: {
     fontSize: 14,
     color: '#666',
@@ -57,6 +51,10 @@ const styles = StyleSheet.create({
   summaryAmount: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1a237e',
+    color: theme.colors.light.primaryOceanBlue,
+  },
+  dollarSign: {
+    fontSize: 16,
+    color: theme.colors.light.primary,
   },
 });

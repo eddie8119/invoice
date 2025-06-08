@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.colors.light.primaryLight,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -89,20 +89,20 @@ const styles = StyleSheet.create({
     marginTop: -50,
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 35,
+    height: 35,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
     marginBottom: 2,
   },
   activeIconContainer: {
-    backgroundColor: theme.colors.light.activeBackground,
+    backgroundColor: theme.colors.light.primary,
     ...theme.shadows.small,
   },
   middleIconContainer: {
-    backgroundColor: theme.colors.light.primary,
+    backgroundColor: theme.colors.light.primaryBlue,
     width: 65,
     height: 65,
     borderRadius: 32.5,

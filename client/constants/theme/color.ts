@@ -1,8 +1,11 @@
 // Primary colors
 export const primary = {
-  main: '#00A0FF', // 主要藍色
-  light: '#4DB8FF', // 較淺藍色
-  dark: '#0080CC', // 較深藍色
+  main: '#00D09E',
+  light: '#DFF7E2',
+  greenWhite: '#F1FFF3',
+  dark: '#0080CC',
+  blue: '#3299FF',
+  oceanBlue: '#0068FF',
 };
 
 export const shadow = {
@@ -37,7 +40,10 @@ export const colors = {
     // Primary
     primary: primary.main,
     primaryLight: primary.light,
+    primaryGreenWhite: primary.greenWhite,
     primaryDark: primary.dark,
+    primaryBlue: primary.blue,
+    primaryOceanBlue: primary.oceanBlue,
 
     // Background
     background: neutral.white,

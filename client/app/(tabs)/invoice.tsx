@@ -2,6 +2,7 @@ import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
+import { theme } from '@/constants/theme';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
@@ -108,16 +109,20 @@ export default function Invoice() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
+      <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
+
+      <View style={styles.contentCard}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
         <InvoiceFilter onFilterChange={handleFilterChange} />
-
-        <InvoiceList
-          invoices={filteredInvoices}
-          onInvoicePress={handleInvoicePress}
-        />
-      </ScrollView>
+        <View style={styles.listContainer}>
+          <ScrollView>
+            <InvoiceList
+              invoices={filteredInvoices}
+              onInvoicePress={handleInvoicePress}
+            />
+          </ScrollView>
+        </View>
+      </View>
     </View>
   );
 }
@@ -125,9 +130,21 @@ export default function Invoice() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f7fa',
+    backgroundColor: theme.colors.light.primary,
   },
   scrollView: {
+    flex: 1,
+  },
+  contentCard: {
+    flex: 1,
+    backgroundColor: theme.colors.light.primaryGreenWhite,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingHorizontal: 12,
+    paddingTop: 16,
+    overflow: 'hidden',
+  },
+  listContainer: {
     flex: 1,
   },
 });

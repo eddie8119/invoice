@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { pannelStyles } from '@/style/pannel';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -26,7 +27,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
       case 'paid':
         return colors.success;
       case 'unpaid':
-        return colors.primary;
+        return colors.primaryOceanBlue;
       case 'overdue':
         return colors.error;
       default:
@@ -83,7 +84,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
       {invoices.map(invoice => (
         <TouchableOpacity
           key={invoice.id}
-          style={styles.card}
+          style={[pannelStyles.card, { marginBottom: 12 }]}
           onPress={() => onInvoicePress(invoice)}
         >
           <View style={styles.cardContent}>
@@ -112,7 +113,10 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
             </View>
 
             <View style={styles.cardRight}>
-              <Text style={styles.amount}>TWD$ {invoice.amount}</Text>
+              <Text>
+                TWD$
+                <Text style={styles.amount}>{invoice.amount}</Text>
+              </Text>
               <Text style={styles.date}>
                 建立日期: {invoice.createdAt.toLocaleDateString()}
               </Text>
@@ -147,18 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
   cardContent: {
-    padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -198,7 +191,7 @@ const styles = StyleSheet.create({
   amount: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#333',
+    color: theme.colors.light.primaryOceanBlue,
     marginBottom: 4,
   },
   date: {

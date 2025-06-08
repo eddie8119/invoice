@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: theme.colors.light.primaryLight,
     borderRadius: 20,
-    padding: 4,
+    padding: 5,
   },
   filterButton: {
     paddingVertical: 8,

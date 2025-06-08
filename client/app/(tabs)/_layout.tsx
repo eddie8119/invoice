@@ -9,6 +9,7 @@ import { colors } from '@/constants/theme/color';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs, usePathname } from 'expo-router';
 import React from 'react';
+import { View } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -21,12 +22,12 @@ export default function TabLayout() {
   const isHomePage = pathname === '/';
 
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: colors.light.primary }}>
       {isHomePage ? <HomeHeader /> : <HeaderBar title={currentTab.title} />}
 
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: colors[colorScheme ?? 'light'].primary,
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
@@ -47,6 +48,6 @@ export default function TabLayout() {
           />
         ))}
       </Tabs>
-    </>
+    </View>
   );
 }

@@ -47,7 +47,10 @@ export const HeaderBar = ({
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // 移除底線，不設置 borderBottomWidth 或 shadow
+    backgroundColor: theme.colors.light.primary,
+  },
   content: {
     height: 56,
     flexDirection: 'row',
