@@ -8,6 +8,7 @@ interface Invoice {
   amount: string;
   createdAt: Date;
   paidAt: Date | null;
+  expectPaidAt: Date | null;
   status: 'paid' | 'unpaid' | 'overdue';
   invoiceNumber: string;
 }
@@ -46,17 +47,35 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
     }
   };
 
-  const getStatusMessage = (status: Invoice['status'], date: string) => {
-    switch (status) {
-      case 'paid':
-        return '';
-      case 'unpaid':
-        return '在天天之內到期';
-      case 'overdue':
-        return '逾期3天';
-      default:
-        return '';
+  const getStatusMessage = (
+    status: Invoice['status'],
+    expectPaidAt: Date | null
+  ) => {
+    if (status === 'paid') return '';
+    if (status === 'unpaid') {
+      const today = new Date(); // Assume this is June 8, 2025
+
+      // This is your current condition:
+      if (expectPaidAt && expectPaidAt > today) {
+        // Logic A: expectPaidAt is provided AND it's after today
+        const diffMs = expectPaidAt.getTime() - today.getTime();
+        const diffDays = Math.max(
+          0,
+          Math.round(diffMs / (1000 * 60 * 60 * 24))
+        );
+        return `在${diffDays}天內到期`;
+      }
+
+      // Logic B: Fallback (if expectPaidAt is null OR expectPaidAt is today or in the past)
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      const lastDay = new Date(year, month + 1, 0); // This will be June 30, 2025
+      const diffMs = lastDay.getTime() - today.getTime();
+      const diffDays = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+      return `在${diffDays}天內到期月底`;
     }
+    if (status === 'overdue') return '逾期3天';
+    return '';
   };
 
   return (
@@ -72,10 +91,7 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
               <Text style={styles.companyName}>{invoice.company}</Text>
               <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
 
-              {getStatusMessage(
-                invoice.status,
-                invoice.createdAt.toLocaleDateString()
-              ) && (
+              {getStatusMessage(invoice.status, invoice.expectPaidAt) && (
                 <View style={styles.statusContainer}>
                   <View
                     style={[
@@ -100,22 +116,24 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
               <Text style={styles.date}>
                 建立日期: {invoice.createdAt.toLocaleDateString()}
               </Text>
-              {invoice.paidAt && (
-                <Text style={styles.date}>
-                  付款日期: {invoice.paidAt.toLocaleDateString()}
-                </Text>
-              )}
 
-              <TouchableOpacity
-                style={[
-                  styles.statusButton,
-                  { backgroundColor: getStatusColor(invoice.status) },
-                ]}
-              >
-                <Text style={styles.statusButtonText}>
-                  {getStatusText(invoice.status)}
-                </Text>
-              </TouchableOpacity>
+              <View style={styles.paidDateAndStatusContainer}>
+                {invoice.paidAt && (
+                  <Text style={[styles.paidDateText]}>
+                    日期: {invoice.paidAt.toLocaleDateString()}
+                  </Text>
+                )}
+                <TouchableOpacity
+                  style={[
+                    styles.statusButton,
+                    { backgroundColor: getStatusColor(invoice.status) },
+                  ]}
+                >
+                  <Text style={styles.statusButtonText}>
+                    {getStatusText(invoice.status)}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </TouchableOpacity>
@@ -197,5 +215,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: '500',
+  },
+  paidDateAndStatusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4, // Adjust as needed for spacing
+  },
+  paidDateText: {
+    marginRight: 8, // Add some space between paid date and status button
+    // No marginBottom here as it's handled by the container's marginTop or overall cardRight padding
   },
 });
