@@ -13,10 +13,10 @@ export const tabConfig: TabConfig[] = [
     route: '/',
   },
   {
-    name: 'report',
-    title: 'report',
+    name: 'invoice',
+    title: 'invoice',
     icon: require('@/assets/icons/user.png'),
-    route: '/invoice-report',
+    route: '/invoice',
   },
   {
     name: 'scanner',
@@ -25,11 +25,17 @@ export const tabConfig: TabConfig[] = [
     route: '/scanner',
   },
   {
-    name: 'upload',
-    title: 'upload',
+    name: 'report',
+    title: 'report',
     icon: require('@/assets/icons/user.png'),
-    route: '/invoice-upload',
+    route: '/invoice-report',
   },
+  //   {
+  //     name: 'upload',
+  //     title: 'upload',
+  //     icon: require('@/assets/icons/user.png'),
+  //     route: '/invoice-upload',
+  //   },
   {
     name: 'profile',
     title: 'profile',
