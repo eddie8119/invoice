@@ -28,4 +28,8 @@ export const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  upperSection: {
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+  },
 });

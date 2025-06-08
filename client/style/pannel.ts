@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import { StyleSheet } from 'react-native';
 
 const baseCard = {
@@ -12,6 +13,15 @@ const baseCard = {
 };
 
 export const pannelStyles = StyleSheet.create({
+  contentCard: {
+    flex: 1,
+    backgroundColor: theme.colors.light.primaryGreenWhite,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    overflow: 'hidden',
+  },
   card: {
     ...baseCard,
   },

@@ -15,4 +15,13 @@ export const textStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
   },
+  statusButton: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  date: {
+    fontSize: 14,
+    color: '#666',
+  },
 });
