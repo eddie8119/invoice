@@ -26,7 +26,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
       <View style={styles.header}>
         <View>
           <H3Title title={invoice.company} style={{ marginBottom: 0 }} />
-          <Text style={styles.subInfo}>#{invoice.invoiceNumber}</Text>
+          <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
         </View>
         <View
           style={[
@@ -38,29 +38,29 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
         </View>
       </View>
       <View style={[{ marginBottom: 16 }]}>
-        <Text style={styles.label}>總金額</Text>
+        <Text style={textStyles.lebal}>總金額</Text>
         <View style={styles.amountRow}>
-          <Text style={styles.label}>TWD$</Text>
+          <Text style={textStyles.lebal}>TWD$</Text>
           <Text style={styles.amountValue}>{invoice.amount}</Text>
         </View>
       </View>
       <View style={styles.dateInfo}>
         <View style={styles.dateItem}>
-          <Text style={textStyles.date}>建立日期</Text>
-          <Text style={textStyles.date}>
+          <Text style={textStyles.lebal}>建立日期</Text>
+          <Text style={textStyles.lebal}>
             {invoice.createdAt.toLocaleDateString()}
           </Text>
         </View>
         <View style={styles.dateItem}>
-          <Text style={textStyles.date}>預計付款日</Text>
-          <Text style={textStyles.date}>
+          <Text style={textStyles.lebal}>預計付款日</Text>
+          <Text style={textStyles.lebal}>
             {invoice.expectPaidAt.toLocaleDateString()}
           </Text>
         </View>
         {invoice.paidAt && (
           <View style={styles.dateItem}>
-            <Text style={textStyles.date}>實際付款日</Text>
-            <Text style={textStyles.date}>
+            <Text style={textStyles.lebal}>實際付款日</Text>
+            <Text style={textStyles.lebal}>
               {invoice.paidAt.toLocaleDateString()}
             </Text>
           </View>
@@ -82,9 +82,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#222',
     // marginBottom: 4,
-  },
-  subInfo: {
-    color: '#888',
   },
   statusBadge: {
     paddingHorizontal: 12,

@@ -11,16 +11,12 @@ export const textStyles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 32,
   },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   statusButton: {
     color: 'white',
     fontSize: 12,
     fontWeight: '500',
   },
-  date: {
+  lebal: {
     fontSize: 14,
     color: '#666',
   },
