@@ -1,8 +1,8 @@
 import H3Title from '@/components/core/H3Title';
 import Loading from '@/components/core/Loading';
 import NotFound from '@/components/core/Loading copy';
-import { EditInvoiceModal } from '@/components/invoice/EditInvoiceModal';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
+import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import { pannelStyles } from '@/style/pannel';

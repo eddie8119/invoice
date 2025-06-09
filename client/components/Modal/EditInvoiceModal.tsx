@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { theme } from '@/constants/theme';
+import React, { useState } from 'react';
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export interface EditInvoiceModalProps {
   visible: boolean;
@@ -11,10 +18,20 @@ export interface EditInvoiceModalProps {
     note?: string;
   };
   onClose: () => void;
-  onSave: (data: { company: string; invoiceNumber: string; amount: number; note?: string }) => void;
+  onSave: (data: {
+    company: string;
+    invoiceNumber: string;
+    amount: number;
+    note?: string;
+  }) => void;
 }
 
-export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({ visible, invoice, onClose, onSave }) => {
+export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
+  visible,
+  invoice,
+  onClose,
+  onSave,
+}) => {
   const [form, setForm] = useState({
     company: invoice.company,
     invoiceNumber: invoice.invoiceNumber,
@@ -27,7 +44,12 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({ visible, inv
   };
 
   const handleSave = () => {
-    if (!form.company.trim() || !form.invoiceNumber.trim() || isNaN(Number(form.amount))) return;
+    if (
+      !form.company.trim() ||
+      !form.invoiceNumber.trim() ||
+      isNaN(Number(form.amount))
+    )
+      return;
     onSave({
       company: form.company.trim(),
       invoiceNumber: form.invoiceNumber.trim(),
