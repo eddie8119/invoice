@@ -5,7 +5,7 @@ interface H3Props {
   title: string;
   style?: StyleProp<TextStyle>;
 }
-const H3 = ({ title, style }: H3Props) => {
+const H3Title = ({ title, style }: H3Props) => {
   return <Text style={[styles.title, style]}>{title}</Text>;
 };
 
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
-export default H3;
+export default H3Title;

@@ -1,4 +1,4 @@
-import H3 from '@/components/core/H3';
+import H3Title from '@/components/core/H3Title';
 import Loading from '@/components/core/Loading';
 import NotFound from '@/components/core/Loading copy';
 import { EditInvoiceModal } from '@/components/invoice/EditInvoiceModal';
@@ -163,7 +163,7 @@ const AccountsReceivableDetailsScreen = () => {
         <ScrollView>
           {/* 發票項目明細 */}
           <View style={[pannelStyles.card, styles.section]}>
-            <H3 title="項目明細" />
+            <H3Title title="項目明細" />
 
             <View style={styles.itemsHeader}>
               <Text style={[styles.itemHeaderText, { flex: 2 }]}>項目名稱</Text>
@@ -219,7 +219,7 @@ const AccountsReceivableDetailsScreen = () => {
           {/* 備註 */}
           {invoice.note && (
             <View style={[pannelStyles.card, styles.section]}>
-              <H3 title="備註" />
+              <H3Title title="備註" />
               <Text style={styles.noteText}>{invoice.note}</Text>
             </View>
           )}
