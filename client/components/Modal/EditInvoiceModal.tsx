@@ -1,3 +1,4 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import React, { useState } from 'react';
@@ -100,12 +101,18 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
             multiline
           />
           <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.buttonText}>取消</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-              <Text style={styles.buttonText}>儲存</Text>
-            </TouchableOpacity>
+            <ButtonText
+              text="Cancel"
+              variant="outlined"
+              size="small"
+              onPress={onClose}
+            />
+            <ButtonText
+              text="Save"
+              variant="filled"
+              size="small"
+              onPress={handleSave}
+            />
           </View>
         </View>
       </View>

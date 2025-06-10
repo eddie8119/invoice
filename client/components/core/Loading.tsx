@@ -1,11 +1,15 @@
 import { theme } from '@/constants/theme';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 const Loading = () => {
   return (
     <View style={styles.container}>
       <View style={styles.loadingContainer}>
+        <ActivityIndicator
+          size="large"
+          color={theme.colors.light.primaryOceanBlue}
+        />
         <Text>載入中...</Text>
       </View>
     </View>
