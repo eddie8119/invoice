@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Button,
   Image,
   ScrollView,
   StyleSheet,
@@ -66,7 +65,7 @@ export const InvoiceScanScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Button title="拍照辨識發票" onPress={handleTakePhoto} />
+      <ButtonText title="拍照辨識發票" onPress={handleTakePhoto} />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {invoiceData && (
         <View style={styles.result}>

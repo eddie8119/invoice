@@ -1,5 +1,4 @@
-import { Button } from '@/components/core/Button';
-import { Input } from '@/components/core/Input';
+import { ButtonText } from '@/components/core/ButtonText';
 import { theme } from '@/constants/theme';
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { Ionicons } from '@expo/vector-icons';
@@ -73,7 +72,7 @@ export default function LoginScreen() {
             {...register('password')}
           />
 
-          <Button
+          <ButtonText
             text="Sign In"
             variant="filled"
             size="medium"

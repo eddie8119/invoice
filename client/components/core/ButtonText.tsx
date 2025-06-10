@@ -13,7 +13,7 @@ import {
 type ButtonSize = 'small' | 'medium' | 'large';
 type ButtonVariant = 'filled' | 'outlined' | 'text';
 
-interface ButtonProps {
+interface ButtonTextProps {
   text: string;
   onPress?: () => void;
   size?: ButtonSize;
@@ -23,7 +23,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-export function Button({
+export function ButtonText({
   text,
   onPress,
   size = 'medium',
@@ -31,7 +31,7 @@ export function Button({
   icon,
   style,
   disabled = false,
-}: ButtonProps) {
+}: ButtonTextProps) {
   const colors = theme.colors.light;
 
   // 根據 variant 決定背景色和文字顏色

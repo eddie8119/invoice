@@ -1,4 +1,4 @@
-import { Button } from '@/components/core/Button';
+import { ButtonText } from '@/components/core/ButtonText';
 import { theme } from '@/constants/theme';
 import { Link, router } from 'expo-router';
 import React from 'react';
@@ -38,21 +38,21 @@ export default function WelcomeScreen() {
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
-          <Button
+          <ButtonText
             text="Sign up via Email"
             variant="filled"
             size="medium"
             onPress={() => router.push('/sign-up')}
           />
 
-          <Button
+          <ButtonText
             text="Sign up via Google"
             variant="outlined"
             size="medium"
             icon={require('@/assets/images/logo.png')}
           />
 
-          <Button
+          <ButtonText
             text="Sign up via Apple"
             variant="outlined"
             size="medium"
@@ -66,7 +66,7 @@ export default function WelcomeScreen() {
             Already have an account?{' '}
           </Text>
           <Link href="/login" asChild>
-            <Button text="Log in" variant="text" size="small" />
+            <ButtonText text="Log in" variant="text" size="small" />
           </Link>
         </View>
       </View>

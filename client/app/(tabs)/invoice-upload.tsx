@@ -3,7 +3,7 @@ import useCloudOCR from '@/hooks/useCloudOCR';
 import { uploadInvoiceToAppwrite } from '@/services/appwriteService';
 import { pickImageAndConvertBase64 } from '@/utils/pickImage';
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, Image, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Text, View } from 'react-native';
 
 export default function InvoiceUploadScreen() {
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -25,7 +25,7 @@ export default function InvoiceUploadScreen() {
 
   return (
     <View style={{ padding: 20 }}>
-      <Button title="選擇圖片" onPress={handlePickImage} />
+      <ButtonText title="選擇圖片" onPress={handlePickImage} />
       {imageUri && (
         <Image
           source={{ uri: imageUri }}

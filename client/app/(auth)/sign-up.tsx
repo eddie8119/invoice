@@ -1,5 +1,4 @@
-import { Button } from '@/components/core/Button';
-import { Input } from '@/components/core/Input';
+import { ButtonText } from '@/components/core/ButtonText';
 import { theme } from '@/constants/theme';
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { authApi } from '@/services/api/auth';
@@ -114,7 +113,7 @@ export default function SignUpScreen() {
             )}
           />
 
-          <Button
+          <ButtonText
             text="Create Account"
             variant="filled"
             size="medium"
