@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { containerStyles } from '@/style/containers';
 import React, { useState } from 'react';
 import {
   Modal,
@@ -67,7 +68,10 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
+        <View style={containerStyles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>×</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>編輯發票資訊</Text>
           <TextInput
             style={styles.input}
@@ -116,16 +120,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  modalContainer: {
-    width: '90%',
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 6,
+  closeButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.05)',
+  },
+  closeButtonText: {
+    fontSize: 24,
+    color: '#888',
+    lineHeight: 28,
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 18,

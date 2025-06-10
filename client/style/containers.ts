@@ -1,3 +1,4 @@
+import { theme } from '@/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const containerStyles = StyleSheet.create({
@@ -31,5 +32,26 @@ export const containerStyles = StyleSheet.create({
   upperSection: {
     paddingHorizontal: 24,
     paddingVertical: 20,
+  },
+  lowerSection: {
+    flex: 1,
+    backgroundColor: theme.colors.light.primaryGreenWhite,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    overflow: 'hidden',
+  },
+  modalContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: theme.colors.light.primaryGreenWhite,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    padding: 24,
   },
 });
