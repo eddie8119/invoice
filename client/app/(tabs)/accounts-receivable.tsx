@@ -4,7 +4,6 @@ import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
-import { pannelStyles } from '@/style/pannel';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -115,7 +114,7 @@ export default function AccountsReceivable() {
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
 
-      <View style={pannelStyles.contentCard}>
+      <View style={containerStyles.lowerSection}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
         <InvoiceFilter onFilterChange={handleFilterChange} />
         <View style={styles.listContainer}>

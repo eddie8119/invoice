@@ -159,7 +159,7 @@ const AccountsReceivableDetailsScreen = () => {
         onSave={handleEditSave}
       />
 
-      <View style={pannelStyles.contentCard}>
+      <View style={containerStyles.lowerSection}>
         <ScrollView>
           {/* 發票項目明細 */}
           <View style={[pannelStyles.card, styles.section]}>
