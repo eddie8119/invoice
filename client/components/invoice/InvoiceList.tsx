@@ -19,9 +19,14 @@ interface Invoice {
 interface InvoiceListProps {
   invoices: Invoice[];
   onInvoicePress: (invoice: Invoice) => void;
+  onStatusToggle?: (invoice: Invoice) => void;
 }
 
-export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
+export const InvoiceList = ({
+  invoices,
+  onInvoicePress,
+  onStatusToggle,
+}: InvoiceListProps) => {
   const colors = theme.colors.light;
 
   const getStatusMessage = (
@@ -65,9 +70,10 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
         >
           <View style={styles.cardContent}>
             <View style={styles.cardLeft}>
-              <Text style={styles.companyName}>{invoice.company}</Text>
-              <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
-
+              <View style={styles.companyInfoContainer}>
+                <Text style={styles.companyName}>{invoice.company}</Text>
+                <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
+              </View>
               {getStatusMessage(invoice.status, invoice.expectPaidAt) && (
                 <View style={styles.statusContainer}>
                   <View
@@ -108,6 +114,14 @@ export const InvoiceList = ({ invoices, onInvoicePress }: InvoiceListProps) => {
                     styles.statusButton,
                     { backgroundColor: getStatusColor(invoice.status) },
                   ]}
+                  onPress={e => {
+                    // 防止事件冒泡，避免觸發父元素的 onPress
+                    e.stopPropagation && e.stopPropagation();
+                    if (onStatusToggle) {
+                      // 切換狀態：未付/逾期 -> 已付，已付 -> 未付
+                      onStatusToggle(invoice);
+                    }
+                  }}
                 >
                   <Text style={textStyles.statusButton}>
                     {getStatusText(invoice.status)}
@@ -128,8 +142,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardLeft: {
+    alignItems: 'flex-start', // 靠左對齊
+    justifyContent: 'flex-start', // 靠上對齊
     flex: 1,
-    justifyContent: 'center',
+    minHeight: 60, // 可視情況調整，避免內容壓縮
+  },
+  companyInfoContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: '100%',
   },
   cardRight: {
     alignItems: 'flex-end',
@@ -139,17 +160,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 0, // 不要讓公司名稱和發票號碼有多餘空隙
   },
   invoiceNumber: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 0, // 不要讓發票號碼和下方有多餘空隙
   },
   statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
+    marginTop: 8, // 狀態訊息區塊與上方資訊的距離
   },
   statusDot: {
     width: 8,

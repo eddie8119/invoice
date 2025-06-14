@@ -9,13 +9,27 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
+// 定義 Invoice 介面，與 InvoiceList.tsx 中的保持一致
+interface Invoice {
+  id: string;
+  company: string;
+  amount: string;
+  createdAt: Date;
+  paidAt: Date | null;
+  expectPaidAt: Date | null;
+  status: 'paid' | 'unpaid' | 'overdue';
+  invoiceNumber: string;
+}
+
 export default function AccountsReceivable() {
+  // 使用 useState 來管理 invoices 數據，初始值為 mockInvoicesReceivable
+  const [invoices, setInvoices] = useState<Invoice[]>(mockInvoicesReceivable as Invoice[]);
   const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState(() => {
     // Initial filtering logic for setFilteredInvoices
     // Filter by the initial selectedMonth and '所有' status
-    return mockInvoicesReceivable.filter(
+    return invoices.filter(
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
   });
@@ -23,7 +37,7 @@ export default function AccountsReceivable() {
   // useEffect to update filteredInvoices when selectedMonth or activeStatusFilter changes
   useEffect(() => {
     // 1. Filter by selected month
-    let invoicesForSelectedMonth = mockInvoicesReceivable.filter(
+    let invoicesForSelectedMonth = invoices.filter(
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
 
@@ -43,7 +57,7 @@ export default function AccountsReceivable() {
         invoicesForSelectedMonth.filter(inv => inv.status === 'overdue')
       );
     }
-  }, [selectedMonth, activeStatusFilter, mockInvoicesReceivable]); // mockInvoicesReceivable is stable but good practice to include if it could change
+  }, [selectedMonth, activeStatusFilter, invoices]); // 依賴於 invoices 而不是 mockInvoicesReceivable
 
   // handleFilterChange now only updates the activeStatusFilter state
   const handleFilterChange = (filter: string) => {
@@ -54,13 +68,32 @@ export default function AccountsReceivable() {
     router.push(`/accounts-receivable-details?id=${invoice.id}`);
   };
 
+  // 處理狀態切換的函數
+  const handleStatusToggle = (invoice: Invoice) => {
+    setInvoices(prevInvoices => 
+      prevInvoices.map(inv => {
+        if (inv.id === invoice.id) {
+          // 如果是已付，切換為未付；如果是未付或逾期，切換為已付
+          const newStatus = inv.status === 'paid' ? 'unpaid' : 'paid';
+          return {
+            ...inv,
+            status: newStatus,
+            // 如果切換為已付，設置付款日期為當前日期；否則清除付款日期
+            paidAt: newStatus === 'paid' ? new Date() : null
+          } as Invoice; // 使用類型斷言確保返回類型正確
+        }
+        return inv;
+      })
+    );
+  };
+
   // 計算總額
-  const unpaidTotal = mockInvoicesReceivable
+  const unpaidTotal = invoices
     .filter(inv => inv.status === 'unpaid')
     .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
     .toFixed(2);
 
-  const overdueTotal = mockInvoicesReceivable
+  const overdueTotal = invoices
     .filter(inv => inv.status === 'overdue')
     .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
     .toFixed(2);
@@ -79,6 +112,7 @@ export default function AccountsReceivable() {
             <InvoiceList
               invoices={filteredInvoices}
               onInvoicePress={handleInvoicePress}
+              onStatusToggle={handleStatusToggle}
             />
           </ScrollView>
         </View>
