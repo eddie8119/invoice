@@ -26,25 +26,25 @@ export const tabConfig: TabConfig[] = [
   {
     name: '應收帳款',
     title: '應收帳款',
-    icon: require('@/assets/icons/user.png'),
+    icon: require('@/assets/icons/pig.png'),
     route: '/accounts-receivable',
   },
   {
-    name: 'scanner',
-    title: 'scanner',
-    icon: require('@/assets/icons/user.png'),
+    name: '掃描',
+    title: '掃描',
+    icon: require('@/assets/icons/scanner.png'),
     route: '/scanner',
   },
   {
     name: '應付帳款',
     title: '應付帳款',
-    icon: require('@/assets/icons/user.png'),
+    icon: require('@/assets/icons/money.png'),
     route: '/accounts-payable',
   },
   {
     name: '收益報告',
     title: '收益報告',
-    icon: require('@/assets/icons/user.png'),
+    icon: require('@/assets/icons/report.png'),
     route: '/invoice-report',
   },
 ];
