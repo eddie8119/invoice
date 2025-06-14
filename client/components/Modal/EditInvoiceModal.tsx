@@ -1,4 +1,6 @@
 import { ButtonText } from '@/components/core/ButtonText';
+import { DatePickerInput } from '@/components/core/DatePickerInput';
+import { Heading } from '@/components/core/Heading';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import React, { useState } from 'react';
@@ -18,6 +20,7 @@ export interface EditInvoiceModalProps {
     invoiceNumber: string;
     amount: number;
     note?: string;
+    paymentDueDate?: string;
   };
   onClose: () => void;
   onSave: (data: {
@@ -39,6 +42,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     invoiceNumber: invoice.invoiceNumber,
     amount: String(invoice.amount),
     note: invoice.note || '',
+    paymentDueDate: invoice.paymentDueDate || '',
   });
 
   const handleChange = (field: string, value: string) => {
@@ -57,6 +61,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
       invoiceNumber: form.invoiceNumber.trim(),
       amount: Number(form.amount),
       note: form.note.trim(),
+      paymentDueDate: form.paymentDueDate.trim(),
     });
     onClose();
   };
@@ -73,7 +78,9 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>編輯發票資訊</Text>
+          <Heading level={2} style={styles.pageTitle}>
+            編輯發票資訊
+          </Heading>
           <TextInput
             style={styles.input}
             value={form.company}
@@ -86,12 +93,10 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
             onChangeText={text => handleChange('invoiceNumber', text)}
             placeholder="發票號碼"
           />
-          <TextInput
-            style={styles.input}
-            value={form.amount}
-            onChangeText={text => handleChange('amount', text)}
-            placeholder="金額"
-            keyboardType="numeric"
+          <DatePickerInput
+            value={form.paymentDueDate}
+            onChange={date => handleChange('paymentDueDate', date)}
+            label="預付款日"
           />
           <TextInput
             style={[styles.input, { height: 80 }]}
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     fontWeight: 'bold',
   },
-  title: {
+  pageTitle: {
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 16,
