@@ -3,6 +3,7 @@ import Loading from '@/components/core/Loading';
 import NotFound from '@/components/core/Loading copy';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
+import { InvoiceItem } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import { pannelStyles } from '@/style/pannel';
@@ -15,14 +16,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-interface InvoiceItem {
-  id: string;
-  name: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
 
 interface InvoiceDetail {
   id: string;
@@ -51,31 +44,34 @@ const AccountsReceivableDetailsScreen = () => {
         // 模擬 API 請求延遲
         await new Promise(resolve => setTimeout(resolve, 500));
 
+        const mockItems: InvoiceItem[] = [
+          {
+            id: '1',
+            name: '網站維護服務',
+            quantity: 1,
+            price: 8000,
+          },
+          {
+            id: '2',
+            name: '伺服器租用費用',
+            quantity: 3,
+            price: 1500,
+          },
+        ];
+
         // 模擬發票詳細資訊
         const mockInvoice: InvoiceDetail = {
           id: id || '1',
           invoiceNumber: 'INV-2025-' + id,
           company: '台灣科技有限公司',
-          amount: 12500,
+          amount: mockItems.reduce(
+            (sum, item) => sum + item.quantity * item.price,
+            0
+          ),
           status: 'unpaid',
           createdAt: new Date('2025-05-15'),
           expectPaidAt: new Date('2025-06-15'),
-          items: [
-            {
-              id: '1',
-              name: '網站維護服務',
-              quantity: 1,
-              unitPrice: 8000,
-              totalPrice: 8000,
-            },
-            {
-              id: '2',
-              name: '伺服器租用費用',
-              quantity: 3,
-              unitPrice: 1500,
-              totalPrice: 4500,
-            },
-          ],
+          items: mockItems,
           note: '請於15日內付款，謝謝。',
         };
 
@@ -96,21 +92,34 @@ const AccountsReceivableDetailsScreen = () => {
   const handleEditSave = (data: {
     company: string;
     invoiceNumber: string;
-    amount: number;
     note?: string;
+    paymentDueDate?: string;
+    items: InvoiceItem[];
   }) => {
-    setInvoice(prev => ({
-      ...prev!,
-      company: data.company,
-      invoiceNumber: data.invoiceNumber,
-      amount: data.amount,
-      note: data.note,
-    }));
+    const totalAmount = data.items.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      0
+    );
+    setInvoice(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        company: data.company,
+        invoiceNumber: data.invoiceNumber,
+        note: data.note,
+        expectPaidAt: data.paymentDueDate
+          ? new Date(data.paymentDueDate)
+          : prev.expectPaidAt,
+        items: data.items,
+        amount: totalAmount,
+      };
+    });
+    setEditVisible(false);
   };
 
   // 計算總金額
   const calculateTotal = (items: InvoiceItem[]) => {
-    return items.reduce((sum, item) => sum + item.totalPrice, 0);
+    return items.reduce((sum, item) => sum + item.quantity * item.price, 0);
   };
 
   if (loading) {
@@ -152,16 +161,20 @@ const AccountsReceivableDetailsScreen = () => {
         invoice={{
           company: invoice.company,
           invoiceNumber: invoice.invoiceNumber,
-          amount: invoice.amount,
-          note: invoice.note || '',
+          note: invoice.note,
+          paymentDueDate: invoice.expectPaidAt
+            .toISOString()
+            .split('T')[0]
+            .replace(/-/g, '/'),
+          items: invoice.items,
         }}
         onClose={() => setEditVisible(false)}
         onSave={handleEditSave}
       />
 
       <View style={containerStyles.lowerSection}>
-        <ScrollView>
-          {/* 發票項目明細 */}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* 項目明細 */}
           <View style={[pannelStyles.card, styles.section]}>
             <H3Title title="項目明細" />
 
@@ -198,12 +211,12 @@ const AccountsReceivableDetailsScreen = () => {
                 <Text
                   style={[styles.itemText, { flex: 1, textAlign: 'right' }]}
                 >
-                  {item.unitPrice}
+                  {item.price}
                 </Text>
                 <Text
                   style={[styles.itemText, { flex: 1, textAlign: 'right' }]}
                 >
-                  {item.totalPrice}
+                  {item.quantity * item.price}
                 </Text>
               </View>
             ))}

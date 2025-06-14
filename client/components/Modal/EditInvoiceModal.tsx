@@ -2,26 +2,32 @@ import { BaseModal } from '@/components/core/BaseModal';
 import { ButtonText } from '@/components/core/ButtonText';
 import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Heading } from '@/components/core/Heading';
+import {
+  EditableInvoiceItemsTable,
+  InvoiceItem,
+} from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View, Text, TouchableOpacity } from 'react-native';
+
+export { InvoiceItem };
 
 export interface EditInvoiceModalProps {
   visible: boolean;
   invoice: {
     company: string;
     invoiceNumber: string;
-    amount: number;
     note?: string;
     paymentDueDate?: string;
+    items: InvoiceItem[];
   };
   onClose: () => void;
   onSave: (data: {
     company: string;
     invoiceNumber: string;
-    amount: number;
     note?: string;
-    paymentDueDate?: string; // Added paymentDueDate
+    paymentDueDate?: string;
+    items: InvoiceItem[];
   }) => void;
 }
 
@@ -34,28 +40,52 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
   const [form, setForm] = useState({
     company: invoice.company,
     invoiceNumber: invoice.invoiceNumber,
-    amount: String(invoice.amount),
     note: invoice.note || '',
     paymentDueDate: invoice.paymentDueDate || '',
+    items: invoice.items || [],
   });
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: keyof typeof form, value: any) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
+  const handleItemChange = (index: number, field: keyof InvoiceItem, value: string) => {
+    const newItems = [...form.items];
+    const item = { ...newItems[index] };
+
+    if (field === 'quantity' || field === 'price') {
+      item[field] = Number(value) || 0;
+    } else {
+      item[field] = value;
+    }
+
+    newItems[index] = item;
+    handleChange('items', newItems);
+  };
+
+  const handleAddItem = () => {
+    const newItem: InvoiceItem = {
+      id: `new-${Date.now()}`,
+      name: '',
+      quantity: 1,
+      price: 0,
+    };
+    handleChange('items', [...form.items, newItem]);
+  };
+
+  const handleRemoveItem = (index: number) => {
+    const newItems = form.items.filter((_, i) => i !== index);
+    handleChange('items', newItems);
+  };
+
   const handleSave = () => {
-    if (
-      !form.company.trim() ||
-      !form.invoiceNumber.trim() ||
-      isNaN(Number(form.amount))
-    )
-      return;
+    if (!form.company.trim() || !form.invoiceNumber.trim()) return;
     onSave({
       company: form.company.trim(),
       invoiceNumber: form.invoiceNumber.trim(),
-      amount: Number(form.amount),
       note: form.note.trim(),
       paymentDueDate: form.paymentDueDate.trim(),
+      items: form.items,
     });
     onClose();
   };
@@ -113,6 +143,13 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
         onChangeText={text => handleChange('note', text)}
         placeholder="備註"
         multiline
+      />
+
+      <EditableInvoiceItemsTable
+        items={form.items}
+        onItemChange={handleItemChange}
+        onAddItem={handleAddItem}
+        onRemoveItem={handleRemoveItem}
       />
     </BaseModal>
   );
