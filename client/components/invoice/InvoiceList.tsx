@@ -1,20 +1,10 @@
 import { theme } from '@/constants/theme';
 import { pannelStyles } from '@/style/pannel';
 import { textStyles } from '@/style/text';
+import { Invoice } from '@/types/invoice';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-interface Invoice {
-  id: string;
-  company: string;
-  amount: string;
-  createdAt: Date;
-  paidAt: Date | null;
-  expectPaidAt: Date | null;
-  status: 'paid' | 'unpaid' | 'overdue';
-  invoiceNumber: string;
-}
 
 interface InvoiceListProps {
   invoices: Invoice[];
@@ -72,7 +62,9 @@ export const InvoiceList = ({
             <View style={styles.cardLeft}>
               <View style={styles.companyInfoContainer}>
                 <Text style={styles.companyName}>{invoice.company}</Text>
-                <Text style={styles.invoiceNumber}>#{invoice.invoiceNumber}</Text>
+                <Text style={styles.invoiceNumber}>
+                  #{invoice.invoiceNumber}
+                </Text>
               </View>
               {getStatusMessage(invoice.status, invoice.expectPaidAt) && (
                 <View style={styles.statusContainer}>

@@ -40,3 +40,46 @@ export const mockInvoicesReceivable = [
     invoiceNumber: 'INV100004',
   },
 ];
+
+export const mockInvoicesPayable = [
+  {
+    id: '3',
+    company: '王華科技有限公司',
+    amount: '582.23',
+    createdAt: new Date('2025-06-05'),
+    paidAt: new Date('2025-06-8'),
+    expectPaidAt: null,
+    status: 'paid' as const,
+    invoiceNumber: 'INV100003',
+  },
+  {
+    id: '1',
+    company: '李煥貿易有限公司',
+    amount: '582.70',
+    createdAt: new Date('2025-06-05'),
+    paidAt: null,
+    expectPaidAt: null,
+    status: 'unpaid' as const,
+    invoiceNumber: 'INV100001',
+  },
+  {
+    id: '4',
+    company: '陳小華有限公司',
+    amount: '582.70',
+    createdAt: new Date('2025-06-04'),
+    paidAt: null,
+    expectPaidAt: new Date('2025-06-13'),
+    status: 'unpaid' as const,
+    invoiceNumber: 'INV100004',
+  },
+  {
+    id: '2',
+    company: '環球科技有限公司',
+    amount: '582.01',
+    createdAt: new Date('2025-06-05'),
+    paidAt: null,
+    expectPaidAt: null,
+    status: 'overdue' as const,
+    invoiceNumber: 'INV100002',
+  },
+];
