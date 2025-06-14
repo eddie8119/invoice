@@ -4,7 +4,7 @@ import { StyleSheet, Text } from 'react-native';
 interface HeadingProps {
   level: 1 | 2 | 3;
   children: React.ReactNode;
-  style?: unknown;
+  style?: StyleProp<TextStyle>;
   color?: string;
   marginBottom?: number;
 }
