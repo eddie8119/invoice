@@ -25,21 +25,15 @@ export const tabConfig: TabConfig[] = [
     route: '/scanner',
   },
   {
-    name: 'report',
-    title: 'report',
+    name: '應付帳款',
+    title: '應付帳款',
+    icon: require('@/assets/icons/user.png'),
+    route: '/accounts-payable',
+  },
+  {
+    name: '收益報告',
+    title: '收益報告',
     icon: require('@/assets/icons/user.png'),
     route: '/invoice-report',
-  },
-  //   {
-  //     name: 'upload',
-  //     title: 'upload',
-  //     icon: require('@/assets/icons/user.png'),
-  //     route: '/invoice-upload',
-  //   },
-  {
-    name: 'profile',
-    title: 'profile',
-    icon: require('@/assets/icons/user.png'),
-    route: '/profile',
   },
 ];
