@@ -2,55 +2,12 @@ import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
+import { mockInvoicesReceivable } from '@/constants/dummyData';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-
-// 模擬數據
-const mockInvoices = [
-  {
-    id: '1',
-    company: '李煥貿易有限公司',
-    amount: '582.70',
-    createdAt: new Date('2025-06-05'),
-    paidAt: null,
-    expectPaidAt: null,
-    status: 'unpaid' as const,
-    invoiceNumber: 'INV100001',
-  },
-  {
-    id: '2',
-    company: '環球科技有限公司',
-    amount: '582.01',
-    createdAt: new Date('2025-06-05'),
-    paidAt: null,
-    expectPaidAt: null,
-    status: 'overdue' as const,
-    invoiceNumber: 'INV100002',
-  },
-  {
-    id: '3',
-    company: '王華科技有限公司',
-    amount: '582.23',
-    createdAt: new Date('2025-06-05'),
-    paidAt: new Date('2025-06-8'),
-    expectPaidAt: null,
-    status: 'paid' as const,
-    invoiceNumber: 'INV100003',
-  },
-  {
-    id: '4',
-    company: '陳小華有限公司',
-    amount: '582.70',
-    createdAt: new Date('2025-06-04'),
-    paidAt: null,
-    expectPaidAt: new Date('2025-06-13'),
-    status: 'unpaid' as const,
-    invoiceNumber: 'INV100004',
-  },
-];
 
 export default function AccountsReceivable() {
   const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
@@ -58,7 +15,7 @@ export default function AccountsReceivable() {
   const [filteredInvoices, setFilteredInvoices] = useState(() => {
     // Initial filtering logic for setFilteredInvoices
     // Filter by the initial selectedMonth and '所有' status
-    return mockInvoices.filter(
+    return mockInvoicesReceivable.filter(
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
   });
@@ -66,7 +23,7 @@ export default function AccountsReceivable() {
   // useEffect to update filteredInvoices when selectedMonth or activeStatusFilter changes
   useEffect(() => {
     // 1. Filter by selected month
-    let invoicesForSelectedMonth = mockInvoices.filter(
+    let invoicesForSelectedMonth = mockInvoicesReceivable.filter(
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
 
@@ -86,7 +43,7 @@ export default function AccountsReceivable() {
         invoicesForSelectedMonth.filter(inv => inv.status === 'overdue')
       );
     }
-  }, [selectedMonth, activeStatusFilter, mockInvoices]); // mockInvoices is stable but good practice to include if it could change
+  }, [selectedMonth, activeStatusFilter, mockInvoicesReceivable]); // mockInvoicesReceivable is stable but good practice to include if it could change
 
   // handleFilterChange now only updates the activeStatusFilter state
   const handleFilterChange = (filter: string) => {
@@ -98,12 +55,12 @@ export default function AccountsReceivable() {
   };
 
   // 計算總額
-  const unpaidTotal = mockInvoices
+  const unpaidTotal = mockInvoicesReceivable
     .filter(inv => inv.status === 'unpaid')
     .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
     .toFixed(2);
 
-  const overdueTotal = mockInvoices
+  const overdueTotal = mockInvoicesReceivable
     .filter(inv => inv.status === 'overdue')
     .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
     .toFixed(2);
