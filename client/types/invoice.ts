@@ -8,3 +8,12 @@ export interface Invoice {
   status: 'paid' | 'unpaid' | 'overdue';
   invoiceNumber: string;
 }
+
+// 交易項目類型定義
+export interface Transaction {
+  id: string;
+  company: string;
+  date: string;
+  amount: number;
+  type: 'income' | 'expense';
+}

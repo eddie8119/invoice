@@ -1,3 +1,5 @@
+import { Transaction } from '@/types/invoice';
+
 export const mockInvoicesReceivable = [
   {
     id: '1',
@@ -81,5 +83,30 @@ export const mockInvoicesPayable = [
     expectPaidAt: null,
     status: 'overdue' as const,
     invoiceNumber: 'INV100002',
+  },
+];
+
+// 近期交易數據
+export const recentTransactions: Transaction[] = [
+  {
+    id: '1',
+    company: '盛科技有限公司',
+    date: '18/27-6/28',
+    amount: 256.0,
+    type: 'income',
+  },
+  {
+    id: '2',
+    company: '微科技有限公司',
+    date: '18/27-6/28',
+    amount: -406.0,
+    type: 'expense',
+  },
+  {
+    id: '3',
+    company: '球科技有限公司',
+    date: '18/27-6/28',
+    amount: 256.0,
+    type: 'income',
   },
 ];
