@@ -1,9 +1,8 @@
 import { Divider } from '@/components/core/Divider';
 import { ProgressBar } from '@/components/core/ProgressBar';
 import { theme } from '@/constants/theme';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 // 上部分數據
 interface BalanceData {
@@ -37,12 +36,7 @@ export const BalanceSection: React.FC<BalanceSectionProps> = ({
       <View style={styles.balanceSection}>
         <View style={styles.balanceItem}>
           <View style={styles.labelContainer}>
-            <Ionicons
-              name="document-text-outline"
-              size={16}
-              color="white"
-              style={styles.icon}
-            />
+            <Image source={require('@/assets/icons/point.png')} />
             <Text style={styles.balanceLabel}>本月應收帳款</Text>
           </View>
           <Text style={styles.balanceAmountReceivable}>
@@ -56,12 +50,7 @@ export const BalanceSection: React.FC<BalanceSectionProps> = ({
         <Divider />
         <View style={styles.balanceItem}>
           <View style={styles.labelContainer}>
-            <Ionicons
-              name="document-text-outline"
-              size={16}
-              color="white"
-              style={styles.icon}
-            />
+            <Image source={require('@/assets/icons/point.png')} />
             <Text style={styles.balanceLabel}>本月應付帳款</Text>
           </View>
           <Text style={styles.balanceAmount}>
