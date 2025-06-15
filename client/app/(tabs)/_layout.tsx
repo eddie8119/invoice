@@ -26,7 +26,7 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.light.primary }}>
-      {isHomePage ? <HomeHeader /> : <HeaderBar title={currentTab.title} />}
+      {isHomePage ? <HomeHeader /> : <HeaderBar title={currentTab.name} />}
 
       <Tabs
         screenOptions={{

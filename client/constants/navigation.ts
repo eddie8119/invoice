@@ -3,6 +3,11 @@ import { ComponentProps } from 'react';
 
 export interface TabConfig {
   name: string;
+  route: string;
+}
+
+export interface BottomTabConfig {
+  name: string;
   title: string;
   icon: any;
   route: string;
@@ -17,6 +22,33 @@ export interface MenuItem {
 }
 
 export const tabConfig: TabConfig[] = [
+  {
+    name: '首頁',
+    route: '/',
+  },
+  {
+    name: '應收帳款',
+    route: '/accounts-receivable',
+  },
+  {
+    name: '掃描',
+    route: '/scanner',
+  },
+  {
+    name: '應付帳款',
+    route: '/accounts-payable',
+  },
+  {
+    name: '收益報告',
+    route: '/invoice-report',
+  },
+  {
+    name: '手動創建發票發票',
+    route: '/create-invoice-manual',
+  },
+];
+
+export const bottomTabConfig: BottomTabConfig[] = [
   {
     name: '首頁',
     title: '首頁',

@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 
-import { tabConfig } from '@/constants/navigation';
+import { bottomTabConfig } from '@/constants/navigation';
 
 export default function BottomBar() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function BottomBar() {
 
   return (
     <View style={styles.container}>
-      {tabConfig.map((item, index) => {
+      {bottomTabConfig.map((item, index) => {
         const isActive = pathname === item.route;
         const isMiddleItem = index === 2; // Scan button in the middle
 
