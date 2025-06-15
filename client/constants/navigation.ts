@@ -76,7 +76,7 @@ export const bottomTabConfig: BottomTabConfig[] = [
   {
     name: '收益報告',
     title: '收益報告',
-    icon: require('@/assets/icons/report.png'),
+    icon: require('@/assets/icons/chartPieSlice.png'),
     route: '/invoice-report',
   },
 ];
