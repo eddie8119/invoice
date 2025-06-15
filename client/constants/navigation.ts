@@ -53,10 +53,10 @@ export const tabConfig: TabConfig[] = [
 export const menuItems: MenuItem[] = [
   {
     id: '0',
-    title: '創建發票',
+    title: '手動創建',
     icon: 'document-text',
     color: '#3F51B5',
-    url: '/create-invoice',
+    url: '/create-invoice-manual',
   },
   {
     id: '1',
