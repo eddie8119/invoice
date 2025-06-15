@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { InvoiceItem } from '@/types/invoice';
 import React from 'react';
 import {
   StyleSheet,
@@ -8,11 +9,15 @@ import {
   View,
 } from 'react-native';
 
-export interface InvoiceItem {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
+export interface EditableInvoiceItemsTableProps {
+  items: InvoiceItem[];
+  onItemChange: (
+    index: number,
+    field: keyof InvoiceItem,
+    value: string
+  ) => void;
+  onAddItem: () => void;
+  onRemoveItem: (index: number) => void;
 }
 
 export interface EditableInvoiceItemsTableProps {

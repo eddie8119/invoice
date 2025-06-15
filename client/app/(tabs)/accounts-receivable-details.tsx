@@ -3,10 +3,10 @@ import Loading from '@/components/core/Loading';
 import NotFound from '@/components/core/Loading copy';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
-import { InvoiceItem } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import { pannelStyles } from '@/style/pannel';
+import { InvoiceDetail, InvoiceItem } from '@/types/invoice';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -16,19 +16,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-interface InvoiceDetail {
-  id: string;
-  invoiceNumber: string;
-  company: string;
-  amount: number;
-  status: 'paid' | 'unpaid' | 'overdue';
-  createdAt: Date;
-  expectPaidAt: Date;
-  paidAt?: Date;
-  items: InvoiceItem[];
-  note?: string;
-}
 
 const AccountsReceivableDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();

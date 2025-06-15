@@ -7,8 +7,12 @@ import {
   View,
   ViewStyle,
   StyleProp,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import { theme } from '@/constants/theme';
+
+const { height: screenHeight } = Dimensions.get('window');
 
 export interface BaseModalProps {
   visible: boolean;
@@ -46,7 +50,11 @@ export const BaseModal: React.FC<BaseModalProps> = ({
             </TouchableOpacity>
           )}
           {title}
-          <View style={[styles.contentContainer, contentContainerStyle]}>{children}</View>
+          <View style={[styles.contentContainer, contentContainerStyle]}>
+            <ScrollView style={{ flex: 1 }}>
+              {children}
+            </ScrollView>
+          </View>
           {footer && <View style={[styles.footerContainer, footerContainerStyle]}>{footer}</View>}
         </View>
       </View>
@@ -60,21 +68,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20, 
+    padding: 20,
   },
   modalContainer: {
+    width: '90%',
+    maxHeight: screenHeight * 0.85,
     backgroundColor: theme.colors.light.background,
-    borderRadius: 12,
+    borderRadius: 10,
     padding: 20,
-    width: '100%',
-    maxWidth: 500, 
+    alignItems: 'stretch',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowRadius: 4,
     elevation: 5,
     position: 'relative',
   },
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.light.surfaceVariant, 
+    backgroundColor: theme.colors.light.surfaceVariant,
   },
   closeButtonText: {
     fontSize: 22,
@@ -97,7 +106,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   contentContainer: {
-    paddingTop: 30, // Space for title and close button if title is not directly above
+    flexGrow: 1,
+    flexShrink: 1,
+    width: '100%',
   },
   footerContainer: {
     marginTop: 20,

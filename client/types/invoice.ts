@@ -9,6 +9,26 @@ export interface Invoice {
   invoiceNumber: string;
 }
 
+export interface InvoiceItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+export interface InvoiceDetail {
+  id: string;
+  invoiceNumber: string;
+  company: string;
+  amount: number;
+  status: 'paid' | 'unpaid' | 'overdue';
+  createdAt: Date;
+  expectPaidAt: Date;
+  paidAt?: Date;
+  items: InvoiceItem[];
+  note?: string;
+}
+
 // 交易項目類型定義
 export interface Transaction {
   id: string;
