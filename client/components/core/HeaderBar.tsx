@@ -1,6 +1,7 @@
+import { Heading } from '@/components/core/Heading';
 import { theme } from '@/constants/theme';
 import { useNavigation } from 'expo-router';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface HeaderBarProps {
@@ -36,9 +37,7 @@ export const HeaderBar = ({
           )}
         </View>
 
-        <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
-          {title}
-        </Text>
+        <Heading level={2}>{title}</Heading>
 
         <View style={styles.rightContainer}>{rightComponent}</View>
       </View>
@@ -69,10 +68,10 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   title: {
-    flex: 1,
+    // flex: 1,
     fontSize: 18,
     fontWeight: '600',
-    textAlign: 'center',
-    marginHorizontal: 8,
+    // textAlign: 'center',
+    // marginHorizontal: 8,
   },
 });

@@ -14,7 +14,7 @@ export const Heading: React.FC<HeadingProps> = ({
   children,
   style,
   color,
-  marginBottom = 16,
+  marginBottom,
 }) => {
   const headingStyles = {
     1: {
@@ -24,15 +24,16 @@ export const Heading: React.FC<HeadingProps> = ({
       color: color || theme.colors.light.text,
     },
     2: {
-      fontSize: 24,
+      // 改過
+      fontSize: 18,
       fontWeight: '600',
-      lineHeight: 32,
       color: color || theme.colors.light.text,
     },
     3: {
-      fontSize: 20,
-      fontWeight: '500',
-      lineHeight: 28,
+      // 改過
+      fontSize: 16,
+      fontWeight: '600',
+      marginBottom: marginBottom || 8,
       color: color || theme.colors.light.text,
     },
   } as const;

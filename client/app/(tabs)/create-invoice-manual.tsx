@@ -1,4 +1,3 @@
-import { Heading } from '@/components/core/Heading';
 import { InvoiceForm, InvoiceFormData } from '@/components/invoice/InvoiceForm';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
@@ -23,13 +22,6 @@ export default function CreateInvoiceManual() {
 
   return (
     <View style={styles.container}>
-      {/* Header section */}
-      <View style={containerStyles.upperSection}>
-        <Heading level={1} style={styles.pageTitle}>
-          手動創建發票
-        </Heading>
-      </View>
-
       {/* Form section */}
       <View style={containerStyles.lowerSection}>
         <ScrollView
