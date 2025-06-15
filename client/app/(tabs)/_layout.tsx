@@ -15,9 +15,12 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
 
-  // 獲取當前頁面的配置
   const currentTab =
-    tabConfig.find(tab => pathname === `/${tab.name}`) || tabConfig[0];
+    tabConfig.find(tab => {
+      if (tab.route === '/' && pathname === '/') return true;
+      if (tab.route !== '/' && pathname.startsWith(tab.route)) return true;
+      return false;
+    }) || tabConfig[0];
 
   const isHomePage = pathname === '/';
 
