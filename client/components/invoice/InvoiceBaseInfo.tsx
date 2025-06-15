@@ -1,4 +1,4 @@
-import H3Title from '@/components/core/H3Title';
+import { Heading } from '@/components/core/Heading';
 import { pannelStyles } from '@/style/pannel';
 import { textStyles } from '@/style/text';
 import type { InvoiceStatus } from '@/utils/invoice';
@@ -25,7 +25,9 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
     <View style={[pannelStyles.card]}>
       <View style={styles.header}>
         <View>
-          <H3Title title={invoice.company} style={{ marginBottom: 0 }} />
+          <Heading level={3} marginBottom={0}>
+            {invoice.company}
+          </Heading>
           <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
         </View>
         <View

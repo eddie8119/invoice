@@ -1,4 +1,4 @@
-import H3Title from '@/components/core/H3Title';
+import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
 import NotFound from '@/components/core/Loading copy';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
@@ -155,7 +155,7 @@ const AccountsReceivableDetailsScreen = () => {
           {/* 備註 */}
           {invoice.note && (
             <View style={[pannelStyles.card, styles.section]}>
-              <H3Title title="備註" />
+              <Heading level={3}>備註</Heading>
               <Text style={styles.noteText}>{invoice.note}</Text>
             </View>
           )}
