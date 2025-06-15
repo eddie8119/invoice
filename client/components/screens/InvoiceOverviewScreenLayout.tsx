@@ -9,17 +9,17 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
-interface InvoiceScreenLayoutProps {
+interface InvoiceOverviewScreenLayoutProps {
   initialInvoices: Invoice[];
   detailPageRoute: string;
   // 如果有其他特定於頁面的標題或配置，可以在這裡添加
   // pageTitle?: string;
 }
 
-export const InvoiceScreenLayout = ({
+export const InvoiceOverviewScreenLayout = ({
   initialInvoices,
   detailPageRoute,
-}: InvoiceScreenLayoutProps) => {
+}: InvoiceOverviewScreenLayoutProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
   const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
