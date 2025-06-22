@@ -1,4 +1,4 @@
-import axiosInstance from '@/lib/axios';
+import axiosInstance from '@/lib/request';
 import { ApiResponse } from '@/types/api';
 import { LoginSchema } from '../../../shared/schemas/loginSchema';
 import { RegisterSchema } from '../../../shared/schemas/registerSchema';
