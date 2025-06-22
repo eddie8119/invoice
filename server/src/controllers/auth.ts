@@ -1,62 +1,85 @@
+import { supabase } from "@/lib/supabase";
 import { LoginSchema, RegisterSchema } from "@/schemas/auth";
-import { accountService } from "@/services/appwrite/accountService";
-import { handleAppwriteError } from "@/utils/errorHandler";
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { AppwriteException } from "node-appwrite";
-
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
-
-// 生成 JWT token 的輔助函數
-const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
-};
 
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, name } = req.body as RegisterSchema;
 
-    // 檢查用戶是否已存在
-    const existingUser = await accountService.userExists(email);
-    if (existingUser) {
-      return res.status(409).json({
+    // 使用 admin client 建立使用者
+    const { data: authData, error: signUpError } =
+      await supabase.auth.admin.createUser({
+        email,
+        password,
+        user_metadata: { name },
+      });
+
+    if (signUpError || !authData.user) {
+      // 檢查是否因為 email 已存在而失敗
+      if (signUpError?.message.includes("already exists")) {
+        return res.status(409).json({
+          success: false,
+          message: "User with this email already exists",
+        });
+      }
+      return res.status(400).json({
         success: false,
-        message: "User with this email already exists",
+        message: signUpError?.message || "Failed to register user",
       });
     }
 
-    // 使用 accountService 創建用戶
-    const { user, userDoc } = await accountService.createUser(
-      email,
-      password,
-      name
-    );
+    // 在 users 資料表中新增對應的 profile
+    const { data: userDoc, error: docError } = await supabase
+      .from("users")
+      .insert([{ id: authData.user.id, email, name }])
+      .select()
+      .maybeSingle();
 
-    // 生成 JWT token
-    const token = generateToken(user.$id);
+    if (docError) {
+      // 如果 profile 建立失敗，刪除剛建立的 auth user 以保持資料一致性
+      await supabase.auth.admin.deleteUser(authData.user.id);
+      return res.status(500).json({
+        success: false,
+        message: `Failed to create user profile: ${docError.message}`,
+      });
+    }
+
+    // 建立使用者後，自動登入以取得 session tokens
+    const { data: sessionData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (signInError || !sessionData.session) {
+      return res.status(500).json({
+        success: false,
+        message:
+          signInError?.message || "Auto-login failed after registration.",
+      });
+    }
 
     res.status(201).json({
       success: true,
       data: {
         user: {
-          id: user.$id,
-          email: user.email,
-          name: user.name,
-          createdAt: user.$createdAt,
+          id: authData.user.id,
+          email: authData.user.email,
+          name,
+          createdAt: authData.user.created_at,
         },
-        userDoc: {
-          id: userDoc.$id,
-          userId: userDoc.userId,
-          email: userDoc.email,
-          createdAt: userDoc.createdAt,
-        },
-        token,
+        userDoc,
+        access_token: sessionData.session.access_token,
+        refresh_token: sessionData.session.refresh_token,
       },
-      message: "User registered successfully",
+      message: "User registered and logged in successfully",
     });
   } catch (error) {
     console.error("Register error:", error);
-    handleAppwriteError(error, res, "Registration failed");
+    res.status(500).json({
+      success: false,
+      message: "Registration failed due to an unexpected error.",
+    });
   }
 };
 
@@ -64,45 +87,40 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as LoginSchema;
 
-    // 使用 accountService 登入
-    const { session, user } = await accountService.loginUser(email, password);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error || !data.session || !data.user) {
+      return res.status(401).json({
+        success: false,
+        message: error?.message || "Invalid email or password",
+      });
+    }
 
-    // 獲取用戶文檔信息
-    const userDoc = await accountService.getUserById(user.$id);
-
-    // 生成 JWT token
-    const token = generateToken(user.$id);
+    const { data: userDoc } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", data.user.id)
+      .maybeSingle();
 
     res.json({
       success: true,
       data: {
         user: {
-          id: user.$id,
-          email: user.email,
-          name: user.name,
-          createdAt: user.$createdAt,
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.user_metadata?.name,
+          createdAt: data.user.created_at,
         },
-        userDoc: userDoc
-          ? {
-              id: userDoc.$id,
-              userId: userDoc.userId,
-              email: userDoc.email,
-              createdAt: userDoc.createdAt,
-            }
-          : null,
-        token,
-        sessionId: session.$id,
+        userDoc,
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
       },
       message: "Login successful",
     });
   } catch (error) {
     console.error("Login error:", error);
-    if (error instanceof AppwriteException) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password",
-      });
-    }
     res.status(500).json({
       success: false,
       message: "Login failed",
@@ -112,9 +130,11 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    // 使用 accountService 登出
-    await accountService.logoutUser();
-
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (token) {
+      // 讓指定的 access token 失效
+      await supabase.auth.signOut(token);
+    }
     res.json({
       success: true,
       message: "Logged out successfully",
@@ -131,35 +151,42 @@ export const logout = async (req: Request, res: Response) => {
 // 獲取當前用戶信息
 export const getCurrentUser = async (req: Request, res: Response) => {
   try {
-    const user = await accountService.getCurrentUser();
-
-    if (!user) {
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (!token) {
       return res.status(401).json({
         success: false,
-        message: "No active session",
+        message: "No token provided",
       });
     }
 
-    // 獲取用戶文檔信息
-    const userDoc = await accountService.getUserById(user.$id);
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return res.status(401).json({
+        success: false,
+        message: authError?.message || "Invalid token or user not found",
+      });
+    }
+
+    const { data: userDoc } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
 
     res.json({
       success: true,
       data: {
         user: {
-          id: user.$id,
+          id: user.id,
           email: user.email,
-          name: user.name,
-          createdAt: user.$createdAt,
+          name: user.user_metadata?.name,
+          createdAt: user.created_at,
         },
-        userDoc: userDoc
-          ? {
-              id: userDoc.$id,
-              userId: userDoc.userId,
-              email: userDoc.email,
-              createdAt: userDoc.createdAt,
-            }
-          : null,
+        userDoc,
       },
     });
   } catch (error) {
@@ -171,39 +198,104 @@ export const getCurrentUser = async (req: Request, res: Response) => {
   }
 };
 
-// 更新用戶信息
+// 更新用戶信息 (僅限本人)
 export const updateUser = async (req: Request, res: Response) => {
   try {
-    const { documentId } = req.params;
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Authentication required" });
+    }
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+
     const updates = req.body;
+    // 不允許透過此 API 更新密碼或 email
+    const { password, email, ...safeUpdates } = updates;
 
-    // 移除敏感字段
-    const { password, userId, ...safeUpdates } = updates;
+    const { data: updatedUserDoc, error: updateError } = await supabase
+      .from("users")
+      .update(safeUpdates)
+      .eq("id", user.id) // 使用 token 中的 user.id 確保安全性
+      .select()
+      .maybeSingle();
 
-    const updatedUserDoc = await accountService.updateUser(
-      documentId,
-      safeUpdates
-    );
+    if (updateError) {
+      return res
+        .status(400)
+        .json({ success: false, message: updateError.message });
+    }
 
     res.json({
       success: true,
-      data: {
-        userDoc: updatedUserDoc,
-      },
+      data: { userDoc: updatedUserDoc },
       message: "User updated successfully",
     });
   } catch (error) {
     console.error("Update user error:", error);
-    handleAppwriteError(error, res, "Failed to update user");
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user",
+    });
   }
 };
 
-// 刪除用戶
+// 刪除用戶 (僅限本人)
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    const { documentId } = req.params;
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Authentication required" });
+    }
 
-    await accountService.deleteUser(documentId);
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return res.status(401).json({ success: false, message: "Invalid token" });
+    }
+    const userId = user.id;
+
+    // 1. 刪除 Supabase Auth user (這會觸發級聯刪除 users 表中的對應資料，如果已設定)
+    const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(
+      userId
+    );
+
+    if (deleteAuthError) {
+      // 如果 Auth user 刪除失敗，就不繼續刪 profile
+      return res
+        .status(500)
+        .json({ success: false, message: deleteAuthError.message });
+    }
+
+    // 2. 刪除 profile table 中的資料 (如果沒有設定級聯刪除，則需要手動刪除)
+    const { error: docError } = await supabase
+      .from("users")
+      .delete()
+      .eq("id", userId);
+
+    if (docError) {
+      // Log the detailed error for debugging
+      console.error(
+        `Profile deletion error for user ${userId} after auth user deletion:`,
+        docError
+      );
+      // 注意：此時 Auth user 已被刪除，但 profile 刪除失敗，需要手動處理
+      return res.status(500).json({
+        success: false,
+        message: `Auth user deleted, but failed to delete profile: ${docError.message}`,
+      });
+    }
 
     res.json({
       success: true,
@@ -211,20 +303,33 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Delete user error:", error);
-    handleAppwriteError(error, res, "Failed to delete user");
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user",
+    });
   }
 };
 
-// 檢查用戶是否存在
+// 檢查用戶是否存在 (公開)
 export const checkUserExists = async (req: Request, res: Response) => {
   try {
     const { email } = req.params;
-    const exists = await accountService.userExists(email);
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
+    }
+    // 直接查詢 auth.users table 更準確
+    const { data, error } = await supabase.auth.admin.listUsers({ email });
+
+    if (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
 
     res.json({
       success: true,
       data: {
-        exists,
+        exists: data.users.length > 0,
       },
     });
   } catch (error) {
