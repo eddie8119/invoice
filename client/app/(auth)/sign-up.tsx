@@ -1,4 +1,5 @@
 import { ButtonText } from '@/components/core/ButtonText';
+import { Input } from '@/components/core/Input';
 import { theme } from '@/constants/theme';
 import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { authApi } from '@/services/api/auth';

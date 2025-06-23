@@ -1,6 +1,6 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import InvoiceForm from '@/components/InvoiceForm';
 import useCloudOCR from '@/hooks/useCloudOCR';
-import { uploadInvoiceToAppwrite } from '@/services/appwriteService';
 import { pickImageAndConvertBase64 } from '@/utils/pickImage';
 import React, { useState } from 'react';
 import { ActivityIndicator, Image, Text, View } from 'react-native';
@@ -19,7 +19,6 @@ export default function InvoiceUploadScreen() {
 
   const handleSubmit = async (formData: any) => {
     if (!imageUri) return;
-    await uploadInvoiceToAppwrite(imageUri, formData);
     alert('成功上傳！');
   };
 
