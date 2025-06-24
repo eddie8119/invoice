@@ -1,4 +1,4 @@
-import routes from "@/routes/index.js";
+import routes from "@/routes/index";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";

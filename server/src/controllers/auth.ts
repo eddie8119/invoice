@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
-import { LoginSchema, RegisterSchema } from "@/schemas/auth";
+import { LoginSchema } from "@/schemas/loginSchema";
+import { RegisterSchema } from "@/schemas/registerSchema";
 import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {
@@ -133,7 +134,7 @@ export const logout = async (req: Request, res: Response) => {
     const token = req.headers.authorization?.replace("Bearer ", "");
     if (token) {
       // 讓指定的 access token 失效
-      await supabase.auth.signOut(token);
+      await supabase.auth.signOut();
     }
     res.json({
       success: true,
@@ -319,17 +320,26 @@ export const checkUserExists = async (req: Request, res: Response) => {
         .status(400)
         .json({ success: false, message: "Email is required" });
     }
-    // 直接查詢 auth.users table 更準確
-    const { data, error } = await supabase.auth.admin.listUsers({ email });
+
+    // 改為查詢 public.users 資料表，這是更可靠且型別安全的方法
+    const { data, error } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .maybeSingle();
 
     if (error) {
-      return res.status(500).json({ success: false, message: error.message });
+      // 如果查詢出錯，不應該讓客戶端知道詳細信息
+      console.error("Check user exists query error:", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Error checking user existence." });
     }
 
     res.json({
       success: true,
       data: {
-        exists: data.users.length > 0,
+        exists: data !== null, // 如果能找到資料 (不為 null)，代表使用者存在
       },
     });
   } catch (error) {

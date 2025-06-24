@@ -1,6 +1,6 @@
 import express from "express";
-import authRoutes from "./auth.js";
-import ocrRoutes from "./ocr.js";
+import authRoutes from "./auth";
+import ocrRoutes from "./ocr";
 
 const app = express();
 
