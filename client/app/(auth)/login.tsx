@@ -1,8 +1,9 @@
 import { ButtonText } from '@/components/core/ButtonText';
+import { Input } from '@/components/core/Input';
 import { theme } from '@/constants/theme';
-import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginSchema, loginSchema } from '@shared/schemas/loginSchema';
 import { Link, router } from 'expo-router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,8 +17,8 @@ export default function LoginScreen() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',

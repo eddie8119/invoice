@@ -1,10 +1,10 @@
 import { ButtonText } from '@/components/core/ButtonText';
 import { Input } from '@/components/core/Input';
 import { theme } from '@/constants/theme';
-import { RegisterSchema, registerSchema } from '@/lib/schemas/registerSchema';
 import { authApi } from '@/services/api/auth';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterSchema, registerSchema } from '@shared/schemas/registerSchema';
 import { Link, router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
