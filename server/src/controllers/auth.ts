@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase";
-import { LoginSchema } from "@/schemas/loginSchema";
-import { RegisterSchema } from "@/schemas/registerSchema";
+import { LoginSchema } from "@shared/schemas/loginSchema";
+import { RegisterSchema } from "@shared/schemas/registerSchema";
 import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {

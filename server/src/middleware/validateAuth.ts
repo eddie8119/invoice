@@ -1,5 +1,5 @@
-import { loginSchema } from "@/schemas/loginSchema";
-import { registerSchema } from "@/schemas/registerSchema";
+import { loginSchema } from "@shared/schemas/loginSchema";
+import { registerSchema } from "@shared/schemas/registerSchema";
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 
