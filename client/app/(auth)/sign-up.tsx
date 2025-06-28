@@ -22,6 +22,7 @@ export default function SignUpScreen() {
     resolver: zodResolver(registerSchema),
     mode: 'onChange',
     defaultValues: {
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -63,6 +64,23 @@ export default function SignUpScreen() {
 
         {/* Form */}
         <View style={styles.form}>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                label="Name"
+                placeholder="Enter your name"
+                value={value}
+                onChangeText={onChange}
+                error={errors.name?.message}
+                keyboardType="default"
+                autoCapitalize="none"
+                autoComplete="name"
+              />
+            )}
+          />
+
           <Controller
             control={control}
             name="email"

@@ -1,6 +1,6 @@
 import request from '@/lib/request';
-import { LoginSchema } from '@/lib/schemas/loginSchema';
-import { RegisterSchema } from '@/lib/schemas/registerSchema';
+import { LoginSchema } from '@/shared/schemas/loginSchema';
+import { RegisterSchema } from '@/shared/schemas/registerSchema';
 import { ApiResponse } from '@/types/api';
 
 export const authApi = {
