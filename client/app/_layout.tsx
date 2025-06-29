@@ -26,7 +26,7 @@ function RootGard({ children }: { children: React.ReactNode }) {
 
     if (!isAuthenticated && !inAuthGroup) {
       // 未登入且不在認證頁面，導向登入頁
-      router.replace('/(auth)/login');
+      // router.replace('/(auth)/login'); //todo
     } else if (isAuthenticated && inAuthGroup) {
       // 已登入但在認證頁面，導向主頁
       router.replace('/');

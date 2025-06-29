@@ -1,19 +1,16 @@
 import { ButtonText } from '@/components/core/ButtonText';
 import { Input } from '@/components/core/Input';
-import { theme } from '@/constants/theme';
+import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { useAuth } from '@/context/AuthContext';
 import { authApi } from '@/services/api/auth';
-import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, registerSchema } from '@shared/schemas/registerSchema';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 export default function SignUpScreen() {
-  const colors = theme.colors.light;
   const { setAuth } = useAuth();
 
   const {
@@ -58,165 +55,90 @@ export default function SignUpScreen() {
   });
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.background }]}
+    <AuthLayout
+      title="Create your account"
+      subtitle="Start creating professional invoices in minutes"
+      footerText="Already have an account?"
+      footerLinkText="Log in"
+      footerLinkHref="/login"
     >
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
+      <View style={{ gap: 12 }}>
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Name"
+              placeholder="Enter your name"
+              value={value}
+              onChangeText={onChange}
+              error={errors.name?.message}
+              keyboardType="default"
+              autoCapitalize="none"
+              autoComplete="name"
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Email"
+              placeholder="Enter your email"
+              value={value}
+              onChangeText={onChange}
+              error={errors.email?.message}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Password"
+              placeholder="Enter your password"
+              value={value}
+              onChangeText={onChange}
+              error={errors.password?.message}
+              isPassword
+              autoCapitalize="none"
+              autoComplete="password"
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="confirmPassword"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Confirm Password"
+              placeholder="Confirm your password"
+              value={value}
+              onChangeText={onChange}
+              error={errors.confirmPassword?.message}
+              isPassword
+              autoCapitalize="none"
+              autoComplete="password"
+            />
+          )}
+        />
+
+        <ButtonText
+          text="Create Account"
+          variant="filled"
+          size="medium"
+          disabled={!isValid}
+          onPress={onSubmit}
+        />
       </View>
-
-      {/* Content */}
-      <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Create your account
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Start creating professional invoices in minutes
-        </Text>
-
-        {/* Form */}
-        <View style={styles.form}>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                label="Name"
-                placeholder="Enter your name"
-                value={value}
-                onChangeText={onChange}
-                error={errors.name?.message}
-                keyboardType="default"
-                autoCapitalize="none"
-                autoComplete="name"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                label="Email"
-                placeholder="Enter your email"
-                value={value}
-                onChangeText={onChange}
-                error={errors.email?.message}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                label="Password"
-                placeholder="Enter your password"
-                value={value}
-                onChangeText={onChange}
-                error={errors.password?.message}
-                isPassword
-                autoCapitalize="none"
-                autoComplete="password"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="confirmPassword"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                label="Confirm Password"
-                placeholder="Confirm your password"
-                value={value}
-                onChangeText={onChange}
-                error={errors.confirmPassword?.message}
-                isPassword
-                autoCapitalize="none"
-                autoComplete="password"
-              />
-            )}
-          />
-
-          <ButtonText
-            text="Create Account"
-            variant="filled"
-            size="medium"
-            disabled={!isValid}
-            onPress={onSubmit}
-          />
-
-          {/* Login Link */}
-          <View style={styles.loginContainer}>
-            <Text style={[styles.loginText, { color: colors.textSecondary }]}>
-              Already have an account?{' '}
-            </Text>
-            <Link href="/login" asChild>
-              <TouchableOpacity>
-                <Text style={[styles.link, { color: colors.primary }]}>
-                  Log in
-                </Text>
-              </TouchableOpacity>
-            </Link>
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
+    </AuthLayout>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  backButton: {
-    marginRight: 8,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontSize: 16,
-    marginBottom: 32,
-  },
-  form: {
-    gap: 12,
-    marginTop: 32,
-  },
-  loginContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 12,
-  },
-  loginText: {
-    fontSize: 14,
-  },
-  link: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-});
