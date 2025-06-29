@@ -1,4 +1,4 @@
-import { InvoiceOverviewScreenLayout } from '@/components/screens/InvoiceOverviewScreenLayout';
+import { InvoiceOverviewScreenLayout } from '@/components/layouts/InvoiceOverviewScreenLayout';
 import { mockInvoicesPayable } from '@/constants/dummyData';
 import React from 'react';
 
