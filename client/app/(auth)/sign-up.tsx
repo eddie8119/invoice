@@ -1,6 +1,7 @@
 import { ButtonText } from '@/components/core/ButtonText';
 import { Input } from '@/components/core/Input';
 import { theme } from '@/constants/theme';
+import { useAuth } from '@/context/AuthContext';
 import { authApi } from '@/services/api/auth';
 import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SignUpScreen() {
   const colors = theme.colors.light;
+  const { setAuth } = useAuth();
 
   const {
     control,
@@ -30,10 +32,25 @@ export default function SignUpScreen() {
   });
 
   const onSubmit = handleSubmit(async data => {
-    console.log('Form data:', data);
     try {
-      const response = await authApi.register(data);
-      console.log('Register response:', response);
+      const {
+        data: apiResponse,
+        message,
+        success,
+      } = await authApi.register(data);
+
+      if (success && apiResponse) {
+        const { user, access_token, refresh_token } = apiResponse.data;
+
+        setAuth(user, {
+          access_token,
+          refresh_token,
+        });
+
+        router.replace('/');
+      } else {
+        console.error('Registration failed:', message || 'Unknown error');
+      }
     } catch (error) {
       console.error('Register error:', error);
     }

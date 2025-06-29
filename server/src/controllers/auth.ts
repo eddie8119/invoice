@@ -13,6 +13,7 @@ export const register = async (req: Request, res: Response) => {
         email,
         password,
         user_metadata: { name },
+        email_confirm: true, //todo
       });
 
     if (signUpError || !authData.user) {
