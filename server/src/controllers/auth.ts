@@ -88,35 +88,30 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body as LoginSchema;
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error || !data.session || !data.user) {
+    const { data: sessionData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (signInError || !sessionData.session || !sessionData.user) {
       return res.status(401).json({
         success: false,
-        message: error?.message || "Invalid email or password",
+        message: signInError?.message || "Invalid email or password",
       });
     }
-
-    const { data: userDoc } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", data.user.id)
-      .maybeSingle();
 
     res.json({
       success: true,
       data: {
         user: {
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.user_metadata?.name,
-          createdAt: data.user.created_at,
+          id: sessionData.user.id,
+          email: sessionData.user.email,
+          name: sessionData.user.user_metadata?.name,
+          createdAt: sessionData.user.created_at,
         },
-        userDoc,
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
+        access_token: sessionData.session.access_token,
+        refresh_token: sessionData.session.refresh_token,
       },
       message: "Login successful",
     });

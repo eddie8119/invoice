@@ -1,28 +1,54 @@
 import { ButtonText } from '@/components/core/ButtonText';
 import { Input } from '@/components/core/Input';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
+import { useAuth } from '@/context/AuthContext';
+import { authApi } from '@/services/api/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, loginSchema } from '@shared/schemas/loginSchema';
+import { router } from 'expo-router';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 export default function LoginScreen() {
+  const { setAuth } = useAuth();
+
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    mode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = handleSubmit(data => {
-    console.log('Form data:', data);
-    // TODO: 實現登入選擇
+  const onSubmit = handleSubmit(async data => {
+    try {
+      const {
+        data: apiResponseData,
+        message,
+        success,
+      } = await authApi.login(data);
+
+      if (success && apiResponseData) {
+        const { user, access_token, refresh_token } = apiResponseData;
+
+        setAuth(user, {
+          access_token,
+          refresh_token,
+        });
+
+        router.replace('/');
+      } else {
+        console.error('Login failed:', message || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   });
 
   return (
@@ -34,30 +60,45 @@ export default function LoginScreen() {
       footerLinkHref="/sign-up"
     >
       <View style={{ gap: 12 }}>
-        <Input
-          label="Email"
-          placeholder="Enter your email"
-          error={errors.email?.message}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          {...register('email')}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Email"
+              placeholder="Enter your email"
+              value={value}
+              onChangeText={onChange}
+              error={errors.email?.message}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+            />
+          )}
         />
 
-        <Input
-          label="Password"
-          placeholder="Enter your password"
-          error={errors.password?.message}
-          isPassword
-          autoCapitalize="none"
-          autoComplete="password"
-          {...register('password')}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="Password"
+              placeholder="Enter your password"
+              value={value}
+              onChangeText={onChange}
+              error={errors.password?.message}
+              isPassword
+              autoCapitalize="none"
+              autoComplete="password"
+            />
+          )}
         />
 
         <ButtonText
           text="Sign In"
           variant="filled"
           size="medium"
+          disabled={!isValid}
           onPress={onSubmit}
         />
       </View>
