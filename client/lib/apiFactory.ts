@@ -17,50 +17,44 @@ export function createApi(instance: AxiosInstance) {
   }
 
   return {
-    async get<T>(
-      url: string,
-      config?: AxiosRequestConfig
-    ): Promise<ApiResponse<T>> {
+    async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
       try {
-        const response = await instance.get(url, config);
+        const response = await instance.get<T>(url, config);
         return response.data;
       } catch (error) {
-        return handleError<T>(error);
+        throw new Error(handleError(error).message);
       }
     },
     async post<T>(
       url: string,
       data?: any,
       config?: AxiosRequestConfig
-    ): Promise<ApiResponse<T>> {
+    ): Promise<T> {
       try {
-        const response = await instance.post(url, data, config);
+        const response = await instance.post<T>(url, data, config);
         return response.data;
       } catch (error) {
-        return handleError<T>(error);
+        throw new Error(handleError(error).message);
       }
     },
     async put<T>(
       url: string,
       data?: any,
       config?: AxiosRequestConfig
-    ): Promise<ApiResponse<T>> {
+    ): Promise<T> {
       try {
-        const response = await instance.put(url, data, config);
+        const response = await instance.put<T>(url, data, config);
         return response.data;
       } catch (error) {
-        return handleError<T>(error);
+        throw new Error(handleError(error).message);
       }
     },
-    async delete<T>(
-      url: string,
-      config?: AxiosRequestConfig
-    ): Promise<ApiResponse<T>> {
+    async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
       try {
-        const response = await instance.delete(url, config);
+        const response = await instance.delete<T>(url, config);
         return response.data;
       } catch (error) {
-        return handleError<T>(error);
+        throw new Error(handleError(error).message);
       }
     },
   };

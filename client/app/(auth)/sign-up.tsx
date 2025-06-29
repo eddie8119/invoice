@@ -34,13 +34,13 @@ export default function SignUpScreen() {
   const onSubmit = handleSubmit(async data => {
     try {
       const {
-        data: apiResponse,
+        data: apiResponseData,
         message,
         success,
       } = await authApi.register(data);
 
-      if (success && apiResponse) {
-        const { user, access_token, refresh_token } = apiResponse.data;
+      if (success && apiResponseData) {
+        const { user, access_token, refresh_token } = apiResponseData;
 
         setAuth(user, {
           access_token,
@@ -49,6 +49,7 @@ export default function SignUpScreen() {
 
         router.replace('/');
       } else {
+        // 可以用一個 toast 或 alert 來顯示錯誤訊息
         console.error('Registration failed:', message || 'Unknown error');
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, name } = req.body as RegisterSchema;
-
     // 使用 admin client 建立使用者
     const { data: authData, error: signUpError } =
       await supabase.auth.admin.createUser({
