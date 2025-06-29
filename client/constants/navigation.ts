@@ -3,6 +3,7 @@ import { ComponentProps } from 'react';
 
 export interface TabConfig {
   name: string;
+  title?: string;
   route: string;
 }
 
@@ -45,6 +46,10 @@ export const tabConfig: TabConfig[] = [
   {
     name: '手動創建發票發票',
     route: '/create-invoice-manual',
+  },
+  {
+    name: '設定',
+    route: '/settings',
   },
 ];
 
@@ -113,9 +118,9 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: '4',
-    title: '個人設定',
+    title: '設定',
     icon: 'document-text',
     color: '#3F51B5',
-    url: '/profile',
+    url: '/settings',
   },
 ];
