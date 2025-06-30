@@ -1,28 +1,55 @@
-import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/containers';
-
+import ProfileSection from '@/components/settings/ProfileSection';
+import SettingsList from '@/components/settings/SettingsList';
+import { useAuth } from '@/context/AuthContext';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
-  return (
-    <View style={styles.container}>
-      <View style={containerStyles.upperSection}></View>
+  const { user, logout } = useAuth();
 
-      <View style={containerStyles.lowerSection}></View>
-    </View>
+  const handleLogout = async () => {
+    await logout();
+    // router.replace('/(auth)/login');
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <ProfileSection user={user} />
+        <SettingsList />
+        <Pressable style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>登出</Text>
+        </Pressable>
+      </ScrollView>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.light.primary,
+    backgroundColor: '#f8f8f8',
   },
   scrollView: {
     flex: 1,
+    padding: 16,
   },
-  listContainer: {
-    flex: 1,
+  logoutButton: {
+    backgroundColor: '#ff5050',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginBottom: 32,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

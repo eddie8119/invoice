@@ -126,6 +126,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
+    console.log("Logout calledrrrr");
     const token = req.headers.authorization?.replace("Bearer ", "");
     if (token) {
       // 讓指定的 access token 失效

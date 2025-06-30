@@ -1,7 +1,8 @@
+import { authApi } from '@/services/api/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-interface UserData {
+export interface UserData {
   id: string;
   email: string;
   name?: string;
@@ -111,8 +112,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 登出
   const logout = async () => {
     try {
-      // 這裡應該調用後端登出 API
-      // 例如: await api.post('/auth/logout');
+      console.log('Logout ttt');
+      await authApi.logout();
       await setAuth(null);
       await setUserProfileData(null);
     } catch (error) {
