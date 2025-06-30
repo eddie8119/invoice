@@ -13,7 +13,7 @@ export default function InvoiceForm({
 
   return (
     <View>
-      <Text>發票號碼</Text>
+      <Text>發票編號</Text>
       <TextInput
         value={form.invoiceNumber}
         onChangeText={v => setForm({ ...form, invoiceNumber: v })}

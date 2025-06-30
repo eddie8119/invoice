@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 0, // 不要讓公司名稱和發票號碼有多餘空隙
+    marginBottom: 0, // 不要讓公司名稱和發票編號有多餘空隙
   },
   invoiceNumber: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 0, // 不要讓發票號碼和下方有多餘空隙
+    marginBottom: 0, // 不要讓發票編號和下方有多餘空隙
   },
   statusContainer: {
     flexDirection: 'row',

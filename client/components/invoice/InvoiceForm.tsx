@@ -107,7 +107,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         style={styles.input}
         value={form.invoiceNumber}
         onChangeText={text => handleChange('invoiceNumber', text)}
-        placeholder="發票號碼"
+        placeholder="發票編號"
       />
       <DatePickerInput
         value={form.paymentDueDate}
