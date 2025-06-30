@@ -1,6 +1,7 @@
 import ProfileSection from '@/components/settings/ProfileSection';
 import SettingsList from '@/components/settings/SettingsList';
 import { useAuth } from '@/context/AuthContext';
+import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +11,7 @@ export default function SettingsScreen() {
 
   const handleLogout = async () => {
     await logout();
-    // router.replace('/(auth)/login');
+    router.replace('/(auth)/login');
   };
 
   return (

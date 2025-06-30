@@ -112,7 +112,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 登出
   const logout = async () => {
     try {
-      console.log('Logout ttt');
       await authApi.logout();
       await setAuth(null);
       await setUserProfileData(null);

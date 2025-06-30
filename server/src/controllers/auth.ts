@@ -31,7 +31,7 @@ export const register = async (req: Request, res: Response) => {
 
     // 在 users 資料表中新增對應的 profile
     const { data: userDoc, error: docError } = await supabase
-      .from("users")
+      .from("Users")
       .insert([{ id: authData.user.id, email, name }])
       .select()
       .maybeSingle();
@@ -126,21 +126,24 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   try {
-    console.log("Logout calledrrrr");
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    if (token) {
-      // 讓指定的 access token 失效
-      await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Logout error:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Logout failed",
+      });
     }
-    res.json({
+    res.status(200).json({
       success: true,
       message: "Logged out successfully",
     });
   } catch (error) {
     console.error("Logout error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Logout failed",
+      message: "Logout failed (unexpected error)",
+      detail: error,
     });
   }
 };

@@ -3,7 +3,7 @@ import { LoginSchema } from '@/shared/schemas/loginSchema';
 import { RegisterSchema } from '@/shared/schemas/registerSchema';
 
 export interface AuthResponse {
-  data: {
+  data?: {
     user: {
       id: string;
       email: string;
@@ -24,7 +24,7 @@ export const authApi = {
   login: (data: LoginSchema): Promise<AuthResponse> => {
     return request.post('/auth/login', data);
   },
-  logout: (): Promise<void> => {
+  logout: (): Promise<AuthResponse> => {
     return request.post('/auth/logout');
   },
   getCurrentUser: (): Promise<AuthResponse> => {
