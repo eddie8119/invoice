@@ -12,25 +12,36 @@ export const getInvoices = async (req: Request, res: Response) => {
       });
     }
 
-    // 獲取發票列表，包含公司名稱
-    const { data: invoices, error } = await supabase
-      .from("Invoices")
-      .select(
-        `
-        id,
-        invoice_number,
-        issue_date,
-        due_date,
-        total_amount,
-        currency,
-        status,
-        notes,
-        created_at,
-        company:Companies(id, name)
+    let query = supabase.from("Invoices").select(
       `
+      id,
+      invoice_number,
+      issue_date,
+      due_date,
+      total_amount,
+      currency,
+      status,
+      notes,
+      created_at,
+      company:Companies(id, name)
+    `
+    );
+
+    const { month } = req.query;
+    // 有傳 month 才加上月份條件
+    if (typeof month === "string") {
+      // 計算該月的第一天和下個月的第一天
+      const startDate = `${month}-01`;
+      const endDate = new Date(
+        new Date(startDate).setMonth(new Date(startDate).getMonth() + 1)
       )
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
+        .toISOString()
+        .slice(0, 10);
+
+      query = query.gte("issue_date", startDate).lt("issue_date", endDate);
+    }
+
+    const { data: invoices, error } = await query;
 
     if (error) {
       console.error("Error fetching invoices:", error);
