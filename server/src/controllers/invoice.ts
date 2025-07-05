@@ -16,19 +16,19 @@ export const getInvoices = async (req: Request, res: Response) => {
       `
       id,
       invoice_number,
-      issue_date,
       due_date,
       total_amount,
       currency,
       status,
       notes,
       created_at,
-      company:Companies(id, name)
+      company:Companies(id, name),
+      type,
     `
     );
 
     // 獲取查詢參數
-    const { month, type = "receivable" } = req.query;
+    const { type = "receivable", month, year } = req.query;
 
     // 增加用戶 ID 過濾條件
     query = query.eq("user_id", userId);
@@ -51,13 +51,18 @@ export const getInvoices = async (req: Request, res: Response) => {
         .toISOString()
         .slice(0, 10);
 
-      query = query.gte("issue_date", startDate).lt("issue_date", endDate);
+      query = query.gte("due_date", startDate).lt("created_at", endDate);
+    }
+
+    // 有傳 year 才加上年份條件
+    if (typeof year === "string") {
+      query = query.eq("due_date", year);
     }
 
     // 按創建時間降序排序
     query = query.order("created_at", { ascending: false });
 
-    const { data: invoices, error } = await query;
+    const { data: invoicesData, error } = await query;
 
     if (error) {
       console.error("Error fetching invoices:", error);
@@ -70,7 +75,7 @@ export const getInvoices = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: invoices,
+      data: invoicesData,
     });
   } catch (error: any) {
     console.error("Error in getInvoices:", error);
@@ -96,7 +101,7 @@ export const getInvoice = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     // 獲取發票詳情，包含公司信息和發票項目
-    const { data: invoice, error } = await supabase
+    const { data: invoiceData, error } = await supabase
       .from("Invoices")
       .select(
         `
@@ -118,7 +123,7 @@ export const getInvoice = async (req: Request, res: Response) => {
       });
     }
 
-    if (!invoice) {
+    if (!invoiceData) {
       return res.status(404).json({
         success: false,
         message: "Invoice not found",
@@ -127,7 +132,7 @@ export const getInvoice = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: invoice,
+      data: invoiceData,
     });
   } catch (error: any) {
     console.error("Error in getInvoice:", error);
@@ -154,9 +159,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     const {
       company_id,
       invoice_number,
-      issue_date,
       due_date,
-      currency = "TWD",
       status = "unpaid",
       notes,
       items,
@@ -190,10 +193,8 @@ export const createInvoice = async (req: Request, res: Response) => {
           user_id: userId,
           company_id,
           invoice_number,
-          issue_date: issue_date || new Date().toISOString().split("T")[0],
           due_date,
           total_amount,
-          currency,
           status,
           notes,
         },
@@ -286,7 +287,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
     const {
       company_id,
       invoice_number,
-      issue_date,
+      created_at,
       due_date,
       currency,
       status,
@@ -314,7 +315,6 @@ export const updateInvoice = async (req: Request, res: Response) => {
     if (company_id !== undefined) invoiceData.company_id = company_id;
     if (invoice_number !== undefined)
       invoiceData.invoice_number = invoice_number;
-    if (issue_date !== undefined) invoiceData.issue_date = issue_date;
     if (due_date !== undefined) invoiceData.due_date = due_date;
     if (currency !== undefined) invoiceData.currency = currency;
     if (status !== undefined) invoiceData.status = status;

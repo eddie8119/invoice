@@ -1,25 +1,31 @@
 import request from '@/lib/request';
-import type { ApiResponse } from '@/types/api';
-import type { InvoiceType } from '@/types/invoice';
+import { createInvoiceSchema } from '@/shared/schemas/createInvoice';
+import type { InvoiceResponse, InvoiceType } from '@/types/invoice';
+import type { ApiResponse } from '@/types/request';
 
 interface GetInvoicesParams {
   type: InvoiceType;
-  month?: string; // 格式: YYYY-MM
+  month?: string;
+  year?: string;
 }
 
 export const invoiceApi = {
   // 獲取發票列表
-  getInvoices: async (params: GetInvoicesParams): Promise<ApiResponse> => {
+  getInvoices: async (
+    params: GetInvoicesParams
+  ): Promise<ApiResponse<InvoiceResponse[]>> => {
     return request.get('/invoices', { params });
   },
 
   // 獲取單個發票
-  getInvoice: async (id: string): Promise<ApiResponse> => {
+  getInvoice: async (id: string): Promise<ApiResponse<InvoiceResponse>> => {
     return request.get(`/invoices/${id}`);
   },
 
   // 創建發票
-  createInvoice: async (data: any): Promise<ApiResponse> => {
+  createInvoice: async (
+    data: createInvoiceSchema
+  ): Promise<ApiResponse<null>> => {
     return request.post('/invoices', data);
   },
 

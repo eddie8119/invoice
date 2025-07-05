@@ -51,7 +51,7 @@ export const InvoiceScanScreen = () => {
       items.push({
         name: match[1],
         quantity: parseInt(match[2], 10),
-        unit_price: parseInt(match[3], 10),
+        unitPrice: parseInt(match[3], 10),
         total: parseInt(match[4], 10),
       });
     }
@@ -89,7 +89,7 @@ export const InvoiceScanScreen = () => {
                 placeholder="數量"
               />
               <TextInput
-                value={item.unit_price.toString()}
+                value={item.unitPrice.toString()}
                 style={styles.input}
                 placeholder="單價"
               />

@@ -1,40 +1,37 @@
 import request from '@/lib/request';
 import { LoginSchema } from '@/shared/schemas/loginSchema';
 import { RegisterSchema } from '@/shared/schemas/registerSchema';
+import type { ApiResponse } from '@/types/request';
 
 export interface AuthResponse {
-  data?: {
-    user: {
-      id: string;
-      email: string;
-      name: string;
-      createdAt: Date;
-    };
-    access_token: string;
-    refresh_token: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    createdAt: Date;
   };
-  message: string;
-  success: boolean;
+  access_token: string;
+  refresh_token: string;
 }
 
 export const authApi = {
-  register: (data: RegisterSchema): Promise<AuthResponse> => {
+  register: (data: RegisterSchema): Promise<ApiResponse<AuthResponse>> => {
     return request.post('/auth/register', data);
   },
-  login: (data: LoginSchema): Promise<AuthResponse> => {
+  login: (data: LoginSchema): Promise<ApiResponse<AuthResponse>> => {
     return request.post('/auth/login', data);
   },
-  logout: (): Promise<AuthResponse> => {
+  logout: (): Promise<ApiResponse<AuthResponse>> => {
     return request.post('/auth/logout');
   },
-  getCurrentUser: (): Promise<AuthResponse> => {
+  getCurrentUser: (): Promise<ApiResponse<AuthResponse>> => {
     return request.get('/auth/me');
   },
 
   // 刷新 token
   refreshToken: (
     refreshToken: string
-  ): Promise<{ accessToken: string; refreshToken: string }> => {
+  ): Promise<ApiResponse<{ accessToken: string; refreshToken: string }>> => {
     return request.post<{ accessToken: string; refreshToken: string }>(
       '/auth/refresh-token',
       { refreshToken }

@@ -7,6 +7,7 @@ export default function AccountsPayable() {
     <InvoiceOverviewScreenLayout
       initialInvoices={mockInvoicesPayable}
       detailPageRoute="/accounts-payable-details"
+      invoiceType="payable"
     />
   );
 }

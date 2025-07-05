@@ -1,5 +1,23 @@
 export type InvoiceType = 'receivable' | 'payable';
 
+export type InvoiceStatus = 'paid' | 'unpaid' | 'overdue';
+
+export interface InvoiceResponse {
+  id: string;
+  invoice_number: string;
+  due_date: Date;
+  total_amount: number;
+  currency: string;
+  status: 'paid' | 'unpaid' | 'overdue';
+  notes: string;
+  created_at: Date;
+  company: {
+    id: string;
+    name: string;
+  };
+  type: InvoiceType;
+}
+
 export interface Invoice {
   id: string;
   company: string;
@@ -12,10 +30,20 @@ export interface Invoice {
 }
 
 export interface InvoiceItem {
-  id: string;
-  name: string;
+  title: string;
   quantity: number;
-  price: number;
+  unitPrice: number;
+  id?: string;
+}
+
+export interface InvoiceFormData {
+  company: string;
+  invoiceNumber: string;
+  note: string;
+  paymentDueDate: string;
+  type: InvoiceType;
+  status: InvoiceStatus;
+  items: InvoiceItem[];
 }
 
 export interface InvoiceDetail {

@@ -1,3 +1,4 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import type { InvoiceFields } from '@/types/types';
 import React, { useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
@@ -29,7 +30,7 @@ export default function InvoiceForm({
         onChangeText={v => setForm({ ...form, amount: v })}
         keyboardType="numeric"
       />
-      <ButtonText title="提交發票" onPress={() => onSubmit(form)} />
+      <ButtonText text="提交發票" onPress={() => onSubmit(form)} />
     </View>
   );
 }
