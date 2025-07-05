@@ -26,7 +26,7 @@ export default function LoginScreen() {
     },
   });
 
-  const onSubmit = handleSubmit(async data => {
+  const onSubmit = handleSubmit(async (data: LoginSchema) => {
     try {
       const {
         data: apiResponseData,

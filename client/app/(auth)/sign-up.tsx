@@ -28,7 +28,7 @@ export default function SignUpScreen() {
     },
   });
 
-  const onSubmit = handleSubmit(async data => {
+  const onSubmit = handleSubmit(async (data: RegisterSchema) => {
     try {
       const {
         data: apiResponseData,
