@@ -1,3 +1,5 @@
+export type InvoiceType = 'receivable' | 'payable';
+
 export interface Invoice {
   id: string;
   company: string;

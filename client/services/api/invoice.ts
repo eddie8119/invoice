@@ -1,10 +1,16 @@
 import request from '@/lib/request';
-import { ApiResponse } from '@/types/api';
+import type { ApiResponse } from '@/types/api';
+import type { InvoiceType } from '@/types/invoice';
+
+interface GetInvoicesParams {
+  type: InvoiceType;
+  month?: string; // 格式: YYYY-MM
+}
 
 export const invoiceApi = {
   // 獲取發票列表
-  getInvoices: async (): Promise<ApiResponse> => {
-    return request.get('/invoices');
+  getInvoices: async (params: GetInvoicesParams): Promise<ApiResponse> => {
+    return request.get('/invoices', { params });
   },
 
   // 獲取單個發票

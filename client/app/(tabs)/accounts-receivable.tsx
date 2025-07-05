@@ -7,6 +7,7 @@ export default function AccountsReceivable() {
     <InvoiceOverviewScreenLayout
       initialInvoices={mockInvoicesReceivable}
       detailPageRoute="/accounts-receivable-details"
+      invoiceType="receivable"
     />
   );
 }

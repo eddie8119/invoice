@@ -27,7 +27,20 @@ export const getInvoices = async (req: Request, res: Response) => {
     `
     );
 
-    const { month } = req.query;
+    // 獲取查詢參數
+    const { month, type = "receivable" } = req.query;
+
+    // 增加用戶 ID 過濾條件
+    query = query.eq("user_id", userId);
+
+    // 增加發票類型過濾條件
+    if (
+      typeof type === "string" &&
+      (type === "receivable" || type === "payable")
+    ) {
+      query = query.eq("type", type);
+    }
+
     // 有傳 month 才加上月份條件
     if (typeof month === "string") {
       // 計算該月的第一天和下個月的第一天
@@ -40,6 +53,9 @@ export const getInvoices = async (req: Request, res: Response) => {
 
       query = query.gte("issue_date", startDate).lt("issue_date", endDate);
     }
+
+    // 按創建時間降序排序
+    query = query.order("created_at", { ascending: false });
 
     const { data: invoices, error } = await query;
 

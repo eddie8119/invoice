@@ -3,8 +3,9 @@ import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { theme } from '@/constants/theme';
+import { invoiceApi } from '@/services/api/invoice';
 import { containerStyles } from '@/style/containers';
-import { Invoice } from '@/types/invoice';
+import { Invoice, InvoiceType } from '@/types/invoice';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -12,6 +13,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 interface InvoiceOverviewScreenLayoutProps {
   initialInvoices: Invoice[];
   detailPageRoute: string;
+  invoiceType: InvoiceType;
   // 如果有其他特定於頁面的標題或配置，可以在這裡添加
   // pageTitle?: string;
 }
@@ -19,8 +21,12 @@ interface InvoiceOverviewScreenLayoutProps {
 export const InvoiceOverviewScreenLayout = ({
   initialInvoices,
   detailPageRoute,
+  invoiceType,
 }: InvoiceOverviewScreenLayoutProps) => {
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
+  const [selectedYear, setSelectedYear] = useState(
+    new Date().getFullYear().toString()
+  );
   const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState(() => {
@@ -28,6 +34,19 @@ export const InvoiceOverviewScreenLayout = ({
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
   });
+
+  useEffect(() => {
+    async function fetchInvoices() {
+      const res = await invoiceApi.getInvoices({
+        type: invoiceType,
+        month: selectedMonth ? `${selectedYear}-${selectedMonth}` : undefined,
+      });
+      if (res.success) {
+        // setInvoices(res.data);
+      }
+    }
+    fetchInvoices();
+  }, [selectedMonth, selectedYear, invoiceType]);
 
   useEffect(() => {
     let invoicesForSelectedMonth = invoices.filter(
