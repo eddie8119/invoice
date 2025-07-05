@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { Request, Response } from "express";
+import { convertToSnakeCase } from "@/utils/formatters";
 
 // 獲取當前用戶的所有發票列表
 export const getInvoices = async (req: Request, res: Response) => {
@@ -156,22 +157,25 @@ export const createInvoice = async (req: Request, res: Response) => {
       });
     }
 
+    // 將前端傳來的駝峰式命名轉換為蛇形命名
+    const snakeCaseData = convertToSnakeCase(req.body);
+
     const {
-      company_id,
+      company,
       invoice_number,
       due_date,
       status = "unpaid",
       notes,
-      items,
-    } = req.body;
+      invoice_items,
+    } = snakeCaseData;
 
     // 驗證必要欄位
     if (
-      !company_id ||
+      !company ||
       !invoice_number ||
       !due_date ||
-      !items ||
-      !Array.isArray(items)
+      !invoice_items ||
+      !Array.isArray(invoice_items)
     ) {
       return res.status(400).json({
         success: false,
@@ -180,7 +184,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 計算總金額
-    const total_amount = items.reduce(
+    const total_amount = invoice_items.reduce(
       (sum, item) => sum + item.quantity * item.unit_price,
       0
     );
@@ -191,12 +195,13 @@ export const createInvoice = async (req: Request, res: Response) => {
       .insert([
         {
           user_id: userId,
-          company_id,
+          company_id: company,
           invoice_number,
           due_date,
           total_amount,
           status,
           notes,
+          type: snakeCaseData.type || 'receivable',
         },
       ])
       .select()
@@ -212,9 +217,9 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 插入發票項目
-    const invoiceItems = items.map((item) => ({
+    const invoiceItems = invoice_items.map((item) => ({
       invoice_id: invoice.id,
-      description: item.description,
+      description: item.title, // 前端使用 title，後端使用 description
       quantity: item.quantity,
       unit_price: item.unit_price,
     }));
