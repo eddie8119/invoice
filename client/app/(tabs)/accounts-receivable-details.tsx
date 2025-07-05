@@ -35,15 +35,15 @@ const AccountsReceivableDetailsScreen = () => {
         const mockItems: InvoiceItem[] = [
           {
             id: '1',
-            name: '網站維護服務',
+            title: '網站維護服務',
             quantity: 1,
-            price: 8000,
+            unitPrice: 8000,
           },
           {
             id: '2',
-            name: '伺服器租用費用',
+            title: '伺服器租用費用',
             quantity: 3,
-            price: 1500,
+            unitPrice: 1500,
           },
         ];
 
@@ -59,7 +59,7 @@ const AccountsReceivableDetailsScreen = () => {
           status: 'unpaid',
           createdAt: new Date('2025-05-15'),
           expectPaidAt: new Date('2025-06-15'),
-          items: mockItems,
+          invoiceItems: mockItems,
           note: '請於15日內付款，謝謝。',
         };
 
@@ -146,7 +146,7 @@ const AccountsReceivableDetailsScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* 項目明細 */}
           <InvoiceItemsSection
-            items={invoice.items}
+            items={invoice.invoiceItems}
             calculateTotal={calculateTotal}
           />
 
@@ -170,7 +170,7 @@ const AccountsReceivableDetailsScreen = () => {
             .toISOString()
             .split('T')[0]
             .replace(/-/g, '/'),
-          items: invoice.items,
+          invoiceItems: invoice.invoiceItems,
         }}
         onClose={() => setEditVisible(false)}
         onSave={handleEditSave}

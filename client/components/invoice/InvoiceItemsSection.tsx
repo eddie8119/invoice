@@ -33,15 +33,15 @@ export const InvoiceItemsSection: React.FC<InvoiceItemsSectionProps> = ({
 
       {items.map(item => (
         <View key={item.id} style={styles.itemRow}>
-          <Text style={[styles.itemText, { flex: 2 }]}>{item.name}</Text>
+          <Text style={[styles.itemText, { flex: 2 }]}>{item.title}</Text>
           <Text style={[styles.itemText, { flex: 1, textAlign: 'center' }]}>
             {item.quantity}
           </Text>
           <Text style={[styles.itemText, { flex: 1, textAlign: 'right' }]}>
-            {item.price}
+            {item.unitPrice}
           </Text>
           <Text style={[styles.itemText, { flex: 1, textAlign: 'right' }]}>
-            {item.quantity * item.price}
+            {item.quantity * item.unitPrice}
           </Text>
         </View>
       ))}

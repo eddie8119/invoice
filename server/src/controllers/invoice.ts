@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { InvoiceDetail, InvoiceForList } from "@/types/invoice";
 import { convertToSnakeCase } from "@/utils/formatters";
+import { CreateInvoiceSchema } from "@shared/schemas/createInvoice";
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 
@@ -174,7 +175,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 將前端傳來的駝峰式命名轉換為蛇形命名
-    const snakeCaseData = convertToSnakeCase(req.body);
+    const snakeCaseData = convertToSnakeCase(req.body as CreateInvoiceSchema);
 
     const {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
