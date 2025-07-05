@@ -1,6 +1,12 @@
-import React from 'react';
-import { Platform, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import React from 'react';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 interface DatePickerInputProps {
   value: string;
@@ -8,7 +14,11 @@ interface DatePickerInputProps {
   label?: string;
 }
 
-export const DatePickerInput: React.FC<DatePickerInputProps> = ({ value, onChange, label }) => {
+export const DatePickerInput: React.FC<DatePickerInputProps> = ({
+  value,
+  onChange,
+  label,
+}) => {
   const [show, setShow] = React.useState(false);
   const [internalDate, setInternalDate] = React.useState<Date | undefined>(
     value ? new Date(value) : undefined
@@ -17,7 +27,9 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({ value, onChang
   const displayValue = value ? value : '請選擇日期';
 
   const handleChange = (_: any, selectedDate?: Date) => {
-    setShow(false);
+    if (Platform.OS !== 'web') {
+      setShow(false);
+    }
     if (selectedDate) {
       setInternalDate(selectedDate);
       const yyyy = selectedDate.getFullYear();
@@ -27,24 +39,69 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({ value, onChang
     }
   };
 
-  return (
-    <View style={{ marginBottom: 12 }}>
-      {label && <Text style={styles.label}>{label}</Text>}
-      <TouchableOpacity
-        style={styles.input}
-        onPress={() => setShow(true)}
-        activeOpacity={0.7}
-      >
-        <Text style={{ color: value ? '#222' : '#aaa', fontSize: 16 }}>{displayValue}</Text>
-      </TouchableOpacity>
-      {show && (
-        <DateTimePicker
-          value={internalDate || new Date()}
-          mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          onChange={handleChange}
+  // Web 環境下的日期輸入處理
+  const handleWebDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateValue = e.target.value;
+    if (dateValue) {
+      const selectedDate = new Date(dateValue);
+      setInternalDate(selectedDate);
+      const yyyy = selectedDate.getFullYear();
+      const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(selectedDate.getDate()).padStart(2, '0');
+      onChange(`${yyyy}/${mm}/${dd}`);
+    }
+  };
+
+  // 根據平台渲染不同的日期選擇器
+  const renderDatePicker = () => {
+    if (Platform.OS === 'web') {
+      // Web 環境使用原生 HTML 日期選擇器
+      return (
+        <input
+          type="date"
+          value={internalDate ? internalDate.toISOString().split('T')[0] : ''}
+          onChange={handleWebDateChange}
+          style={{
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: '10px',
+            borderRadius: '8px',
+            border: '1px solid #e0e0e0',
+            backgroundColor: '#f8f8f8',
+            fontSize: '16px',
+          }}
         />
-      )}
+      );
+    } else {
+      // 原生環境使用 TouchableOpacity 和 DateTimePicker
+      return (
+        <>
+          <TouchableOpacity
+            style={[styles.input, { width: '100%' }]}
+            onPress={() => setShow(true)}
+            activeOpacity={0.7}
+          >
+            <Text style={{ color: value ? '#222' : '#aaa', fontSize: 16 }}>
+              {displayValue}
+            </Text>
+          </TouchableOpacity>
+          {show && (
+            <DateTimePicker
+              value={internalDate || new Date()}
+              mode="date"
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              onChange={handleChange}
+            />
+          )}
+        </>
+      );
+    }
+  };
+
+  return (
+    <View style={{ marginBottom: 12, width: '100%', flex: 1 }}>
+      {label && <Text style={styles.label}>{label}</Text>}
+      {renderDatePicker()}
     </View>
   );
 };
@@ -57,6 +114,8 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f8f8f8',
     justifyContent: 'center',
+    width: '100%',
+    flex: 1,
   },
   label: {
     marginBottom: 4,
