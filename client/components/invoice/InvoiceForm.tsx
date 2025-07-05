@@ -3,6 +3,7 @@ import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Input } from '@/components/core/Input';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
+import { invoiceApi } from '@/services/api/invoice';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Picker } from '@react-native-picker/picker';
@@ -43,24 +44,24 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       company: '',
       invoiceNumber: '',
       note: '',
-      paymentDueDate: '',
+      dueDate: '',
       type: 'receivable' as InvoiceType,
       status: 'unpaid' as InvoiceStatus,
-      items: [
+      invoiceItems: [
         {
           id: `new-${Date.now()}`,
           title: '',
-          quantity: 0,
-          unitPrice: 0,
+          quantity: null,
+          unitPrice: null,
         },
       ],
     },
   });
 
   // 使用 useFieldArray 來管理動態表單項目
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
-    name: 'items',
+    name: 'invoiceItems',
   });
 
   // 當有 initialData 時，重設表單值
@@ -81,13 +82,21 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     append({
       id: `new-${Date.now()}`,
       title: '',
-      quantity: 0,
-      unitPrice: 0,
+      quantity: null,
+      unitPrice: null,
     });
   };
 
-  const onSubmit = handleSubmit(data => {
-    onSave(data);
+  const onSubmit = handleSubmit(async (data: CreateInvoiceSchema) => {
+    try {
+      const {
+        data: apiResponseData,
+        message,
+        success,
+      } = await invoiceApi.createInvoice(data);
+    } catch (error) {
+      console.error('Create invoice error:', error);
+    }
   });
 
   return (
@@ -164,7 +173,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
-          name="paymentDueDate"
+          name="dueDate"
           render={({ field: { onChange, value } }) => (
             <>
               <DatePickerInput
@@ -172,10 +181,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 onChange={onChange}
                 label="預付款日"
               />
-              {errors.paymentDueDate && (
+              {errors.dueDate && (
                 <View style={styles.errorText}>
                   <Text style={{ color: theme.colors.light.error }}>
-                    {errors.paymentDueDate.message}
+                    {errors.dueDate.message}
                   </Text>
                 </View>
               )}
@@ -209,13 +218,18 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         <EditableInvoiceItemsTable
           items={fields}
           onItemChange={(index, field, value) => {
-            // 根據欄位類型轉換值
+            const currentItem = fields[index];
             const processedValue =
               field === 'quantity' || field === 'unitPrice'
                 ? Number(value) || 0
                 : value;
 
-            setValue(`items.${index}.${field}`, processedValue);
+            const updatedItem = {
+              ...currentItem,
+              [field]: processedValue,
+            };
+
+            update(index, updatedItem);
           }}
           onAddItem={handleAddItem}
           onRemoveItem={remove}

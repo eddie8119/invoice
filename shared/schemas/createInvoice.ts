@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createInvoiceSchema = z.object({
   company: z.string(),
   invoiceNumber: z.string(),
-  paymentDueDate: z.date(),
+  dueDate: z.date(),
   type: z.string().default("receivable"),
   status: z.string().default("unpaid"),
   notes: z.string().optional(),

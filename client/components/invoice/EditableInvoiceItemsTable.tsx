@@ -42,7 +42,6 @@ export const EditableInvoiceItemsTable: React.FC<
             style={styles.itemInput}
             value={item.title}
             onChangeText={text => onItemChange(index, 'title', text)}
-            placeholder="例如：網站設計服務"
           />
           <View style={styles.numericRow}>
             <View style={styles.numericInputContainer}>
@@ -132,7 +131,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.light.primary,
     padding: 12,
     borderRadius: 5,
-
     alignItems: 'center',
     marginTop: 10,
   },

@@ -12,7 +12,7 @@ export interface EditInvoiceModalProps {
     company: string;
     invoiceNumber: string;
     note?: string;
-    paymentDueDate?: string;
+    dueDate?: string;
     status: InvoiceStatus;
     items: InvoiceItem[];
   };
@@ -30,7 +30,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     company: invoice.company,
     invoiceNumber: invoice.invoiceNumber,
     note: invoice.note || '',
-    paymentDueDate: invoice.paymentDueDate || '',
+    dueDate: invoice.dueDate || '',
     status: invoice.status || 'unpaid',
     items: invoice.items || [],
   };

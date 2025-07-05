@@ -81,7 +81,7 @@ const AccountsReceivableDetailsScreen = () => {
     company: string;
     invoiceNumber: string;
     note?: string;
-    paymentDueDate?: string;
+    dueDate?: string;
     items: InvoiceItem[];
   }) => {
     const totalAmount = data.items.reduce(
@@ -95,9 +95,7 @@ const AccountsReceivableDetailsScreen = () => {
         company: data.company,
         invoiceNumber: data.invoiceNumber,
         note: data.note,
-        expectPaidAt: data.paymentDueDate
-          ? new Date(data.paymentDueDate)
-          : prev.expectPaidAt,
+        expectPaidAt: data.dueDate ? new Date(data.dueDate) : prev.expectPaidAt,
         items: data.items,
         amount: totalAmount,
       };
@@ -168,7 +166,7 @@ const AccountsReceivableDetailsScreen = () => {
           company: invoice.company,
           invoiceNumber: invoice.invoiceNumber,
           note: invoice.note,
-          paymentDueDate: invoice.expectPaidAt
+          dueDate: invoice.expectPaidAt
             .toISOString()
             .split('T')[0]
             .replace(/-/g, '/'),
