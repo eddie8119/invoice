@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabase";
-import { Request, Response } from "express";
+import { InvoiceDetail, InvoiceForList } from "@/types/invoice";
 import { convertToSnakeCase } from "@/utils/formatters";
+import { Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
 
 // 獲取當前用戶的所有發票列表
 export const getInvoices = async (req: Request, res: Response) => {
@@ -74,9 +76,16 @@ export const getInvoices = async (req: Request, res: Response) => {
       });
     }
 
+    // Force cast to our defined type after checking for null/undefined.
+    const typedInvoices = (invoicesData as unknown as InvoiceForList[]) || [];
+    const formattedInvoices = typedInvoices.map((invoice) => ({
+      ...invoice,
+      due_date: new Date(invoice.due_date).toISOString().split("T")[0],
+    }));
+
     return res.status(200).json({
       success: true,
-      data: invoicesData,
+      data: formattedInvoices,
     });
   } catch (error: any) {
     console.error("Error in getInvoices:", error);
@@ -131,9 +140,16 @@ export const getInvoice = async (req: Request, res: Response) => {
       });
     }
 
+    // Force cast to our defined type. The check for !invoiceData above makes this safe.
+    const typedInvoice = invoiceData as unknown as InvoiceDetail;
+    const formattedInvoice = {
+      ...typedInvoice,
+      due_date: new Date(typedInvoice.due_date).toISOString().split("T")[0],
+    };
+
     return res.status(200).json({
       success: true,
-      data: invoiceData,
+      data: formattedInvoice,
     });
   } catch (error: any) {
     console.error("Error in getInvoice:", error);
@@ -161,12 +177,13 @@ export const createInvoice = async (req: Request, res: Response) => {
     const snakeCaseData = convertToSnakeCase(req.body);
 
     const {
-      company,
+      company, // 公司名稱，要存到 Companies 表的 name 欄位
       invoice_number,
       due_date,
       status = "unpaid",
       notes,
-      invoice_items,
+      invoice_items, // 發票項目，要存到 InvoiceItems 表
+      type = "receivable",
     } = snakeCaseData;
 
     // 驗證必要欄位
@@ -185,23 +202,71 @@ export const createInvoice = async (req: Request, res: Response) => {
 
     // 計算總金額
     const total_amount = invoice_items.reduce(
-      (sum, item) => sum + item.quantity * item.unit_price,
+      (sum, item) =>
+        sum + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0),
       0
     );
 
-    // 插入發票主記錄
+    // 步驟 1: 檢查公司是否已存在，如果不存在則創建
+    let company_id;
+    const { data: existingCompany, error: companyFetchError } = await supabase
+      .from("Companies")
+      .select("id")
+      .eq("name", company)
+      .eq("user_id", userId)
+      .single();
+
+    if (companyFetchError && companyFetchError.code !== "PGRST116") {
+      // PGRST116 是「沒有找到記錄」的錯誤
+      console.error("Error fetching company:", companyFetchError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to check if company exists",
+        error: companyFetchError.message,
+      });
+    }
+
+    if (existingCompany) {
+      // 如果公司已存在，使用現有的 ID
+      company_id = existingCompany.id;
+    } else {
+      // 如果公司不存在，創建新公司
+      const { data: newCompany, error: companyCreateError } = await supabase
+        .from("Companies")
+        .insert([
+          {
+            name: company,
+            user_id: userId,
+          },
+        ])
+        .select()
+        .single();
+
+      if (companyCreateError) {
+        console.error("Error creating company:", companyCreateError);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to create company",
+          error: companyCreateError.message,
+        });
+      }
+
+      company_id = newCompany.id;
+    }
+
+    // 步驟 2: 創建發票記錄
     const { data: invoice, error: invoiceError } = await supabase
       .from("Invoices")
       .insert([
         {
           user_id: userId,
-          company_id: company,
+          company_id, // 使用上面獲取或創建的公司 ID
           invoice_number,
-          due_date,
+          due_date: new Date(due_date), // String to Date
           total_amount,
           status,
           notes,
-          type: snakeCaseData.type || 'receivable',
+          type, // 發票類型（應收或應付）
         },
       ])
       .select()
@@ -216,12 +281,13 @@ export const createInvoice = async (req: Request, res: Response) => {
       });
     }
 
-    // 插入發票項目
+    // 步驟 3: 創建發票項目
     const invoiceItems = invoice_items.map((item) => ({
+      id: item.id || uuidv4(), // 使用 uuid 產生唯一 ID
       invoice_id: invoice.id,
-      description: item.title, // 前端使用 title，後端使用 description
-      quantity: item.quantity,
-      unit_price: item.unit_price,
+      title: item.title || "", // 前端使用 title
+      quantity: Number(item.quantity) || 0,
+      unit_price: Number(item.unit_price) || 0,
     }));
 
     const { error: itemsError } = await supabase
@@ -230,7 +296,7 @@ export const createInvoice = async (req: Request, res: Response) => {
 
     if (itemsError) {
       console.error("Error creating invoice items:", itemsError);
-      // 如果插入項目失敗，我們應該刪除剛才創建的發票
+      // 如果插入項目失敗，刪除剛才創建的發票
       await supabase.from("Invoices").delete().eq("id", invoice.id);
 
       return res.status(500).json({
@@ -240,13 +306,13 @@ export const createInvoice = async (req: Request, res: Response) => {
       });
     }
 
-    // 獲取完整的發票信息，包括項目和公司
+    // 步驟 4: 獲取完整的發票信息，包括項目和公司
     const { data: completeInvoice, error: fetchError } = await supabase
       .from("Invoices")
       .select(
         `
         *,
-        company:Companies(*),
+        company:Companies(id, name, address, contact_person, email, phone),
         items:InvoiceItems(*)
       `
       )
@@ -350,7 +416,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
       // 插入新項目
       const invoiceItems = items.map((item) => ({
         invoice_id: id,
-        description: item.description,
+        title: item.title,
         quantity: item.quantity,
         unit_price: item.unit_price,
       }));
@@ -479,3 +545,6 @@ export const deleteInvoice = async (req: Request, res: Response) => {
     });
   }
 };
+
+// 原則
+// 日期型別統一：前端和 API 之間使用 ISO 格式的字串 ("YYYY-MM-DD") 進行通訊，而在存入資料庫時，則轉換為 Date 物件。

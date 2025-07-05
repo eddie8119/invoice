@@ -43,16 +43,15 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     defaultValues: {
       company: '',
       invoiceNumber: '',
-      note: '',
-      dueDate: '',
+      dueDate: new Date().toISOString().split('T')[0],
       type: 'receivable' as InvoiceType,
       status: 'unpaid' as InvoiceStatus,
+      notes: '',
       invoiceItems: [
         {
-          id: `new-${Date.now()}`,
           title: '',
-          quantity: null,
-          unitPrice: null,
+          quantity: undefined,
+          unitPrice: undefined,
         },
       ],
     },
@@ -69,8 +68,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     if (initialData) {
       reset({
         ...initialData,
-        // 確保 items 有 id 屬性
-        items: initialData.items.map(item => ({
+        // 確保 invoiceItems 有 id 屬性
+        invoiceItems: initialData.invoiceItems.map(item => ({
           ...item,
           id: item.id || `item-${Date.now()}-${Math.random()}`,
         })),
@@ -80,15 +79,15 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
   const handleAddItem = () => {
     append({
-      id: `new-${Date.now()}`,
       title: '',
-      quantity: null,
-      unitPrice: null,
+      quantity: undefined,
+      unitPrice: undefined,
     });
   };
 
   const onSubmit = handleSubmit(async (data: CreateInvoiceSchema) => {
     try {
+      // data is already validated by the schema, so we can use it directly.
       const {
         data: apiResponseData,
         message,
@@ -194,7 +193,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
-          name="note"
+          name="notes"
           render={({ field: { onChange, value } }) => (
             <View style={styles.inputContainer}>
               <Text style={styles.label}>備註</Text>
@@ -207,8 +206,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 numberOfLines={4}
                 textAlignVertical="top"
               />
-              {errors.note && (
-                <Text style={styles.errorText}>{errors.note.message}</Text>
+              {errors.notes && (
+                <Text style={styles.errorText}>{errors.notes.message}</Text>
               )}
             </View>
           )}
@@ -219,10 +218,13 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           items={fields}
           onItemChange={(index, field, value) => {
             const currentItem = fields[index];
-            const processedValue =
-              field === 'quantity' || field === 'unitPrice'
-                ? Number(value) || 0
-                : value;
+            let processedValue: string | number | undefined = value;
+
+            if (field === 'quantity' || field === 'unitPrice') {
+              const num = parseFloat(value);
+              // Use undefined for empty/invalid to trigger 'required' validation
+              processedValue = isNaN(num) ? undefined : num;
+            }
 
             const updatedItem = {
               ...currentItem,
