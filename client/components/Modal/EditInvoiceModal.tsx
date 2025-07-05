@@ -1,12 +1,10 @@
 import { BaseModal } from '@/components/core/BaseModal';
 import { Heading } from '@/components/core/Heading';
-import { InvoiceForm, InvoiceFormData } from '@/components/invoice/InvoiceForm';
+import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { theme } from '@/constants/theme';
-import { InvoiceItem } from '@/types/invoice';
+import { InvoiceFormData, InvoiceItem, InvoiceStatus } from '@/types/invoice';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-
-export { InvoiceItem };
 
 export interface EditInvoiceModalProps {
   visible: boolean;
@@ -15,6 +13,7 @@ export interface EditInvoiceModalProps {
     invoiceNumber: string;
     note?: string;
     paymentDueDate?: string;
+    status: InvoiceStatus;
     items: InvoiceItem[];
   };
   onClose: () => void;
@@ -32,6 +31,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     invoiceNumber: invoice.invoiceNumber,
     note: invoice.note || '',
     paymentDueDate: invoice.paymentDueDate || '',
+    status: invoice.status || 'unpaid',
     items: invoice.items || [],
   };
 
@@ -47,11 +47,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
   );
 
   return (
-    <BaseModal
-      visible={visible}
-      onClose={onClose}
-      title={modalTitle}
-    >
+    <BaseModal visible={visible} onClose={onClose} title={modalTitle}>
       <InvoiceForm
         initialData={initialData}
         onCancel={onClose}

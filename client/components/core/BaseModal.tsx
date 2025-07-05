@@ -1,16 +1,16 @@
+import { theme } from '@/constants/theme';
 import React from 'react';
 import {
+  Dimensions,
   Modal,
+  ScrollView,
+  StyleProp,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   ViewStyle,
-  StyleProp,
-  ScrollView,
-  Dimensions,
 } from 'react-native';
-import { theme } from '@/constants/theme';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -51,11 +51,13 @@ export const BaseModal: React.FC<BaseModalProps> = ({
           )}
           {title}
           <View style={[styles.contentContainer, contentContainerStyle]}>
-            <ScrollView style={{ flex: 1 }}>
-              {children}
-            </ScrollView>
+            <ScrollView style={{ flex: 1 }}>{children}</ScrollView>
           </View>
-          {footer && <View style={[styles.footerContainer, footerContainerStyle]}>{footer}</View>}
+          {footer && (
+            <View style={[styles.footerContainer, footerContainerStyle]}>
+              {footer}
+            </View>
+          )}
         </View>
       </View>
     </Modal>
@@ -68,7 +70,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
   },
   modalContainer: {
     width: '90%',

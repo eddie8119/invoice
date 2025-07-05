@@ -1,3 +1,4 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import React, { useState } from 'react';
 import {
   Image,
@@ -65,7 +66,7 @@ export const InvoiceScanScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <ButtonText title="拍照辨識發票" onPress={handleTakePhoto} />
+      <ButtonText text="拍照辨識發票" onPress={handleTakePhoto} />
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
       {invoiceData && (
         <View style={styles.result}>

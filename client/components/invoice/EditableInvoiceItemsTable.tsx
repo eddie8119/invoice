@@ -1,5 +1,4 @@
 import { theme } from '@/constants/theme';
-import { InvoiceItem } from '@/types/invoice';
 import React from 'react';
 import {
   StyleSheet,
@@ -9,24 +8,16 @@ import {
   View,
 } from 'react-native';
 
-export interface EditableInvoiceItemsTableProps {
-  items: InvoiceItem[];
-  onItemChange: (
-    index: number,
-    field: keyof InvoiceItem,
-    value: string
-  ) => void;
-  onAddItem: () => void;
-  onRemoveItem: (index: number) => void;
+interface Item {
+  id: string;
+  title: string;
+  quantity: number;
+  unitPrice: number;
 }
 
-export interface EditableInvoiceItemsTableProps {
-  items: InvoiceItem[];
-  onItemChange: (
-    index: number,
-    field: keyof InvoiceItem,
-    value: string
-  ) => void;
+interface EditableInvoiceItemsTableProps {
+  items: Item[];
+  onItemChange: (index: number, field: keyof Item, value: any) => void;
   onAddItem: () => void;
   onRemoveItem: (index: number) => void;
 }
@@ -35,47 +26,44 @@ export const EditableInvoiceItemsTable: React.FC<
   EditableInvoiceItemsTableProps
 > = ({ items, onItemChange, onAddItem, onRemoveItem }) => {
   return (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemTitle}>項目明細</Text>
-      {/* Table Header */}
-      <View style={styles.itemRow}>
-        <Text style={[styles.itemHeader, { flex: 2.5 }]}>項目名稱</Text>
-        <Text style={[styles.itemHeader, { flex: 1, textAlign: 'center' }]}>
-          數量
-        </Text>
-        <Text style={[styles.itemHeader, { flex: 1.5, textAlign: 'right' }]}>
-          單價
-        </Text>
-        <View style={{ width: 30 }} />
-        {/* For remove button */}
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.title}>項目明細</Text>
 
       {items.map((item, index) => (
-        <View key={item.id} style={styles.itemRow}>
-          <TextInput
-            style={[styles.itemInput, { flex: 2.5 }]}
-            value={item.name}
-            onChangeText={text => onItemChange(index, 'name', text)}
-            placeholder="項目名稱"
-          />
-          <TextInput
-            style={[styles.itemInput, { flex: 1, textAlign: 'center' }]}
-            value={String(item.quantity)}
-            onChangeText={text => onItemChange(index, 'quantity', text)}
-            keyboardType="numeric"
-          />
-          <TextInput
-            style={[styles.itemInput, { flex: 1.5, textAlign: 'right' }]}
-            value={String(item.price)}
-            onChangeText={text => onItemChange(index, 'price', text)}
-            keyboardType="numeric"
-          />
+        <View key={item.id} style={styles.itemContainer}>
           <TouchableOpacity
             onPress={() => onRemoveItem(index)}
-            style={styles.removeButton}
+            style={styles.deleteButton}
           >
-            <Text style={styles.removeButtonText}>-</Text>
+            <Text style={styles.deleteButtonText}>✕</Text>
           </TouchableOpacity>
+          <Text style={styles.inputLabel}>項目名稱</Text>
+          <TextInput
+            style={styles.itemInput}
+            value={item.title}
+            onChangeText={text => onItemChange(index, 'title', text)}
+            placeholder="例如：網站設計服務"
+          />
+          <View style={styles.numericRow}>
+            <View style={styles.numericInputContainer}>
+              <Text style={styles.inputLabel}>數量</Text>
+              <TextInput
+                style={styles.itemInput}
+                value={String(item.quantity)}
+                onChangeText={text => onItemChange(index, 'quantity', text)}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={styles.numericInputContainer}>
+              <Text style={styles.inputLabel}>單價</Text>
+              <TextInput
+                style={styles.itemInput}
+                value={String(item.unitPrice)}
+                onChangeText={text => onItemChange(index, 'unitPrice', text)}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
         </View>
       ))}
 
@@ -87,56 +75,64 @@ export const EditableInvoiceItemsTable: React.FC<
 };
 
 const styles = StyleSheet.create({
-  itemContainer: {
+  container: {
     marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.light.divider,
-    paddingTop: 10,
   },
-  itemTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: theme.colors.light.text,
-  },
-  itemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  itemHeader: {
+  title: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: theme.colors.light.textSecondary,
+    marginBottom: 10,
+  },
+  itemContainer: {
+    backgroundColor: '#f8f9fa',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.light.divider,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: theme.colors.light.text,
+    marginBottom: 6,
+    fontWeight: '500',
   },
   itemInput: {
     borderWidth: 1,
     borderColor: theme.colors.light.divider,
-    borderRadius: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    marginHorizontal: 2,
-    fontSize: 14,
-    color: theme.colors.light.text,
-    backgroundColor: theme.colors.light.surface,
-  },
-  removeButton: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: theme.colors.light.error,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 8,
-  },
-  removeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     fontSize: 16,
+    backgroundColor: '#fff',
+  },
+  numericRow: {
+    flexDirection: 'row',
+    marginTop: 10,
+    gap: 10,
+  },
+  numericInputContainer: {
+    flex: 1,
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    padding: 4,
+  },
+  deleteButtonText: {
+    color: theme.colors.light.error,
+    fontSize: 20,
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
   addButton: {
     backgroundColor: theme.colors.light.primary,
-    borderRadius: 8,
-    padding: 10,
+    padding: 12,
+    borderRadius: 5,
+
     alignItems: 'center',
     marginTop: 10,
   },
