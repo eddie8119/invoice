@@ -40,7 +40,7 @@ export interface InvoiceFormData {
   company: string;
   invoiceNumber: string;
   note: string;
-  paymentDueDate: string;
+  dueDate: string;
   type: InvoiceType;
   status: InvoiceStatus;
   items: InvoiceItem[];
