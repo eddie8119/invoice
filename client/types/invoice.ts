@@ -43,7 +43,7 @@ export interface InvoiceFormData {
   dueDate: string;
   type: InvoiceType;
   status: InvoiceStatus;
-  items: InvoiceItem[];
+  invoiceItems: InvoiceItem[];
 }
 
 export interface InvoiceDetail {
@@ -55,7 +55,7 @@ export interface InvoiceDetail {
   createdAt: Date;
   expectPaidAt: Date;
   paidAt?: Date;
-  items: InvoiceItem[];
+  invoiceItems: InvoiceItem[];
   note?: string;
 }
 
