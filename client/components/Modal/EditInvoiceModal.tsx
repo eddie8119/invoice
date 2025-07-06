@@ -2,20 +2,14 @@ import { BaseModal } from '@/components/core/BaseModal';
 import { Heading } from '@/components/core/Heading';
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { theme } from '@/constants/theme';
-import { InvoiceFormData, InvoiceItem, InvoiceStatus } from '@/types/invoice';
+import { InvoiceFormData } from '@/types/invoice';
+import { CreateInvoiceSchema } from '@shared/schemas/createInvoice';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
 export interface EditInvoiceModalProps {
   visible: boolean;
-  invoice: {
-    company: string;
-    invoiceNumber: string;
-    note?: string;
-    dueDate?: string;
-    status: InvoiceStatus;
-    items: InvoiceItem[];
-  };
+  invoice: CreateInvoiceSchema;
   onClose: () => void;
   onSave: (data: InvoiceFormData) => void;
 }
@@ -26,13 +20,13 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
   onClose,
   onSave,
 }) => {
-  const initialData: InvoiceFormData = {
-    company: invoice.company,
-    invoiceNumber: invoice.invoiceNumber,
-    note: invoice.note || '',
-    dueDate: invoice.dueDate || '',
+  const initialData: CreateInvoiceSchema = {
+    ...invoice,
+    notes: invoice.notes || '',
+    dueDate: invoice.dueDate || new Date().toISOString().split('T')[0],
     status: invoice.status || 'unpaid',
-    items: invoice.items || [],
+    type: invoice.type || 'receivable',
+    invoiceItems: invoice.invoiceItems || [],
   };
 
   const handleSave = (data: InvoiceFormData) => {

@@ -2,7 +2,7 @@ export type InvoiceType = 'receivable' | 'payable';
 
 export type InvoiceStatus = 'paid' | 'unpaid' | 'overdue';
 
-export interface InvoiceResponse {
+export interface GetInvoiceResponse {
   id: string;
   invoice_number: string;
   due_date: Date;
@@ -16,6 +16,27 @@ export interface InvoiceResponse {
     name: string;
   };
   type: InvoiceType;
+}
+
+export interface createInvoiceDetailResponse {
+  id: number;
+  invoiceNumber: string;
+  dueDate: string;
+  totalAmount: number;
+  status: string;
+  notes: string;
+  type: string;
+  company: {
+    id: number;
+    name: string;
+  };
+  items: Array<{
+    id: number;
+    invoiceId: number;
+    title: string;
+    quantity: number;
+    unitPrice: number;
+  }>;
 }
 
 export interface Invoice {
