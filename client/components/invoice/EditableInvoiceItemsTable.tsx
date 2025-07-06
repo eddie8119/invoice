@@ -48,7 +48,7 @@ export const EditableInvoiceItemsTable: React.FC<
               <Text style={styles.inputLabel}>數量</Text>
               <TextInput
                 style={styles.itemInput}
-                value={String(item.quantity)}
+                value={item.quantity == null ? '' : String(item.quantity)}
                 onChangeText={text => onItemChange(index, 'quantity', text)}
                 keyboardType="numeric"
               />
@@ -57,7 +57,7 @@ export const EditableInvoiceItemsTable: React.FC<
               <Text style={styles.inputLabel}>單價</Text>
               <TextInput
                 style={styles.itemInput}
-                value={String(item.unitPrice)}
+                value={item.unitPrice == null ? '' : String(item.unitPrice)}
                 onChangeText={text => onItemChange(index, 'unitPrice', text)}
                 keyboardType="numeric"
               />
