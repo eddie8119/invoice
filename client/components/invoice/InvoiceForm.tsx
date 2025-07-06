@@ -11,9 +11,18 @@ import {
   CreateInvoiceSchema,
   createInvoiceSchema,
 } from '@shared/schemas/createInvoice';
-import React, { useEffect } from 'react';
+import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -30,6 +39,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   submitButtonText = 'Save',
   cancelButtonText = 'Cancel',
 }) => {
+  // 新增 loading 狀態
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // 設定表單與驗證
   const {
     control,
@@ -87,14 +98,29 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
   const onSubmit = handleSubmit(async (data: CreateInvoiceSchema) => {
     try {
-      // data is already validated by the schema, so we can use it directly.
+      setIsSubmitting(true);
+
       const {
         data: apiResponseData,
         message,
         success,
       } = await invoiceApi.createInvoice(data);
+
+      if (success && apiResponseData) {
+        Alert.alert('成功', '發票建立成功', [
+          { text: 'OK', onPress: () => router.replace('/accounts-receivable') },
+        ]);
+        return;
+      }
+
+      Alert.alert('錯誤', message || '建立發票失敗，請稍後再試');
+      console.error('Create invoice failed:', message);
     } catch (error) {
       console.error('Create invoice error:', error);
+      Alert.alert('系統錯誤', '發生未預期的錯誤，請稍後再試');
+    } finally {
+      // 無論成功或失敗，都將 loading 狀態設為 false
+      setIsSubmitting(false);
     }
   });
 
@@ -199,7 +225,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               <Text style={styles.label}>備註</Text>
               <TextInput
                 style={styles.textarea}
-                placeholder="輸入備註"
                 value={value}
                 onChangeText={onChange}
                 multiline
@@ -243,14 +268,21 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           variant="outlined"
           size="small"
           onPress={onCancel}
+          disabled={isSubmitting}
         />
-        <ButtonText
-          text={submitButtonText}
-          variant="filled"
-          size="small"
-          disabled={!isValid}
-          onPress={onSubmit}
-        />
+        {isSubmitting ? (
+          <View style={styles.loadingButton}>
+            <ActivityIndicator color={theme.colors.light.primary} />
+          </View>
+        ) : (
+          <ButtonText
+            text={submitButtonText}
+            variant="filled"
+            size="small"
+            disabled={!isValid || isSubmitting}
+            onPress={onSubmit}
+          />
+        )}
       </View>
     </View>
   );
@@ -298,5 +330,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     marginLeft: 10,
+  },
+  loadingButton: {
+    backgroundColor: theme.colors.light.background,
+    padding: 12,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 100,
   },
 });
