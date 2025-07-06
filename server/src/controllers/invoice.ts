@@ -26,7 +26,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       notes,
       created_at,
       company:Companies(id, name),
-      type,
+      type
     `
     );
 
@@ -175,7 +175,6 @@ export const createInvoice = async (req: Request, res: Response) => {
 
     // 將前端傳來的駝峰式命名轉換為蛇形命名
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
-
     const {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
       invoice_number,
@@ -283,8 +282,9 @@ export const createInvoice = async (req: Request, res: Response) => {
 
     // 步驟 3: 創建發票項目
     const invoiceItems = invoice_items.map((item) => ({
+      user_id: userId,
       invoice_id: invoice.id,
-      title: item.title || "", // 前端使用 title
+      title: item.title || "",
       quantity: Number(item.quantity) || 0,
       unit_price: Number(item.unit_price) || 0,
     }));

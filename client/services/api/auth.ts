@@ -15,26 +15,29 @@ export interface AuthResponse {
 }
 
 export const authApi = {
-  register: (data: RegisterSchema): Promise<ApiResponse<AuthResponse>> => {
-    return request.post('/auth/register', data);
+  register: async (
+    data: RegisterSchema
+  ): Promise<ApiResponse<AuthResponse>> => {
+    return await request.post('/auth/register', data);
   },
-  login: (data: LoginSchema): Promise<ApiResponse<AuthResponse>> => {
-    return request.post('/auth/login', data);
+  login: async (data: LoginSchema): Promise<ApiResponse<AuthResponse>> => {
+    console.log(55, data);
+    return await request.post('/auth/login', data);
   },
-  logout: (): Promise<ApiResponse<AuthResponse>> => {
-    return request.post('/auth/logout');
+  logout: async (): Promise<ApiResponse<AuthResponse>> => {
+    return await request.post('/auth/logout');
   },
-  getCurrentUser: (): Promise<ApiResponse<AuthResponse>> => {
-    return request.get('/auth/me');
+  getCurrentUser: async (): Promise<ApiResponse<AuthResponse>> => {
+    return await request.get('/auth/me');
   },
 
   // 刷新 token
-  refreshToken: (
+  refreshToken: async (
     refreshToken: string
   ): Promise<ApiResponse<{ accessToken: string; refreshToken: string }>> => {
-    return request.post<{ accessToken: string; refreshToken: string }>(
-      '/auth/refresh-token',
-      { refreshToken }
-    );
+    return await request.post<{
+      accessToken: string;
+      refreshToken: string;
+    }>('/auth/refresh-token', { refreshToken });
   },
 };
