@@ -4,17 +4,21 @@
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "./dist",
-    "rootDir": ".",
+    // 1. rootDir 設為父目錄 (invoice/)，讓 server 和 shared 都在根目錄下
+    "rootDir": "..",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    // 2. baseUrl 也設為父目錄，讓路徑別名從 invoice/ 開始計算
+    "baseUrl": "..",
+    // 3. paths 從新的 baseUrl (invoice/) 出發
     "paths": {
-      "@/*": ["src/*"],
-      "@shared/*": ["../shared/*"]
+      "@/*": ["server/src/*"],
+      "@shared/*": ["shared/*"]
     }
   },
+  // 4. include 的路徑是相對於 tsconfig.json 本身 (server/)
   "include": ["src/**/*", "../shared/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
