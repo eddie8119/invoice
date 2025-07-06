@@ -1,8 +1,8 @@
 import { supabase } from "@/lib/supabase";
 import { InvoiceDetail, InvoiceForList } from "@/types/invoice";
-import { convertToSnakeCase } from "@/utils/formatters";
-import { CreateInvoiceSchema } from "@shared/schemas/createInvoice";
+import camelcaseKeys from "camelcase-keys";
 import { Request, Response } from "express";
+import snakecaseKeys from "snakecase-keys";
 
 // 獲取當前用戶的所有發票列表
 export const getInvoices = async (req: Request, res: Response) => {
@@ -85,7 +85,7 @@ export const getInvoices = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: formattedInvoices,
+      data: camelcaseKeys(formattedInvoices, { deep: true }),
     });
   } catch (error: any) {
     console.error("Error in getInvoices:", error);
@@ -149,7 +149,7 @@ export const getInvoice = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      data: formattedInvoice,
+      data: camelcaseKeys(formattedInvoice, { deep: true }),
     });
   } catch (error: any) {
     console.error("Error in getInvoice:", error);
@@ -174,7 +174,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 將前端傳來的駝峰式命名轉換為蛇形命名
-    const snakeCaseData = convertToSnakeCase(req.body as CreateInvoiceSchema);
+    const snakeCaseData = snakecaseKeys(req.body, { deep: true });
 
     const {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
@@ -330,7 +330,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: "Invoice created successfully",
-      data: completeInvoice,
+      data: camelcaseKeys(completeInvoice, { deep: true }),
     });
   } catch (error: any) {
     console.error("Error in createInvoice:", error);
@@ -476,7 +476,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Invoice updated successfully",
-      data: updatedInvoice,
+      data: camelcaseKeys(updatedInvoice, { deep: true }),
     });
   } catch (error: any) {
     console.error("Error in updateInvoice:", error);
