@@ -3,7 +3,6 @@ import { InvoiceDetail, InvoiceForList } from "@/types/invoice";
 import { convertToSnakeCase } from "@/utils/formatters";
 import { CreateInvoiceSchema } from "@shared/schemas/createInvoice";
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
 
 // 獲取當前用戶的所有發票列表
 export const getInvoices = async (req: Request, res: Response) => {
@@ -284,7 +283,6 @@ export const createInvoice = async (req: Request, res: Response) => {
 
     // 步驟 3: 創建發票項目
     const invoiceItems = invoice_items.map((item) => ({
-      id: item.id || uuidv4(), // 使用 uuid 產生唯一 ID
       invoice_id: invoice.id,
       title: item.title || "", // 前端使用 title
       quantity: Number(item.quantity) || 0,
