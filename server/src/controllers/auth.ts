@@ -29,9 +29,9 @@ export const register = async (req: Request, res: Response) => {
       });
     }
 
-    // 在 users 資料表中新增對應的 profile
+    // 在 Profiles 資料表中新增對應的 profile
     const { data: userDoc, error: docError } = await supabase
-      .from("Users")
+      .from("Profiles")
       .insert([{ id: authData.user.id, email, name }])
       .select()
       .maybeSingle();
@@ -172,7 +172,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     }
 
     const { data: userDoc } = await supabase
-      .from("users")
+      .from("Profiles")
       .select("*")
       .eq("id", user.id)
       .maybeSingle();
@@ -221,7 +221,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const { password, email, ...safeUpdates } = updates;
 
     const { data: updatedUserDoc, error: updateError } = await supabase
-      .from("users")
+      .from("Profiles")
       .update(safeUpdates)
       .eq("id", user.id) // 使用 token 中的 user.id 確保安全性
       .select()
@@ -266,7 +266,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     }
     const userId = user.id;
 
-    // 1. 刪除 Supabase Auth user (這會觸發級聯刪除 users 表中的對應資料，如果已設定)
+    // 1. 刪除 Supabase Auth user (這會觸發級聯刪除 Profiles 表中的對應資料，如果已設定)
     const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(
       userId
     );
@@ -280,7 +280,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     // 2. 刪除 profile table 中的資料 (如果沒有設定級聯刪除，則需要手動刪除)
     const { error: docError } = await supabase
-      .from("users")
+      .from("Profiles")
       .delete()
       .eq("id", userId);
 
@@ -320,9 +320,9 @@ export const checkUserExists = async (req: Request, res: Response) => {
         .json({ success: false, message: "Email is required" });
     }
 
-    // 改為查詢 public.users 資料表，這是更可靠且型別安全的方法
+    // 改為查詢 public.Profiles 資料表，這是更可靠且型別安全的方法
     const { data, error } = await supabase
-      .from("users")
+      .from("Profiles")
       .select("id")
       .eq("email", email)
       .maybeSingle();
