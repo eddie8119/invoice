@@ -21,7 +21,6 @@ export const authApi = {
     return await request.post('/auth/register', data);
   },
   login: async (data: LoginSchema): Promise<ApiResponse<AuthResponse>> => {
-    console.log(55, data);
     return await request.post('/auth/login', data);
   },
   logout: async (): Promise<ApiResponse<AuthResponse>> => {

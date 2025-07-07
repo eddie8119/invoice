@@ -1,5 +1,9 @@
 import { supabase } from "@/lib/supabase";
-import { InvoiceDetail, InvoiceForList } from "@/types/invoice";
+import {
+  InvoiceDetail,
+  InvoiceForList,
+  InvoiceItemInsert,
+} from "@/types/invoice";
 import camelcaseKeys from "camelcase-keys";
 import { Request, Response } from "express";
 import snakecaseKeys from "snakecase-keys";
@@ -200,14 +204,14 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 計算總金額
-    const total_amount = invoice_items.reduce(
+    const total_amount: number = invoice_items.reduce(
       (sum, item) =>
         sum + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0),
       0
     );
 
     // 步驟 1: 檢查公司是否已存在，如果不存在則創建
-    let company_id;
+    let company_id: string;
     const { data: existingCompany, error: companyFetchError } = await supabase
       .from("Companies")
       .select("id")
@@ -230,7 +234,7 @@ export const createInvoice = async (req: Request, res: Response) => {
       company_id = existingCompany.id;
     } else {
       // 如果公司不存在，創建新公司
-      const { data: newCompany, error: companyCreateError } = await supabase
+      const { data: newCompanyData, error: companyCreateError } = await supabase
         .from("Companies")
         .insert([
           {
@@ -250,11 +254,11 @@ export const createInvoice = async (req: Request, res: Response) => {
         });
       }
 
-      company_id = newCompany.id;
+      company_id = newCompanyData.id;
     }
 
     // 步驟 2: 創建發票記錄
-    const { data: invoice, error: invoiceError } = await supabase
+    const { data: invoiceData, error: invoiceError } = await supabase
       .from("Invoices")
       .insert([
         {
@@ -281,9 +285,9 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 步驟 3: 創建發票項目
-    const invoiceItems = invoice_items.map((item) => ({
+    const invoiceItems: InvoiceItemInsert[] = invoice_items.map((item) => ({
       user_id: userId,
-      invoice_id: invoice.id,
+      invoice_id: invoiceData.id,
       title: item.title || "",
       quantity: Number(item.quantity) || 0,
       unit_price: Number(item.unit_price) || 0,
@@ -296,7 +300,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     if (itemsError) {
       console.error("Error creating invoice items:", itemsError);
       // 如果插入項目失敗，刪除剛才創建的發票
-      await supabase.from("Invoices").delete().eq("id", invoice.id);
+      await supabase.from("Invoices").delete().eq("id", invoiceData.id);
 
       return res.status(500).json({
         success: false,
@@ -315,8 +319,12 @@ export const createInvoice = async (req: Request, res: Response) => {
         items:InvoiceItems(*)
       `
       )
-      .eq("id", invoice.id)
+      .eq("id", invoiceData.id)
       .single();
+    // 在 select 字串裡寫出關聯語法，就能一次查出多表資料
+    // select 關聯語法讓你一次查出所有關聯表的資料
+    // 最強的地方： 在一個 endpoint 裡用 select 語法一次查出多表的 JSON 結構. 根據資料表的外鍵自動 JOIN
+    // 一般 RESTful API 這通常需要多次查詢、資料組裝，程式碼較多
 
     if (fetchError) {
       console.error("Error fetching complete invoice:", fetchError);

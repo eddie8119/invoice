@@ -1,7 +1,15 @@
 import { CompanyFromDB } from "./company";
 
-export interface InvoiceItemFromDB {
+export interface InvoiceItem {
   id: string;
+  invoice_id: string;
+  title: string;
+  quantity: number;
+  unit_price: number;
+}
+
+export interface InvoiceItemInsert {
+  user_id: string;
   invoice_id: string;
   title: string;
   quantity: number;
@@ -26,5 +34,5 @@ export interface InvoiceForList extends BaseInvoiceFromDB {
 
 export interface InvoiceDetail extends BaseInvoiceFromDB {
   company: CompanyFromDB | null;
-  items: InvoiceItemFromDB[];
+  items: InvoiceItem[];
 }
