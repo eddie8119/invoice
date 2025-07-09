@@ -10,7 +10,7 @@ import type { ApiResponse } from '@/types/request';
 interface GetInvoicesParams {
   type: InvoiceType;
   month?: string;
-  year?: string;
+  year: string;
 }
 
 export const invoiceApi = {

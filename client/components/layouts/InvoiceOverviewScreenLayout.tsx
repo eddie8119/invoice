@@ -27,7 +27,9 @@ export const InvoiceOverviewScreenLayout = ({
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
-  const [selectedMonth, setSelectedMonth] = useState('6'); // Default to June
+  const [selectedMonth, setSelectedMonth] = useState(
+    (new Date().getMonth() + 1).toString()
+  );
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState(() => {
     return invoices.filter(
@@ -39,7 +41,8 @@ export const InvoiceOverviewScreenLayout = ({
     async function fetchInvoices() {
       const res = await invoiceApi.getInvoices({
         type: invoiceType,
-        month: selectedMonth ? `${selectedYear}-${selectedMonth}` : undefined,
+        month: selectedMonth,
+        year: selectedYear,
       });
       if (res.success) {
         // setInvoices(res.data);

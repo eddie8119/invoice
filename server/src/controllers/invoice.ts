@@ -25,7 +25,6 @@ export const getInvoices = async (req: Request, res: Response) => {
       invoice_number,
       due_date,
       total_amount,
-      currency,
       status,
       notes,
       created_at,
@@ -37,33 +36,28 @@ export const getInvoices = async (req: Request, res: Response) => {
     // 獲取查詢參數
     const { type = "receivable", month, year } = req.query;
 
-    // 增加用戶 ID 過濾條件
     query = query.eq("user_id", userId);
+    query = query.eq("type", type);
 
-    // 增加發票類型過濾條件
-    if (
-      typeof type === "string" &&
-      (type === "receivable" || type === "payable")
-    ) {
-      query = query.eq("type", type);
-    }
+    if (year && month) {
+      const formattedMonth = month.toString().padStart(2, "0");
+      const startDate = `${year}-${formattedMonth}-01`;
 
-    // 有傳 month 才加上月份條件
-    if (typeof month === "string") {
-      // 計算該月的第一天和下個月的第一天
-      const startDate = `${month}-01`;
-      const endDate = new Date(
-        new Date(startDate).setMonth(new Date(startDate).getMonth() + 1)
-      )
-        .toISOString()
-        .slice(0, 10);
+      // 計算下個月的第一天
+      const nextMonth = new Date(
+        parseInt(year as string),
+        parseInt(month as string),
+        1
+      );
+      const endDate = nextMonth.toISOString().slice(0, 10);
 
-      query = query.gte("due_date", startDate).lt("created_at", endDate);
-    }
+      query = query.gte("due_date", startDate).lt("due_date", endDate);
+    } else if (year) {
+      // 只有年份的情況
+      const startDate = `${year}-01-01`;
+      const endDate = `${parseInt(year as string) + 1}-01-01`;
 
-    // 有傳 year 才加上年份條件
-    if (typeof year === "string") {
-      query = query.eq("due_date", year);
+      query = query.gte("due_date", startDate).lt("due_date", endDate);
     }
 
     // 按創建時間降序排序
