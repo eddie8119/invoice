@@ -28,6 +28,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       status,
       notes,
       created_at,
+      paid_at,
       company:Companies(id, name),
       type
     `

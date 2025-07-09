@@ -11,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 interface InvoiceOverviewScreenLayoutProps {
-  initialInvoices: Invoice[];
   detailPageRoute: string;
   invoiceType: InvoiceType;
   // 如果有其他特定於頁面的標題或配置，可以在這裡添加
@@ -19,11 +18,10 @@ interface InvoiceOverviewScreenLayoutProps {
 }
 
 export const InvoiceOverviewScreenLayout = ({
-  initialInvoices,
   detailPageRoute,
   invoiceType,
 }: InvoiceOverviewScreenLayoutProps) => {
-  const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
@@ -44,8 +42,18 @@ export const InvoiceOverviewScreenLayout = ({
         month: selectedMonth,
         year: selectedYear,
       });
-      if (res.success) {
-        // setInvoices(res.data);
+      if (res.success && res.data) {
+        const transformedInvoices = res.data.map((item: any) => ({
+          id: item.id,
+          invoiceNumber: item.invoiceNumber,
+          company: item.company.name,
+          totalAmount: item.totalAmount.toString(),
+          createdAt: new Date(item.createdAt),
+          dueDate: item.dueDate ? new Date(item.dueDate) : null,
+          paidAt: item.paidAt ? new Date(item.paidAt) : null,
+          status: item.status,
+        }));
+        setInvoices(transformedInvoices);
       }
     }
     fetchInvoices();
@@ -99,12 +107,12 @@ export const InvoiceOverviewScreenLayout = ({
 
   const unpaidTotal = invoices
     .filter(inv => inv.status === 'unpaid')
-    .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
+    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0)
     .toFixed(2);
 
   const overdueTotal = invoices
     .filter(inv => inv.status === 'overdue')
-    .reduce((sum, inv) => sum + parseFloat(inv.amount), 0)
+    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0)
     .toFixed(2);
 
   return (
