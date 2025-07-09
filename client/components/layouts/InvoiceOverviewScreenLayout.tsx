@@ -2,6 +2,7 @@ import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
+import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
 import { containerStyles } from '@/style/containers';
 import { InvoiceType } from '@/types/invoice';
@@ -20,6 +21,7 @@ export const InvoiceOverviewScreenLayout = ({
   invoiceType,
 }: InvoiceOverviewScreenLayoutProps) => {
   const {
+    invoices,
     filteredInvoices,
     selectedMonth,
     setSelectedMonth,
@@ -41,11 +43,15 @@ export const InvoiceOverviewScreenLayout = ({
         <InvoiceFilter onFilterChange={handleFilterChange} />
         <View style={styles.listContainer}>
           <ScrollView>
-            <InvoiceList
-              invoices={filteredInvoices}
-              onInvoicePress={handleInvoicePress}
-              onStatusToggle={handleStatusToggle}
-            />
+            {invoices.length === 0 ? (
+              <NoData />
+            ) : (
+              <InvoiceList
+                invoices={filteredInvoices}
+                onInvoicePress={handleInvoicePress}
+                onStatusToggle={handleStatusToggle}
+              />
+            )}
           </ScrollView>
         </View>
       </View>
