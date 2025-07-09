@@ -108,8 +108,19 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
       if (success && apiResponseData) {
         Alert.alert('成功', '發票建立成功', [
-          { text: 'OK', onPress: () => router.replace('/accounts-receivable') },
+          {
+            text: 'OK',
+            onPress: () => {
+              const { type } = data;
+              if (type === 'receivable') {
+                router.replace('/accounts-receivable');
+              } else {
+                router.replace('/accounts-payable');
+              }
+            },
+          },
         ]);
+
         return;
       }
 
