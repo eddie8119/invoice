@@ -26,8 +26,8 @@ export default function InvoiceForm({
       />
       <Text>金額</Text>
       <TextInput
-        value={form.amount}
-        onChangeText={v => setForm({ ...form, amount: v })}
+        value={form.totalAmount}
+        onChangeText={v => setForm({ ...form, totalAmount: v })}
         keyboardType="numeric"
       />
       <ButtonText text="提交發票" onPress={() => onSubmit(form)} />

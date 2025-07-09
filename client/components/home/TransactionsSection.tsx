@@ -5,17 +5,19 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Heading } from '../core/Heading';
 
 // 交易項目組件
-const TransactionItem = ({ company, date, amount, type }) => {
+const TransactionItem = ({ company, date, totalAmount, type }) => {
   const isIncome = type === 'income';
-  const amountText = isIncome
-    ? `+$${amount.toFixed(2)}`
-    : `-$${Math.abs(amount).toFixed(2)}`;
-  const amountColor = isIncome ? theme.colors.light.primaryOceanBlue : 'black';
+  const totalAmountText = isIncome
+    ? `+$${totalAmount.toFixed(2)}`
+    : `-$${Math.abs(totalAmount).toFixed(2)}`;
+  const totalAmountColor = isIncome
+    ? theme.colors.light.primaryOceanBlue
+    : 'black';
 
   return (
     <View style={styles.transactionItem}>
       <View style={styles.transactionAvatar}>
-        <Text style={[styles.avatarText, { color: amountColor }]}>
+        <Text style={[styles.avatarText, { color: totalAmountColor }]}>
           {isIncome ? '收' : '支'}
         </Text>
       </View>
@@ -23,8 +25,8 @@ const TransactionItem = ({ company, date, amount, type }) => {
         <Text style={styles.companyName}>{company}</Text>
         <Text style={styles.transactionDate}>{date}</Text>
       </View>
-      <Text style={[styles.transactionAmount, { color: amountColor }]}>
-        {amountText}
+      <Text style={[styles.transactionAmount, { color: totalAmountColor }]}>
+        {totalAmountText}
       </Text>
     </View>
   );
@@ -40,7 +42,7 @@ export const TransactionsSection: React.FC = () => {
           <TransactionItem
             company={item.company}
             date={item.date}
-            amount={item.amount}
+            totalAmount={item.totalAmount}
             type={item.type}
           />
         )}

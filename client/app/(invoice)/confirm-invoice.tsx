@@ -10,7 +10,7 @@ import {
 
 interface InvoiceItem {
   name: string;
-  amount: number;
+  totalAmount: number;
   quantity: number;
   totalPrice: number;
 }
@@ -74,7 +74,7 @@ export default function ConfirmInvoicePage() {
             <View key={index} style={styles.itemCard}>
               <Text style={styles.itemName}>{item.name}</Text>
               <View style={styles.itemDetails}>
-                <Text style={styles.itemText}>單價: ${item.amount}</Text>
+                <Text style={styles.itemText}>單價: ${item.totalAmount}</Text>
                 <Text style={styles.itemText}>數量: {item.quantity}</Text>
                 <Text style={styles.itemText}>小計: ${item.totalPrice}</Text>
               </View>

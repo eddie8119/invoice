@@ -6,7 +6,7 @@ export interface GetInvoiceResponse {
   id: string;
   invoice_number: string;
   due_date: Date;
-  total_amount: number;
+  total_totalAmount: number;
   currency: string;
   status: 'paid' | 'unpaid' | 'overdue';
   notes: string;
@@ -42,10 +42,10 @@ export interface createInvoiceDetailResponse {
 export interface Invoice {
   id: string;
   company: string;
-  amount: string;
+  totalAmount: string;
   createdAt: Date;
   paidAt: Date | null;
-  expectPaidAt: Date | null;
+  dueDate: Date | null;
   status: 'paid' | 'unpaid' | 'overdue';
   invoiceNumber: string;
 }
@@ -71,10 +71,10 @@ export interface InvoiceDetail {
   id: string;
   invoiceNumber: string;
   company: string;
-  amount: number;
+  totalAmount: number;
   status: 'paid' | 'unpaid' | 'overdue';
   createdAt: Date;
-  expectPaidAt: Date;
+  dueDate: Date;
   paidAt?: Date;
   invoiceItems: InvoiceItem[];
   note?: string;
@@ -85,6 +85,6 @@ export interface Transaction {
   id: string;
   company: string;
   date: string;
-  amount: number;
+  totalAmount: number;
   type: 'income' | 'expense';
 }

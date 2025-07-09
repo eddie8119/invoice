@@ -9,7 +9,7 @@ interface InvoiceData {
   date: string;
   items: {
     name: string;
-    amount: number;
+    totalAmount: number;
     quantity: number;
     totalPrice: number;
   }[];
@@ -98,7 +98,7 @@ export default function InvoiceScanner({ onScanComplete }: Props) {
         if (name) {
           data.items.push({
             name,
-            amount: price,
+            totalAmount: price,
             quantity,
             totalPrice: price * quantity,
           });
@@ -106,7 +106,7 @@ export default function InvoiceScanner({ onScanComplete }: Props) {
       }
     });
 
-    // Calculate total amount
+    // Calculate total totalAmount
     data.totalAmount = data.items.reduce(
       (sum, item) => sum + item.totalPrice,
       0

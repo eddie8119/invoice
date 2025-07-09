@@ -9,7 +9,7 @@ interface InvoiceData {
   date: string;
   items: {
     name: string;
-    amount: number;
+    totalAmount: number;
     quantity: number;
     totalPrice: number;
   }[];

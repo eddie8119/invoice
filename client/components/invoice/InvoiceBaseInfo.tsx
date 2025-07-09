@@ -11,9 +11,9 @@ interface InvoiceBaseInfoProps {
     company: string;
     invoiceNumber: string;
     status: InvoiceStatus;
-    amount: number;
+    totalAmount: number;
     createdAt: Date;
-    expectPaidAt: Date;
+    dueDate: Date;
     paidAt?: Date;
   };
 }
@@ -56,7 +56,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
         <View style={styles.dateItem}>
           <Text style={textStyles.lebal}>預計付款日</Text>
           <Text style={textStyles.lebal}>
-            {invoice.expectPaidAt.toLocaleDateString()}
+            {invoice.dueDate.toLocaleDateString()}
           </Text>
         </View>
         {invoice.paidAt && (

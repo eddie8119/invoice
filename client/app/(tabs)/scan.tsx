@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface InvoiceItem {
   name: string;
-  amount: number;
+  totalAmount: number;
   quantity: number;
   totalPrice: number;
 }
@@ -50,7 +50,7 @@ export default function ScanScreen() {
         items: [
           {
             name: '測試商品',
-            amount: 100,
+            totalAmount: 100,
             quantity: 2,
             totalPrice: 200,
           },

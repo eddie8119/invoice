@@ -32,7 +32,7 @@ export default function useCloudOCR() {
       const invoiceData: InvoiceFields = {
         invoiceNumber: data.invoiceNumber || '',
         date: data.date || '',
-        amount: data.amount || 0,
+        totalAmount: data.totalAmount || 0,
         items: data.items || [],
       };
 

@@ -21,16 +21,16 @@ export const InvoiceList = ({
 
   const getStatusMessage = (
     status: Invoice['status'],
-    expectPaidAt: Date | null
+    dueDate: Date | null
   ) => {
     if (status === 'paid') return '';
     if (status === 'unpaid') {
       const today = new Date(); // Assume this is June 8, 2025
 
       // This is your current condition:
-      if (expectPaidAt && expectPaidAt > today) {
-        // Logic A: expectPaidAt is provided AND it's after today
-        const diffMs = expectPaidAt.getTime() - today.getTime();
+      if (dueDate && dueDate > today) {
+        // Logic A: dueDate is provided AND it's after today
+        const diffMs = dueDate.getTime() - today.getTime();
         const diffDays = Math.max(
           0,
           Math.round(diffMs / (1000 * 60 * 60 * 24))
@@ -38,7 +38,7 @@ export const InvoiceList = ({
         return `在${diffDays}天內到期`;
       }
 
-      // Logic B: Fallback (if expectPaidAt is null OR expectPaidAt is today or in the past)
+      // Logic B: Fallback (if dueDate is null OR dueDate is today or in the past)
       const year = today.getFullYear();
       const month = today.getMonth();
       const lastDay = new Date(year, month + 1, 0); // This will be June 30, 2025
@@ -66,7 +66,7 @@ export const InvoiceList = ({
                   #{invoice.invoiceNumber}
                 </Text>
               </View>
-              {getStatusMessage(invoice.status, invoice.expectPaidAt) && (
+              {getStatusMessage(invoice.status, invoice.dueDate) && (
                 <View style={styles.statusContainer}>
                   <View
                     style={[
@@ -80,7 +80,7 @@ export const InvoiceList = ({
                       { color: getStatusColor(invoice.status) },
                     ]}
                   >
-                    {getStatusMessage(invoice.status, invoice.expectPaidAt)}
+                    {getStatusMessage(invoice.status, invoice.dueDate)}
                   </Text>
                 </View>
               )}
@@ -89,11 +89,9 @@ export const InvoiceList = ({
             <View style={styles.cardRight}>
               <Text>
                 TWD$
-                <Text style={styles.amount}>{invoice.amount}</Text>
+                <Text style={styles.amount}>{invoice.totalAmount}</Text>
               </Text>
-              <Text style={textStyles.date}>
-                建立日期: {invoice.createdAt.toLocaleDateString()}
-              </Text>
+              <Text>建立日期: {invoice.createdAt.toLocaleDateString()}</Text>
 
               <View style={styles.paidDateAndStatusContainer}>
                 {invoice.paidAt && (

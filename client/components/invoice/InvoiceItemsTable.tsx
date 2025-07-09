@@ -1,7 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { pannelStyles } from '@/style/pannel';
-import { theme } from '@/constants/theme';
+import React from 'react';
+import { Text, View } from 'react-native';
 
 export interface InvoiceItem {
   id: string;
@@ -15,9 +14,9 @@ export interface InvoiceItemsTableProps {
   company: string;
   invoiceNumber: string;
   status: string;
-  amount: number;
+  totalAmount: number;
   createdAt: Date;
-  expectPaidAt: Date;
+  dueDate: Date;
   paidAt?: Date;
   getStatusColor: (status: string) => string;
   getStatusText: (status: string) => string;
@@ -29,8 +28,8 @@ export const InvoiceItemsTable: React.FC<InvoiceItemsTableProps> = ({
   invoiceNumber,
   status,
   amount,
-  createdAt,
-  expectPaidAt,
+  totalAmountdAt,
+  dueDate,
   paidAt,
   getStatusColor,
   getStatusText,
@@ -42,7 +41,12 @@ export const InvoiceItemsTable: React.FC<InvoiceItemsTableProps> = ({
         <Text style={styles.companyName}>{company}</Text>
         <Text style={styles.invoiceNumber}>#{invoiceNumber}</Text>
       </View>
-      <View style={[styles.statusBadge, { backgroundColor: getStatusColor(status) }]}> 
+      <View
+        style={[
+          styles.statusBadge,
+          { backgroundColor: getStatusColor(status) },
+        ]}
+      >
         <Text style={styles.statusText}>{getStatusText(status)}</Text>
       </View>
     </View>
@@ -60,7 +64,7 @@ export const InvoiceItemsTable: React.FC<InvoiceItemsTableProps> = ({
       </View>
       <View style={styles.dateItem}>
         <Text style={styles.dateLabel}>預計付款日</Text>
-        <Text style={styles.dateValue}>{expectPaidAt.toLocaleDateString()}</Text>
+        <Text style={styles.dateValue}>{dueDate.toLocaleDateString()}</Text>
       </View>
       {paidAt && (
         <View style={styles.dateItem}>

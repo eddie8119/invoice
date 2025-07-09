@@ -58,7 +58,7 @@ const AccountsReceivableDetailsScreen = () => {
           ),
           status: 'unpaid',
           createdAt: new Date('2025-05-15'),
-          expectPaidAt: new Date('2025-06-15'),
+          dueDate: new Date('2025-06-15'),
           invoiceItems: mockItems,
           note: '請於15日內付款，謝謝。',
         };
@@ -95,7 +95,7 @@ const AccountsReceivableDetailsScreen = () => {
         company: data.company,
         invoiceNumber: data.invoiceNumber,
         note: data.note,
-        expectPaidAt: data.dueDate ? new Date(data.dueDate) : prev.expectPaidAt,
+        dueDate: data.dueDate ? new Date(data.dueDate) : prev.dueDate,
         items: data.items,
         amount: totalAmount,
       };
@@ -166,7 +166,7 @@ const AccountsReceivableDetailsScreen = () => {
           company: invoice.company,
           invoiceNumber: invoice.invoiceNumber,
           note: invoice.note,
-          dueDate: invoice.expectPaidAt
+          dueDate: invoice.dueDate
             .toISOString()
             .split('T')[0]
             .replace(/-/g, '/'),

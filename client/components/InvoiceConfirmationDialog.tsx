@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import {
   Modal,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 interface InvoiceItem {
   name: string;
-  amount: number;
+  totalAmount: number;
   quantity: number;
   totalPrice: number;
 }
@@ -46,10 +46,14 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
     const newItems = [...editedData.items];
     const item = { ...newItems[index] };
 
-    if (field === 'amount' || field === 'quantity' || field === 'totalPrice') {
+    if (
+      field === 'totalAmount' ||
+      field === 'quantity' ||
+      field === 'totalPrice'
+    ) {
       item[field] = parseFloat(value) || 0;
-      if (field === 'amount' || field === 'quantity') {
-        item.totalPrice = item.amount * item.quantity;
+      if (field === 'totalAmount' || field === 'quantity') {
+        item.totalPrice = item.totalAmount * item.quantity;
       }
     } else {
       item[field] = value;
@@ -105,8 +109,10 @@ export const InvoiceConfirmationDialog: React.FC<Props> = ({
                 <View style={styles.itemDetails}>
                   <TextInput
                     style={styles.numberInput}
-                    value={item.amount.toString()}
-                    onChangeText={text => updateItem(index, 'amount', text)}
+                    value={item.totalAmount.toString()}
+                    onChangeText={text =>
+                      updateItem(index, 'totalAmount', text)
+                    }
                     keyboardType="numeric"
                     placeholder="單價"
                   />

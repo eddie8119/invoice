@@ -1,35 +1,38 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Stack } from 'expo-router';
+import React from 'react';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 interface InvoiceItem {
   month: string;
-  amount: number;
+  totalAmount: number;
 }
 
 const invoiceData: InvoiceItem[] = [
-  { month: '2020/10', amount: 0 },
-  { month: '2020/09', amount: 1085.37 },
-  { month: '2020/08', amount: 205.0 },
-  { month: '2020/07', amount: 130727.3 },
-  { month: '2020/06', amount: 8511.0 },
-  { month: '2020/05', amount: 253377.0 },
-  { month: '2020/04', amount: 5600.0 },
-  { month: '2020/03', amount: 110.0 },
-  { month: '2020/02', amount: 0 },
-  { month: '2020/01', amount: 0 },
-  { month: '2019/12', amount: 0 },
-  { month: '2019/11', amount: 1208.9 },
+  { month: '2020/10', totalAmount: 0 },
+  { month: '2020/09', totalAmount: 1085.37 },
+  { month: '2020/08', totalAmount: 205.0 },
+  { month: '2020/07', totalAmount: 130727.3 },
+  { month: '2020/06', totalAmount: 8511.0 },
+  { month: '2020/05', totalAmount: 253377.0 },
+  { month: '2020/04', totalAmount: 5600.0 },
+  { month: '2020/03', totalAmount: 110.0 },
+  { month: '2020/02', totalAmount: 0 },
+  { month: '2020/01', totalAmount: 0 },
+  { month: '2019/12', totalAmount: 0 },
+  { month: '2019/11', totalAmount: 1208.9 },
 ];
 
 export default function InvoiceReport() {
-  const totalAmount = invoiceData.reduce((sum, item) => sum + item.amount, 0);
+  const totalAmount = invoiceData.reduce(
+    (sum, item) => sum + item.totalAmount,
+    0
+  );
   const overdueAmount = 125213.37;
 
   const renderItem = ({ item }: { item: InvoiceItem }) => (
     <View style={styles.invoiceItem}>
       <Text style={styles.month}>{item.month}</Text>
-      <Text style={styles.amount}>${item.amount.toFixed(2)}</Text>
+      <Text style={styles.totalAmount}>${item.totalAmount.toFixed(2)}</Text>
     </View>
   );
 
