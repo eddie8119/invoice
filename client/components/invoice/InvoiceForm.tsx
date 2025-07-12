@@ -151,6 +151,19 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             />
           )}
         />
+        <Controller
+          control={control}
+          name="caseName"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="專案名稱"
+              placeholder="輸入專案名稱"
+              value={value}
+              onChangeText={onChange}
+              error={errors.caseName?.message}
+            />
+          )}
+        />
 
         <Controller
           control={control}

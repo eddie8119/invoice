@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const createInvoiceSchema = z.object({
   company: z.string().min(1, "公司名稱為必填"),
+  caseName: z.string().min(1, "專案名稱為必填"),
   invoiceNumber: z.string().min(1, "發票編號為必填"),
   dueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date string",

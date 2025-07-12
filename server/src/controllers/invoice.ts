@@ -27,6 +27,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       total_amount,
       status,
       notes,
+      case_name,
       created_at,
       paid_at,
       company:Companies(id, name),
@@ -177,6 +178,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     const {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
       invoice_number,
+      case_name,
       due_date,
       status = "unpaid",
       notes,
@@ -187,6 +189,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     // 驗證必要欄位
     if (
       !company ||
+      !case_name ||
       !invoice_number ||
       !due_date ||
       !invoice_items ||
@@ -260,6 +263,7 @@ export const createInvoice = async (req: Request, res: Response) => {
           user_id: userId,
           company_id, // 使用上面獲取或創建的公司 ID
           invoice_number,
+          case_name,
           due_date: new Date(due_date), // String to Date
           total_amount,
           status,
