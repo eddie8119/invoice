@@ -5,6 +5,7 @@ import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { InvoiceItemsSection } from '@/components/invoice/InvoiceItemsSection';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { theme } from '@/constants/theme';
+import { invoiceApi } from '@/services/api/invoice';
 import { containerStyles } from '@/style/containers';
 import { pannelStyles } from '@/style/pannel';
 import { InvoiceDetail, InvoiceItem } from '@/types/invoice';
@@ -22,48 +23,23 @@ const AccountsReceivableDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [editVisible, setEditVisible] = useState(false);
 
-  // 模擬從 API 獲取發票詳細資訊
   useEffect(() => {
-    // 實際應用中，這裡應該調用 API 獲取數據
     const fetchInvoiceDetails = async () => {
       try {
         setLoading(true);
-        // 模擬 API 請求延遲
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        const mockItems: InvoiceItem[] = [
-          {
-            id: '1',
-            title: '網站維護服務',
-            quantity: 1,
-            unitPrice: 8000,
-          },
-          {
-            id: '2',
-            title: '伺服器租用費用',
-            quantity: 3,
-            unitPrice: 1500,
-          },
-        ];
-
-        // 模擬發票詳細資訊
-        const mockInvoice: InvoiceDetail = {
-          id: id || '1',
-          invoiceNumber: 'INV-2025-' + id,
-          company: '台灣科技有限公司',
-          amount: mockItems.reduce(
-            (sum, item) => sum + item.quantity * item.price,
-            0
-          ),
-          status: 'unpaid',
-          createdAt: new Date('2025-05-15'),
-          dueDate: new Date('2025-06-15'),
-          invoiceItems: mockItems,
-          note: '請於15日內付款，謝謝。',
-        };
-
-        setInvoice(mockInvoice);
+        const response = await invoiceApi.getInvoice(id);
+        if (response.success && response.data) {
+          const transformedData = {
+            ...response.data,
+            dueDate: new Date(response.data.dueDate),
+            paidAt: response.data.paidAt
+              ? new Date(response.data.paidAt)
+              : null,
+          };
+          setInvoice(transformedData);
+        }
       } catch (error) {
         console.error('獲取發票詳細資訊失敗:', error);
       } finally {
@@ -73,8 +49,6 @@ const AccountsReceivableDetailsScreen = () => {
 
     fetchInvoiceDetails();
   }, [id]);
-
-  const [editVisible, setEditVisible] = useState(false);
 
   // 編輯完成時，更新本地 invoice 狀態
   const handleEditSave = (data: {
@@ -146,15 +120,15 @@ const AccountsReceivableDetailsScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* 項目明細 */}
           <InvoiceItemsSection
-            items={invoice.invoiceItems}
+            items={invoice.items}
             calculateTotal={calculateTotal}
           />
 
           {/* 備註 */}
-          {invoice.note && (
+          {invoice.notes && (
             <View style={[pannelStyles.card, styles.section]}>
               <Heading level={3}>備註</Heading>
-              <Text style={styles.noteText}>{invoice.note}</Text>
+              <Text style={styles.noteText}>{invoice.notes}</Text>
             </View>
           )}
         </ScrollView>
