@@ -24,8 +24,8 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     ...invoice,
     notes: invoice.notes || '',
     dueDate: invoice.dueDate || new Date().toISOString().split('T')[0],
-    status: invoice.status || 'unpaid',
-    type: invoice.type || 'receivable',
+    status: invoice.status,
+    type: invoice.type,
     invoiceItems: invoice.invoiceItems || [],
   };
 

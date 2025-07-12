@@ -1,6 +1,6 @@
 export type InvoiceType = 'receivable' | 'payable';
-
 export type InvoiceStatus = 'paid' | 'unpaid' | 'overdue';
+import { CompanyDTO } from './company';
 
 export interface GetInvoiceResponse {
   id: string;
@@ -8,28 +8,22 @@ export interface GetInvoiceResponse {
   due_date: Date;
   total_totalAmount: number;
   currency: string;
-  status: 'paid' | 'unpaid' | 'overdue';
+  status: InvoiceStatus;
   notes: string;
   created_at: Date;
-  company: {
-    id: string;
-    name: string;
-  };
+  company: CompanyDTO;
   type: InvoiceType;
 }
 
 export interface createInvoiceDetailResponse {
   id: number;
   invoiceNumber: string;
-  dueDate: string;
+  dueDate: Date;
   totalAmount: number;
-  status: string;
+  status: InvoiceStatus;
   notes: string;
-  type: string;
-  company: {
-    id: number;
-    name: string;
-  };
+  type: InvoiceType;
+  company: CompanyDTO;
   items: Array<{
     id: number;
     invoiceId: number;
@@ -41,27 +35,29 @@ export interface createInvoiceDetailResponse {
 
 export interface Invoice {
   id: string;
-  company: string;
-  totalAmount: string;
+  company: CompanyDTO;
+  totalAmount: number;
   createdAt: Date;
   paidAt: Date | null;
   dueDate: Date | null;
-  status: 'paid' | 'unpaid' | 'overdue';
+  status: InvoiceStatus;
   invoiceNumber: string;
 }
 
 export interface InvoiceItem {
+  id: string;
   title: string;
   quantity: number;
+  createdAt: Date;
+  invoiceId: string;
   unitPrice: number;
-  id?: string;
 }
 
 export interface InvoiceFormData {
   company: string;
   invoiceNumber: string;
   note: string;
-  dueDate: string;
+  dueDate: Date;
   type: InvoiceType;
   status: InvoiceStatus;
   invoiceItems: InvoiceItem[];
@@ -70,21 +66,24 @@ export interface InvoiceFormData {
 export interface InvoiceDetail {
   id: string;
   invoiceNumber: string;
-  company: string;
+  status: InvoiceStatus;
+  notes: string;
   totalAmount: number;
-  status: 'paid' | 'unpaid' | 'overdue';
-  createdAt: Date;
   dueDate: Date;
-  paidAt?: Date;
-  invoiceItems: InvoiceItem[];
-  note?: string;
+  type: InvoiceType;
+  updatedAt: Date;
+  createdAt: Date;
+  companyId: string;
+  paidAt: Date | null;
+  company: CompanyDTO;
+  items: InvoiceItem[];
 }
 
 // 交易項目類型定義
 export interface Transaction {
   id: string;
   company: string;
-  date: string;
+  date: Date;
   totalAmount: number;
   type: 'income' | 'expense';
 }

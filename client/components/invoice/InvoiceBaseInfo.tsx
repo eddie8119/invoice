@@ -1,21 +1,13 @@
 import { Heading } from '@/components/core/Heading';
 import { pannelStyles } from '@/style/pannel';
 import { textStyles } from '@/style/text';
-import type { InvoiceStatus } from '@/utils/invoice';
+import { InvoiceDetail } from '@/types/invoice';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 interface InvoiceBaseInfoProps {
-  invoice: {
-    company: string;
-    invoiceNumber: string;
-    status: InvoiceStatus;
-    totalAmount: number;
-    createdAt: Date;
-    dueDate: Date;
-    paidAt?: Date;
-  };
+  invoice: InvoiceDetail;
 }
 
 export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
@@ -26,7 +18,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
       <View style={styles.header}>
         <View>
           <Heading level={3} marginBottom={0}>
-            {invoice.company}
+            {invoice.company.name}
           </Heading>
           <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
         </View>
@@ -43,7 +35,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
         <Text style={textStyles.lebal}>總金額</Text>
         <View style={styles.amountRow}>
           <Text style={textStyles.lebal}>TWD$</Text>
-          <Text style={styles.amountValue}>{invoice.amount}</Text>
+          <Text style={styles.amountValue}>{invoice.totalAmount}</Text>
         </View>
       </View>
       <View style={styles.dateInfo}>

@@ -2,6 +2,7 @@ import request from '@/lib/request';
 import { createInvoiceSchema } from '@/shared/schemas/createInvoice';
 import type {
   GetInvoiceResponse,
+  InvoiceDetail,
   InvoiceType,
   createInvoiceDetailResponse,
 } from '@/types/invoice';
@@ -22,7 +23,7 @@ export const invoiceApi = {
   },
 
   // 獲取單個發票
-  getInvoice: async (id: string): Promise<ApiResponse<GetInvoiceResponse>> => {
+  getInvoice: async (id: string): Promise<ApiResponse<InvoiceDetail>> => {
     return request.get(`/invoices/${id}`);
   },
 

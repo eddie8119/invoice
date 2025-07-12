@@ -33,6 +33,7 @@ const AccountsReceivableDetailsScreen = () => {
         if (response.success && response.data) {
           const transformedData = {
             ...response.data,
+            createdAt: new Date(response.data.createdAt),
             dueDate: new Date(response.data.dueDate),
             paidAt: response.data.paidAt
               ? new Date(response.data.paidAt)
@@ -79,7 +80,7 @@ const AccountsReceivableDetailsScreen = () => {
 
   // 計算總金額
   const calculateTotal = (items: InvoiceItem[]) => {
-    return items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    return items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
   };
 
   if (loading) {
@@ -137,14 +138,9 @@ const AccountsReceivableDetailsScreen = () => {
       <EditInvoiceModal
         visible={editVisible}
         invoice={{
-          company: invoice.company,
-          invoiceNumber: invoice.invoiceNumber,
-          note: invoice.note,
-          dueDate: invoice.dueDate
-            .toISOString()
-            .split('T')[0]
-            .replace(/-/g, '/'),
-          invoiceItems: invoice.invoiceItems,
+          ...invoice,
+          company: invoice.company.name,
+          invoiceItems: invoice.items,
         }}
         onClose={() => setEditVisible(false)}
         onSave={handleEditSave}
