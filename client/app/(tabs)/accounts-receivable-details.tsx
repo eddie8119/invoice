@@ -126,10 +126,10 @@ const AccountsReceivableDetailsScreen = () => {
           />
 
           {/* 備註 */}
-          {invoice.notes && (
+          {invoice.note && (
             <View style={[pannelStyles.card, styles.section]}>
               <Heading level={3}>備註</Heading>
-              <Text style={styles.noteText}>{invoice.notes}</Text>
+              <Text style={styles.noteText}>{invoice.note}</Text>
             </View>
           )}
         </ScrollView>

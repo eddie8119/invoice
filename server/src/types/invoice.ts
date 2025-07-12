@@ -23,7 +23,7 @@ export interface BaseInvoiceFromDB {
   total_amount: number;
   currency: string | null;
   status: string;
-  notes: string | null;
+  note: string | null;
   created_at: string;
   type: "receivable" | "payable";
 }

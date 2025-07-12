@@ -22,7 +22,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
 }) => {
   const initialData: CreateInvoiceSchema = {
     ...invoice,
-    notes: invoice.notes || '',
+    note: invoice.note || '',
     dueDate: invoice.dueDate || new Date().toISOString().split('T')[0],
     status: invoice.status,
     type: invoice.type,

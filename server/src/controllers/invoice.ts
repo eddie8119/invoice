@@ -26,7 +26,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       due_date,
       total_amount,
       status,
-      notes,
+      note,
       case_name,
       created_at,
       paid_at,
@@ -181,7 +181,7 @@ export const createInvoice = async (req: Request, res: Response) => {
       case_name,
       due_date,
       status = "unpaid",
-      notes,
+      note,
       invoice_items, // 發票項目，要存到 InvoiceItems 表
       type = "receivable",
     } = snakeCaseData;
@@ -267,7 +267,7 @@ export const createInvoice = async (req: Request, res: Response) => {
           due_date: new Date(due_date), // String to Date
           total_amount,
           status,
-          notes,
+          note,
           type, // 發票類型（應收或應付）
         },
       ])
@@ -368,7 +368,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
       due_date,
       currency,
       status,
-      notes,
+      note,
       items,
     } = req.body;
 
@@ -395,7 +395,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
     if (due_date !== undefined) invoiceData.due_date = due_date;
     if (currency !== undefined) invoiceData.currency = currency;
     if (status !== undefined) invoiceData.status = status;
-    if (notes !== undefined) invoiceData.notes = notes;
+    if (note !== undefined) invoiceData.note = note;
 
     // 如果有項目更新，重新計算總金額
     if (items && Array.isArray(items)) {

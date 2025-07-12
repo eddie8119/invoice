@@ -9,7 +9,7 @@ export interface GetInvoiceResponse {
   total_totalAmount: number;
   currency: string;
   status: InvoiceStatus;
-  notes: string;
+  note: string;
   created_at: Date;
   company: CompanyDTO;
   type: InvoiceType;
@@ -21,7 +21,7 @@ export interface createInvoiceDetailResponse {
   dueDate: Date;
   totalAmount: number;
   status: InvoiceStatus;
-  notes: string;
+  note: string;
   type: InvoiceType;
   company: CompanyDTO;
   items: Array<{
@@ -67,7 +67,7 @@ export interface InvoiceDetail {
   id: string;
   invoiceNumber: string;
   status: InvoiceStatus;
-  notes: string;
+  note: string;
   totalAmount: number;
   dueDate: Date;
   type: InvoiceType;

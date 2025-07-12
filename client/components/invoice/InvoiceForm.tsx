@@ -57,7 +57,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       dueDate: new Date().toISOString().split('T')[0],
       type: 'receivable' as InvoiceType,
       status: 'unpaid' as InvoiceStatus,
-      notes: '',
+      note: '',
       invoiceItems: [
         {
           title: '',
@@ -243,7 +243,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
-          name="notes"
+          name="note"
           render={({ field: { onChange, value } }) => (
             <View style={styles.inputContainer}>
               <Text style={styles.label}>備註</Text>
@@ -255,8 +255,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 numberOfLines={4}
                 textAlignVertical="top"
               />
-              {errors.notes && (
-                <Text style={styles.errorText}>{errors.notes.message}</Text>
+              {errors.note && (
+                <Text style={styles.errorText}>{errors.note.message}</Text>
               )}
             </View>
           )}
