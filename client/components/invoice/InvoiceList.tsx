@@ -2,6 +2,7 @@ import { theme } from '@/constants/theme';
 import { pannelStyles } from '@/style/pannel';
 import { textStyles } from '@/style/text';
 import { Invoice } from '@/types/invoice';
+import { getRemainingDaysMessage } from '@/utils/getRemainingDaysMessage';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -19,37 +20,6 @@ export const InvoiceList = ({
 }: InvoiceListProps) => {
   const colors = theme.colors.light;
 
-  const getStatusMessage = (
-    status: Invoice['status'],
-    dueDate: Date | null
-  ) => {
-    if (status === 'paid') return '';
-    if (status === 'unpaid') {
-      const today = new Date(); // Assume this is June 8, 2025
-
-      // This is your current condition:
-      if (dueDate && dueDate > today) {
-        // Logic A: dueDate is provided AND it's after today
-        const diffMs = dueDate.getTime() - today.getTime();
-        const diffDays = Math.max(
-          0,
-          Math.round(diffMs / (1000 * 60 * 60 * 24))
-        );
-        return `在${diffDays}天內到期`;
-      }
-
-      // Logic B: Fallback (if dueDate is null OR dueDate is today or in the past)
-      const year = today.getFullYear();
-      const month = today.getMonth();
-      const lastDay = new Date(year, month + 1, 0); // This will be June 30, 2025
-      const diffMs = lastDay.getTime() - today.getTime();
-      const diffDays = Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
-      return `在${diffDays}天內到期月底`;
-    }
-    if (status === 'overdue') return '逾期3天';
-    return '';
-  };
-
   return (
     <View>
       {invoices.map(invoice => (
@@ -66,7 +36,7 @@ export const InvoiceList = ({
                   #{invoice.invoiceNumber}
                 </Text>
               </View>
-              {getStatusMessage(invoice.status, invoice.dueDate) && (
+              {getRemainingDaysMessage(invoice.status, invoice.dueDate) && (
                 <View style={styles.statusContainer}>
                   <View
                     style={[
@@ -80,7 +50,7 @@ export const InvoiceList = ({
                       { color: getStatusColor(invoice.status) },
                     ]}
                   >
-                    {getStatusMessage(invoice.status, invoice.dueDate)}
+                    {getRemainingDaysMessage(invoice.status, invoice.dueDate)}
                   </Text>
                 </View>
               )}
