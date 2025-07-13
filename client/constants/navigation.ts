@@ -51,6 +51,10 @@ export const tabConfig: TabConfig[] = [
     name: '設定',
     route: '/settings',
   },
+  {
+    name: '公司管理',
+    route: '/companies-overview',
+  },
 ];
 
 export const bottomTabConfig: BottomTabConfig[] = [
@@ -97,10 +101,10 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: '1',
-    title: '應收帳款',
+    title: '公司管理',
     icon: 'document-text',
     color: '#3F51B5',
-    url: '/accounts-receivable',
+    url: '/companies-overview',
   },
   {
     id: '2',
