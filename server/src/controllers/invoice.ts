@@ -4,6 +4,7 @@ import {
   InvoiceForList,
   InvoiceItemInsert,
 } from "@/types/invoice";
+import { getUserIdOrUnauthorized } from "@/utils/auth";
 import camelcaseKeys from "camelcase-keys";
 import { Request, Response } from "express";
 import snakecaseKeys from "snakecase-keys";
@@ -11,13 +12,8 @@ import snakecaseKeys from "snakecase-keys";
 // 獲取當前用戶的所有發票列表
 export const getInvoices = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
     let query = supabase.from("Invoices").select(
       `
@@ -100,13 +96,8 @@ export const getInvoices = async (req: Request, res: Response) => {
 // 獲取單個發票的詳細信息，包括公司信息和發票項目
 export const getInvoice = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
     const { id } = req.params;
 
@@ -165,13 +156,8 @@ export const getInvoice = async (req: Request, res: Response) => {
 export const createInvoice = async (req: Request, res: Response) => {
   // 開始一個事務，確保所有操作都成功或都失敗
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
     // 將前端傳來的駝峰式命名轉換為蛇形命名
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
@@ -352,13 +338,8 @@ export const createInvoice = async (req: Request, res: Response) => {
 // 更新發票信息
 export const updateInvoice = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
     const { id } = req.params;
     const {
@@ -498,13 +479,8 @@ export const updateInvoice = async (req: Request, res: Response) => {
 // 刪除發票
 export const deleteInvoice = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id;
-    if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
     const { id } = req.params;
 
