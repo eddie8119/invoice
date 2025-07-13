@@ -1,10 +1,11 @@
+import { EditInvoiceStatusModal } from '@/components/Modal/EditInvoiceStatusModal';
 import { theme } from '@/constants/theme';
 import { pannelStyles } from '@/style/pannel';
 import { textStyles } from '@/style/text';
 import { Invoice } from '@/types/invoice';
 import { getRemainingDaysMessage } from '@/utils/getRemainingDaysMessage';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface InvoiceListProps {
@@ -20,78 +21,90 @@ export const InvoiceList = ({
 }: InvoiceListProps) => {
   const colors = theme.colors.light;
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<InvoiceDTO | null>(
+    null
+  );
+  const [selectedPaidAt, setSelectedPaidAt] = useState<Date>(new Date());
+
   return (
     <View>
-      {invoices.map(invoice => (
-        <TouchableOpacity
-          key={invoice.id}
-          style={[pannelStyles.card, { marginBottom: 12 }]}
-          onPress={() => onInvoicePress(invoice)}
-        >
-          <View style={styles.cardContent}>
-            <View style={styles.cardLeft}>
-              <View style={styles.companyInfoContainer}>
-                <Text style={styles.companyName}>{invoice.company}</Text>
-                <Text style={styles.invoiceNumber}>
-                  #{invoice.invoiceNumber}
-                </Text>
-              </View>
-              {getRemainingDaysMessage(invoice.status, invoice.dueDate) && (
-                <View style={styles.statusContainer}>
-                  <View
-                    style={[
-                      styles.statusDot,
-                      { backgroundColor: getStatusColor(invoice.status) },
-                    ]}
-                  />
-                  <Text
-                    style={[
-                      styles.statusMessage,
-                      { color: getStatusColor(invoice.status) },
-                    ]}
-                  >
-                    {getRemainingDaysMessage(invoice.status, invoice.dueDate)}
+      <View>
+        {invoices.map(invoice => (
+          <TouchableOpacity
+            key={invoice.id}
+            style={[pannelStyles.card, { marginBottom: 12 }]}
+            onPress={() => onInvoicePress(invoice)}
+          >
+            <View style={styles.cardContent}>
+              <View style={styles.cardLeft}>
+                <View style={styles.companyInfoContainer}>
+                  <Text style={styles.companyName}>{invoice.company}</Text>
+                  <Text style={styles.invoiceNumber}>
+                    #{invoice.invoiceNumber}
                   </Text>
                 </View>
-              )}
-            </View>
-
-            <View style={styles.cardRight}>
-              <Text>
-                TWD$
-                <Text style={styles.amount}>{invoice.totalAmount}</Text>
-              </Text>
-              <Text>建立日期: {invoice.createdAt.toLocaleDateString()}</Text>
-
-              <View style={styles.paidDateAndStatusContainer}>
-                {invoice.paidAt && (
-                  <Text style={[styles.paidDateText]}>
-                    日期: {invoice.paidAt.toLocaleDateString()}
-                  </Text>
+                {getRemainingDaysMessage(invoice.status, invoice.dueDate) && (
+                  <View style={styles.statusContainer}>
+                    <View
+                      style={[
+                        styles.statusDot,
+                        { backgroundColor: getStatusColor(invoice.status) },
+                      ]}
+                    />
+                    <Text
+                      style={[
+                        styles.statusMessage,
+                        { color: getStatusColor(invoice.status) },
+                      ]}
+                    >
+                      {getRemainingDaysMessage(invoice.status, invoice.dueDate)}
+                    </Text>
+                  </View>
                 )}
-                <TouchableOpacity
-                  style={[
-                    styles.statusButton,
-                    { backgroundColor: getStatusColor(invoice.status) },
-                  ]}
-                  onPress={e => {
-                    // 防止事件冒泡，避免觸發父元素的 onPress
-                    e.stopPropagation && e.stopPropagation();
-                    if (onStatusToggle) {
-                      // 切換狀態：未付/逾期 -> 已付，已付 -> 未付
-                      onStatusToggle(invoice);
-                    }
-                  }}
-                >
-                  <Text style={textStyles.statusButton}>
-                    {getStatusText(invoice.status)}
-                  </Text>
-                </TouchableOpacity>
+              </View>
+
+              <View style={styles.cardRight}>
+                <Text>
+                  TWD$
+                  <Text style={styles.amount}>{invoice.totalAmount}</Text>
+                </Text>
+                <Text>建立日期: {invoice.createdAt.toLocaleDateString()}</Text>
+
+                <View style={styles.paidDateAndStatusContainer}>
+                  {invoice.paidAt && (
+                    <Text style={[styles.paidDateText]}>
+                      日期: {invoice.paidAt.toLocaleDateString()}
+                    </Text>
+                  )}
+                  <TouchableOpacity
+                    style={[
+                      styles.statusButton,
+                      { backgroundColor: getStatusColor(invoice.status) },
+                    ]}
+                    onPress={e => {
+                      // 防止事件冒泡，避免觸發父元素的 onPress
+                      e.stopPropagation && e.stopPropagation();
+                      setSelectedInvoice(invoice);
+                      setSelectedPaidAt(invoice.paidAt || new Date());
+                      setModalVisible(true);
+                    }}
+                  >
+                    <Text style={textStyles.statusButton}>
+                      {getStatusText(invoice.status)}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      ))}
+          </TouchableOpacity>
+        ))}
+      </View>
+      <EditInvoiceStatusModal
+        visible={modalVisible}
+        invoice={selectedInvoice}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };
