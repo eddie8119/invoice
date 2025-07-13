@@ -52,8 +52,12 @@ export const tabConfig: TabConfig[] = [
     route: '/settings',
   },
   {
-    name: '公司管理',
+    name: '公司列表',
     route: '/companies-overview',
+  },
+  {
+    name: '公司管理',
+    route: '/company-overview',
   },
 ];
 
@@ -101,7 +105,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: '1',
-    title: '公司管理',
+    title: '公司列表',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/companies-overview',

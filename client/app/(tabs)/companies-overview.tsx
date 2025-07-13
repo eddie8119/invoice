@@ -1,5 +1,6 @@
 import { companyApi } from '@/services/api/company';
 import { CompanyDTO } from '@/types/company';
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -53,7 +54,7 @@ export default function CompaniesOverview() {
           <TouchableOpacity
             style={styles.card}
             onPress={() => {
-              // TODO: 跳轉到公司詳細頁
+              router.push(`/company-overview/?id=${item.id}` as any);
             }}
           >
             <Text style={styles.name}>{item.name}</Text>
