@@ -1,5 +1,6 @@
 export type InvoiceType = 'receivable' | 'payable';
 export type InvoiceStatus = 'paid' | 'unpaid' | 'overdue';
+import { CaseDTO } from './case';
 import { CompanyDTO } from './company';
 
 export interface GetInvoiceResponse {
@@ -76,6 +77,7 @@ export interface InvoiceDetail {
   companyId: string;
   paidAt: Date | null;
   company: CompanyDTO;
+  case: CaseDTO;
   items: InvoiceItem[];
 }
 

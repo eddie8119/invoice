@@ -27,6 +27,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       created_at,
       paid_at,
       company:Companies(id, name),
+      case:Cases(id, name),
       type
     `
     );
@@ -108,6 +109,7 @@ export const getInvoice = async (req: Request, res: Response) => {
         `
         *,
         company:Companies(*),
+        case:Cases(id, name),
         items:InvoiceItems(*)
       `
       )

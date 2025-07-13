@@ -18,7 +18,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
       <View style={styles.header}>
         <View>
           <Heading level={3} marginBottom={0}>
-            {invoice.company.name}
+            {invoice.company.name} - {invoice.case.name}
           </Heading>
           <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
         </View>
@@ -40,7 +40,7 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
       </View>
       <View style={styles.dateInfo}>
         <View style={styles.dateItem}>
-          <Text style={textStyles.lebal}>建立日期</Text>
+          <Text style={textStyles.lebal}>發票建立日期</Text>
           <Text style={textStyles.lebal}>
             {invoice.createdAt.toLocaleDateString()}
           </Text>
