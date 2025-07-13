@@ -1,3 +1,4 @@
+import { TagList } from '@/components/ui/tag';
 import { companyApi } from '@/services/api/company';
 import { CompanyDTO } from '@/types/company';
 import { router } from 'expo-router';
@@ -59,6 +60,9 @@ export default function CompaniesOverview() {
           >
             <Text style={styles.name}>{item.name}</Text>
             {item.phone && <Text style={styles.info}>電話：{item.phone}</Text>}
+            {item.cases && item.cases.length > 0 && (
+              <TagList tags={item.cases} />
+            )}
           </TouchableOpacity>
         )}
         ListEmptyComponent={

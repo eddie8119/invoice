@@ -21,7 +21,11 @@ export const getCompanies = async (req: Request, res: Response) => {
         contact_person,
         created_at,
         updated_at,
-        user_id
+        user_id,
+        cases:Cases (
+          id,
+          name
+        )
       `
       )
       .eq("user_id", userId)
@@ -71,7 +75,11 @@ export const getCompany = async (req: Request, res: Response) => {
         contact_person,
         created_at,
         updated_at,
-        user_id
+        user_id,
+        cases:Cases (
+          id,
+          name
+        )
       `
       )
       .eq("user_id", userId)

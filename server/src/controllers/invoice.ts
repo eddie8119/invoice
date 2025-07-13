@@ -23,7 +23,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       total_amount,
       status,
       note,
-      case_name,
+      case_id,
       created_at,
       paid_at,
       company:Companies(id, name),
@@ -241,7 +241,52 @@ export const createInvoice = async (req: Request, res: Response) => {
       company_id = newCompanyData.id;
     }
 
-    // 步驟 2: 創建發票記錄
+    // 步驟 2: 檢查案件是否已存在，如果不存在則創建
+    let case_id: string;
+    const { data: existingCase, error: caseFetchError } = await supabase
+      .from("Cases")
+      .select("id")
+      .eq("name", case_name)
+      .eq("user_id", userId)
+      .single();
+
+    if (caseFetchError && caseFetchError.code !== "PGRST116") {
+      console.error("Error fetching case:", caseFetchError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to check if case exists",
+        error: caseFetchError.message,
+      });
+    }
+
+    if (existingCase) {
+      case_id = existingCase.id;
+    } else {
+      const { data: newCaseData, error: caseCreateError } = await supabase
+        .from("Cases")
+        .insert([
+          {
+            name: case_name,
+            user_id: userId,
+            company_id: company_id,
+          },
+        ])
+        .select()
+        .single();
+
+      if (caseCreateError) {
+        console.error("Error creating case:", caseCreateError);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to create case",
+          error: caseCreateError.message,
+        });
+      }
+
+      case_id = newCaseData.id;
+    }
+
+    // 步驟 3: 創建發票記錄
     const { data: invoiceData, error: invoiceError } = await supabase
       .from("Invoices")
       .insert([
@@ -249,7 +294,7 @@ export const createInvoice = async (req: Request, res: Response) => {
           user_id: userId,
           company_id, // 使用上面獲取或創建的公司 ID
           invoice_number,
-          case_name,
+          case_id,
           due_date: new Date(due_date), // String to Date
           total_amount,
           status,
@@ -269,7 +314,7 @@ export const createInvoice = async (req: Request, res: Response) => {
       });
     }
 
-    // 步驟 3: 創建發票項目
+    // 步驟 4: 創建發票項目
     const invoiceItems: InvoiceItemInsert[] = invoice_items.map((item) => ({
       user_id: userId,
       invoice_id: invoiceData.id,
