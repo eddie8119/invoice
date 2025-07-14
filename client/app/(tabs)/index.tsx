@@ -8,24 +8,16 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.upperSection}>
         <BalanceSection />
       </View>
 
       <View style={containerStyles.lowerSection}>
         <MenuSection />
-        <ScrollView
-          contentContainerStyle={{
-            paddingBottom: 32,
-            flexGrow: 1,
-          }}
-          showsVerticalScrollIndicator={false}
-        >
-          <TransactionsSection />
-        </ScrollView>
+        <TransactionsSection />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

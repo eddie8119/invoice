@@ -93,28 +93,29 @@ const AccountsReceivableDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* 發票基本資訊區塊 + 編輯按鈕 */}
-      <View style={[containerStyles.upperSection, { position: 'relative' }]}>
-        <InvoiceBaseInfo invoice={invoice} />
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            top: 8,
-            right: 32,
-            zIndex: 2,
-            backgroundColor: 'white',
-            borderRadius: 16,
-            padding: 6,
-            elevation: 2,
-          }}
-          onPress={() => setEditVisible(true)}
-        >
+      <View
+        style={{
+          position: 'absolute',
+          top: 8,
+          right: 20,
+          zIndex: 2,
+          backgroundColor: 'white',
+          borderRadius: 16,
+          padding: 6,
+          elevation: 2,
+        }}
+      >
+        <TouchableOpacity onPress={() => setEditVisible(true)}>
           <Text
             style={{ fontSize: 18, color: theme.colors.light.primaryOceanBlue }}
           >
             ✏️
           </Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={[containerStyles.upperSection, { position: 'relative' }]}>
+        <InvoiceBaseInfo invoice={invoice} />
       </View>
 
       <View style={containerStyles.lowerSection}>

@@ -1,10 +1,11 @@
+import Loading from '@/components/core/Loading';
 import { TagList } from '@/components/ui/tag';
+import { theme } from '@/constants/theme';
 import { companyApi } from '@/services/api/company';
 import { CompanyDTO } from '@/types/company';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -32,11 +33,7 @@ export default function CompaniesOverview() {
   }, []);
 
   if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#3F51B5" />
-      </View>
-    );
+    return <Loading />;
   }
   if (error) {
     return (
@@ -76,7 +73,7 @@ export default function CompaniesOverview() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f6fa', padding: 16 },
+  container: { flex: 1, backgroundColor: theme.colors.light.primary },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,

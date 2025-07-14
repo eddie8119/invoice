@@ -16,12 +16,6 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
   return (
     <View style={[pannelStyles.card]}>
       <View style={styles.header}>
-        <View>
-          <Heading level={3} marginBottom={0}>
-            {invoice.company.name} - {invoice.case.name}
-          </Heading>
-          <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
-        </View>
         <View
           style={[
             styles.statusBadge,
@@ -29,6 +23,12 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
           ]}
         >
           <Text style={styles.statusText}>{getStatusText(invoice.status)}</Text>
+        </View>
+        <View>
+          <Heading level={3} marginBottom={0}>
+            {invoice.company.name} - {invoice.case.name}
+          </Heading>
+          <Text style={textStyles.lebal}>#{invoice.invoiceNumber}</Text>
         </View>
       </View>
       <View style={[{ marginBottom: 16 }]}>
@@ -67,15 +67,15 @@ export const InvoiceBaseInfo: React.FC<InvoiceBaseInfoProps> = ({
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    gap: 8,
     marginBottom: 16,
   },
   company: {
     fontSize: 18,
     fontWeight: '700',
     color: '#222',
-    // marginBottom: 4,
   },
   statusBadge: {
     paddingHorizontal: 12,

@@ -1,3 +1,4 @@
+import Loading from '@/components/core/Loading';
 import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
@@ -30,6 +31,7 @@ export const InvoiceOverviewScreenLayout = ({
     handleFilterChange,
     handleInvoicePress,
     handleStatusToggle,
+    isLoading,
   } = useInvoices(invoiceType, detailPageRoute);
 
   return (
@@ -43,7 +45,9 @@ export const InvoiceOverviewScreenLayout = ({
         <InvoiceFilter onFilterChange={handleFilterChange} />
         <View style={styles.listContainer}>
           <ScrollView>
-            {invoices.length === 0 ? (
+            {isLoading ? (
+              <Loading />
+            ) : invoices.length === 0 ? (
               <NoData />
             ) : (
               <InvoiceList

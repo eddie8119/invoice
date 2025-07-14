@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 
 export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
+  const [isLoading, setIsLoading] = useState(true);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
@@ -14,7 +15,6 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([]);
 
-  // 自動取得發票資料
   useEffect(() => {
     fetchInvoices();
   }, [selectedMonth, selectedYear, invoiceType]);
@@ -42,23 +42,30 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
   }, [selectedMonth, activeStatusFilter, invoices]);
 
   const fetchInvoices = useCallback(async () => {
-    const res = await invoiceApi.getInvoices({
-      type: invoiceType,
-      month: selectedMonth,
-      year: selectedYear,
-    });
-    if (res.success && res.data) {
-      const transformedInvoices = res.data.map((item: any) => ({
-        id: item.id,
-        invoiceNumber: item.invoiceNumber,
-        company: item.company.name,
-        totalAmount: item.totalAmount.toString(),
-        createdAt: new Date(item.createdAt),
-        dueDate: item.dueDate ? new Date(item.dueDate) : null,
-        paidAt: item.paidAt ? new Date(item.paidAt) : null,
-        status: item.status,
-      }));
-      setInvoices(transformedInvoices);
+    try {
+      setIsLoading(true);
+      const res = await invoiceApi.getInvoices({
+        type: invoiceType,
+        month: selectedMonth,
+        year: selectedYear,
+      });
+      if (res.success && res.data) {
+        const transformedInvoices = res.data.map((item: any) => ({
+          id: item.id,
+          invoiceNumber: item.invoiceNumber,
+          company: item.company.name,
+          totalAmount: item.totalAmount.toString(),
+          createdAt: new Date(item.createdAt),
+          dueDate: item.dueDate ? new Date(item.dueDate) : null,
+          paidAt: item.paidAt ? new Date(item.paidAt) : null,
+          status: item.status,
+        }));
+        setInvoices(transformedInvoices);
+      }
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [selectedMonth, selectedYear, invoiceType]);
 
@@ -109,5 +116,6 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
     handleInvoicePress,
     unpaidTotal,
     overdueTotal,
+    isLoading,
   };
 }
