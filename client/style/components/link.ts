@@ -14,3 +14,5 @@ export const linkStyles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+export type LinkStyleNames = keyof typeof linkStyles;

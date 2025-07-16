@@ -1,6 +1,7 @@
-import { InvoiceForm, InvoiceFormData } from '@/components/invoice/InvoiceForm';
+import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/containers';
+import { containerStyles } from '@/style/layouts/containers';
+import { InvoiceFormData } from '@/types/invoice';
 import { router } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';

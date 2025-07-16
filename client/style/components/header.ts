@@ -16,3 +16,5 @@ export const headerStyles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export type HeaderStyleNames = keyof typeof headerStyles;

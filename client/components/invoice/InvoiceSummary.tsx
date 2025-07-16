@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import { pannelStyles } from '@/style/pannel';
+import { pannelStyles } from '@/style/components/pannel';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 

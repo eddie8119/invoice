@@ -1,7 +1,7 @@
 import { EditInvoiceStatusModal } from '@/components/Modal/EditInvoiceStatusModal';
 import { theme } from '@/constants/theme';
-import { pannelStyles } from '@/style/pannel';
-import { textStyles } from '@/style/text';
+import { pannelStyles } from '@/style/components/pannel';
+import { textStyles } from '@/style/components/text';
 import { Invoice } from '@/types/invoice';
 import { getRemainingDaysMessage } from '@/utils/getRemainingDaysMessage';
 import { getStatusColor, getStatusText } from '@/utils/invoice';

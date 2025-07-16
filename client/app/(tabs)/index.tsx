@@ -2,7 +2,7 @@ import { BalanceSection } from '@/components/home/BalanceSection';
 import { MenuSection } from '@/components/home/MenuSection';
 import { TransactionsSection } from '@/components/home/TransactionsSection';
 import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/containers';
+import { containerStyles } from '@/style/layouts/containers';
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 

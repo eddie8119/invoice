@@ -2,6 +2,38 @@ import { theme } from '@/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const containerStyles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: theme.colors.light.background,
+  },
+  upperSection: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+    backgroundColor: theme.colors.light.surface,
+  },
+  lowerSection: {
+    flex: 1,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  spaceBetween: {
+    justifyContent: 'space-between',
+  },
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  padding: {
+    padding: theme.spacing.md,
+  },
+  margin: {
+    margin: theme.spacing.md,
+  },
+
   container: {
     flex: 1,
   },
@@ -12,35 +44,6 @@ export const containerStyles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 32,
-  },
-  screen: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  spaceBetween: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  upperSection: {
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-  },
-  lowerSection: {
-    flex: 1,
-    backgroundColor: theme.colors.light.primaryGreenWhite,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    overflow: 'hidden',
   },
   modalContainer: {
     position: 'absolute',
@@ -55,3 +58,5 @@ export const containerStyles = StyleSheet.create({
     padding: 24,
   },
 });
+
+export type ContainerStyleNames = keyof typeof containerStyles;

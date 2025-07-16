@@ -1,6 +1,39 @@
+import { theme } from '@/constants/theme';
 import { StyleSheet } from 'react-native';
 
 export const buttonStyles = StyleSheet.create({
+  primary: {
+    backgroundColor: theme.colors.light.buttonPrimary,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.radius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondary: {
+    backgroundColor: theme.colors.light.buttonSecondary,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.radius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.light.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: theme.colors.light.text,
+    fontSize: theme.typography.fontSizes.md,
+    fontWeight: theme.typography.fontWeights.medium,
+  },
+  textSecondary: {
+    color: theme.colors.light.textSecondary,
+    fontSize: theme.typography.fontSizes.md,
+    fontWeight: theme.typography.fontWeights.regular,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+
   // === Base Styles ===
   base: {
     alignItems: 'center',
@@ -66,3 +99,5 @@ export const buttonStyles = StyleSheet.create({
     marginBottom: 24,
   },
 });
+
+export type ButtonStyleNames = keyof typeof buttonStyles;

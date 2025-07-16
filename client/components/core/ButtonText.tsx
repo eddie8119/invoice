@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import { buttonStyles } from '@/style/buttons';
+import { buttonStyles } from '@/style/components/buttons';
 import React from 'react';
 import {
   Image,

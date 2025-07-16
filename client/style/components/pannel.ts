@@ -21,3 +21,5 @@ export const pannelStyles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export type PannelStyleNames = keyof typeof pannelStyles;

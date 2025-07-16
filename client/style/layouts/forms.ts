@@ -60,3 +60,5 @@ export const formStyles = StyleSheet.create({
     marginTop: 4,
   },
 });
+
+export type FormStyleNames = keyof typeof formStyles;

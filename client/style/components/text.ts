@@ -21,3 +21,5 @@ export const textStyles = StyleSheet.create({
     color: '#666',
   },
 });
+
+export type TextStyleNames = keyof typeof textStyles;

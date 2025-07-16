@@ -1,4 +1,4 @@
-import { pannelStyles } from '@/style/pannel';
+import { pannelStyles } from '@/style/components/pannel';
 import React from 'react';
 import { Text, View } from 'react-native';
 

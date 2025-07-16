@@ -1,6 +1,6 @@
 import { Heading } from '@/components/core/Heading';
 import { theme } from '@/constants/theme';
-import { pannelStyles } from '@/style/pannel';
+import { pannelStyles } from '@/style/components/pannel';
 import { InvoiceItem } from '@/types/invoice';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';

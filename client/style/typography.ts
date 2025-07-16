@@ -1,61 +1,59 @@
-import { StyleSheet } from 'react-native';
+import { theme } from '@/constants/theme';
+import { StyleSheet, TextStyle } from 'react-native';
 
-export const typographyStyles = StyleSheet.create({
-  // Headings
+export const textStyles = StyleSheet.create({
   h1: {
-    fontSize: 32,
-    fontWeight: '700',
-    lineHeight: 40,
+    fontSize: theme.typography.fontSizes.xxl,
+    fontWeight: theme.typography.fontWeights.bold as TextStyle['fontWeight'],
+    color: theme.colors.light.text,
+    marginBottom: theme.spacing.sm,
+    lineHeight: theme.typography.lineHeights.xl,
   },
   h2: {
-    fontSize: 28,
-    fontWeight: '700',
-    lineHeight: 36,
+    fontSize: theme.typography.fontSizes.xl,
+    fontWeight: theme.typography.fontWeights.bold as TextStyle['fontWeight'],
+    color: theme.colors.light.text,
+    marginBottom: theme.spacing.sm,
+    lineHeight: theme.typography.lineHeights.lg,
   },
   h3: {
-    fontSize: 24,
-    fontWeight: '600',
-    lineHeight: 32,
+    fontSize: theme.typography.fontSizes.lg,
+    fontWeight: theme.typography.fontWeights.medium as TextStyle['fontWeight'],
+    color: theme.colors.light.text,
+    marginBottom: theme.spacing.xs,
+    lineHeight: theme.typography.lineHeights.lg,
   },
   h4: {
-    fontSize: 20,
-    fontWeight: '600',
-    lineHeight: 28,
+    fontSize: theme.typography.fontSizes.md,
+    fontWeight: theme.typography.fontWeights.medium as TextStyle['fontWeight'],
+    color: theme.colors.light.text,
+    marginBottom: theme.spacing.xs,
+    lineHeight: theme.typography.lineHeights.md,
   },
-
-  // Body text
-  bodyLarge: {
-    fontSize: 18,
-    lineHeight: 28,
-  },
-  bodyMedium: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  bodySmall: {
-    fontSize: 14,
-    lineHeight: 20,
-  },
-
-  // Labels
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    lineHeight: 20,
+  body: {
+    fontSize: theme.typography.fontSizes.md,
+    color: theme.colors.light.text,
+    lineHeight: theme.typography.lineHeights.md,
   },
   caption: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: theme.typography.fontSizes.sm,
+    color: theme.colors.light.textSecondary,
+    lineHeight: theme.typography.lineHeights.sm,
   },
-
-  // Text alignment
+  error: {
+    fontSize: theme.typography.fontSizes.sm,
+    color: theme.colors.light.error,
+    lineHeight: theme.typography.lineHeights.sm,
+  },
   textCenter: {
-    textAlign: 'center',
-  },
-  textLeft: {
-    textAlign: 'left',
+    textAlign: 'center' as TextStyle['textAlign'],
   },
   textRight: {
-    textAlign: 'right',
+    textAlign: 'right' as TextStyle['textAlign'],
+  },
+  textLeft: {
+    textAlign: 'left' as TextStyle['textAlign'],
   },
 });
+
+export type TextStyleNames = keyof typeof textStyles;

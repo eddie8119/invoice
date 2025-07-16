@@ -1,5 +1,5 @@
 import { theme } from '@/constants/theme';
-import { formStyles } from '@/style/forms';
+import { formStyles } from '@/style/layouts/forms';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {

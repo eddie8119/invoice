@@ -1,6 +1,6 @@
 import { Heading } from '@/components/core/Heading';
-import { pannelStyles } from '@/style/pannel';
-import { textStyles } from '@/style/text';
+import { pannelStyles } from '@/style/components/pannel';
+import { textStyles } from '@/style/components/text';
 import { InvoiceDetail } from '@/types/invoice';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React from 'react';
