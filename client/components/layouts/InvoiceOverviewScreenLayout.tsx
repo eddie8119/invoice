@@ -5,9 +5,10 @@ import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
+import { containerStyles } from '@/style/containers';
 import { InvoiceType } from '@/types/invoice';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 interface InvoiceOverviewScreenLayoutProps {
   detailPageRoute: string;
@@ -34,19 +35,16 @@ export const InvoiceOverviewScreenLayout = ({
   } = useInvoices(invoiceType, detailPageRoute);
 
   return (
-    <View
-      className="flex-1"
-      style={{ backgroundColor: theme.colors.light.primary }}
-    >
-      <View className="flex-1">
+    <View style={styles.container}>
+      <View style={containerStyles.upperSection}>
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
 
-      <View className="flex-1">
+      <View style={containerStyles.lowerSection}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
         <InvoiceFilter onFilterChange={handleFilterChange} />
-        <View className="flex-1">
-          <ScrollView className="flex-1">
+        <View style={styles.listContainer}>
+          <ScrollView>
             {isLoading ? (
               <Loading />
             ) : invoices.length === 0 ? (
@@ -64,3 +62,16 @@ export const InvoiceOverviewScreenLayout = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.light.primary,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  listContainer: {
+    flex: 1,
+  },
+});
