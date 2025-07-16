@@ -1,0 +1,56 @@
+:root {
+  /* Brand Colors */
+  --color-brand-primary: #0050be;
+  --color-brand-secondary: #1c99df;
+  --color-brand-tertiary: #bee63c;
+
+  /* Black Colors */
+  --color-black-100: #ebedef; /* 5% */
+  --color-black-200: #e2e4e5; /* 10% */
+  --color-black-300: #cccdec; /* 20% */
+  --color-black-400: #9fa0a2; /* 40% */
+  --color-black-500: #474848; /* 80% */
+  --color-black-900: #1c1c1c; /* 100% */
+
+  /* White Colors */
+  --color-white-100: #ffffff; /* 100% */
+  --color-white-200: #f2f2f2; /* 80% */
+  --color-white-300: #e6e6e6; /* 40% */
+  --color-white-400: #d9d9d9; /* 20% */
+  --color-white-500: #cccccc; /* 10% */
+  --color-white-900: #f9f9f9; /* 5% */
+
+  /* Primary Colors */
+  --color-primary-light: #f7f9fb;
+  --color-primary-blue: #e3f5ff;
+  --color-primary-purple: #e5ecf6;
+  --color-primary-purple-50: #edf2f8;
+  --color-primary-brand: #000000;
+
+  /* Secondary Colors */
+  --color-secondary-purple-a: #95a4fc;
+  --color-secondary-purple-b: #c6c7f8;
+  --color-secondary-blue-a: #a8c5da;
+  --color-secondary-blue-b: #b1e3ff;
+  --color-secondary-green-a: #a1e3cb;
+  --color-secondary-green-b: #22c55e;
+  --color-secondary-yellow: #f59e0b;
+  --color-secondary-red: #ff4747;
+
+  /* System Colors (保留原有的系統顏色) */
+  --va-secondary: #64748b;
+  --va-success: #10b981;
+  --va-info: #0ea5e9;
+  --va-danger: var(--color-secondary-red);
+  --va-warning: #f59e0b;
+  --va-background-primary: var(--color-white-900);
+  --va-background-secondary: var(--color-white-200);
+  --va-background-element: var(--color-white-300);
+  --va-background-card-primary: var(--color-white-100);
+  --va-background-card-secondary: var(--color-white-900);
+  --va-background-border: var(--color-white-300);
+  --va-text-primary: var(--color-black-900);
+  --va-text-inverted: var(--color-white-100);
+  --va-shadow: rgba(0, 0, 0, 0.1);
+  --va-focus: var(--color-secondary-blue-a);
+}
