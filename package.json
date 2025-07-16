@@ -14,6 +14,7 @@
     "concurrently": "^8.2.0"
   },
   "dependencies": {
+    "or": "^0.2.0",
     "zod": "^3.25.48"
   }
 }
