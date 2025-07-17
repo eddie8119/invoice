@@ -1,5 +1,5 @@
 import { Heading } from '@/components/core/Heading';
-import { theme } from '@/constants/theme';
+import { useTheme } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,10 +17,10 @@ export const HeaderBar = ({
 }: HeaderBarProps) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
-  const colors = theme.colors.light;
+  const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[{ paddingTop: insets.top, backgroundColor: colors.primary }]}>
       <View style={styles.content}>
         <View style={styles.leftContainer}>
           {showBack && (
@@ -31,7 +31,7 @@ export const HeaderBar = ({
             >
               <Image
                 source={require('@/assets/icons/arrow-back.png')}
-                style={{ width: 16, height: 16 }}
+                style={{ width: 16, height: 16, tintColor: colors.text }}
               />
             </TouchableOpacity>
           )}
@@ -46,10 +46,6 @@ export const HeaderBar = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // 移除底線，不設置 borderBottomWidth 或 shadow
-    backgroundColor: theme.colors.light.primary,
-  },
   content: {
     height: 56,
     flexDirection: 'row',

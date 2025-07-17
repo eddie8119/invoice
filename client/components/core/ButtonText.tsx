@@ -1,9 +1,10 @@
-import { theme } from '@/constants/theme';
 import { buttonStyles } from '@/style/components/buttons';
+import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {
   Image,
   ImageSourcePropType,
+  ImageStyle, // Import ImageStyle
   StyleProp,
   Text,
   TouchableOpacity,
@@ -32,27 +33,33 @@ export function ButtonText({
   style,
   disabled = false,
 }: ButtonTextProps) {
-  const colors = theme.colors.light;
+  const { colors } = useTheme();
 
   // 根據 variant 決定背景色和文字顏色
   const getColors = () => {
+    // The colors object from useTheme might not have `buttonPrimary`.
+    // We'll use `primary` for the button color and `background` for the text color in filled variant.
+    // This aligns with the theme structure we defined in _layout.tsx.
+    const buttonPrimaryColor = colors.primary; // Assuming primary is the main button color
+    const buttonTextColor = colors.text;
+
     switch (variant) {
       case 'filled':
         return {
-          backgroundColor: colors.buttonPrimary,
-          textColor: colors.background,
+          backgroundColor: buttonPrimaryColor,
+          textColor: colors.card, // Use card color for text on primary background for better contrast
           borderColor: 'transparent',
         };
       case 'outlined':
         return {
           backgroundColor: 'transparent',
-          textColor: colors.buttonPrimary,
-          borderColor: colors.buttonPrimary,
+          textColor: buttonPrimaryColor,
+          borderColor: buttonPrimaryColor,
         };
       case 'text':
         return {
           backgroundColor: 'transparent',
-          textColor: colors.buttonPrimary,
+          textColor: buttonPrimaryColor,
           borderColor: 'transparent',
         };
     }
@@ -93,7 +100,7 @@ export function ButtonText({
       {icon && (
         <Image
           source={icon}
-          style={buttonStyles.socialIcon}
+          style={buttonStyles.socialIcon as ImageStyle} // Explicitly cast to ImageStyle
           resizeMode="contain"
         />
       )}
