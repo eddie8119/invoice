@@ -1,5 +1,6 @@
+import Loading from '@/components/core/Loading';
+import { theme } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import {
   DarkTheme,
   DefaultTheme,
@@ -9,36 +10,55 @@ import { useFonts } from 'expo-font';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
 import './globals.css';
 
-function RootGard({ children }: { children: React.ReactNode }) {
+// 整合 React Navigation 主題與我們的自訂主題
+const AppLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: theme.colors.light.primary,
+    background: theme.colors.light.background,
+    card: theme.colors.light.surface,
+    text: theme.colors.light.text,
+    border: theme.colors.light.border,
+  },
+};
+
+const AppDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: theme.colors.dark.primary,
+    background: theme.colors.dark.background,
+    card: theme.colors.dark.surface,
+    text: theme.colors.dark.text,
+    border: theme.colors.dark.border,
+  },
+};
+
+function RootGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const segments = useSegments();
   const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
-    // 如果認證狀態改變，處理路由導航
     if (isLoading) return;
 
     const inAuthGroup = segments[0] === '(auth)';
 
     if (!isAuthenticated && !inAuthGroup) {
-      // 未登入且不在認證頁面，導向登入頁
-      // router.replace('/(auth)/login'); //todo
+      router.replace('/(auth)/login');
     } else if (isAuthenticated && inAuthGroup) {
-      // 已登入但在認證頁面，導向主頁
       router.replace('/');
     }
   }, [isAuthenticated, segments, isLoading]);
 
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    // 直接使用 Loading 元件
+    return <Loading />;
   }
 
   return <>{children}</>;
@@ -51,23 +71,19 @@ export default function RootLayout() {
   });
 
   if (!loaded) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
     <AuthProvider>
-      <RootGard>
+      <RootGuard>
         <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          value={colorScheme === 'dark' ? AppDarkTheme : AppLightTheme}
         >
           <Slot />
-          <StatusBar style="auto" />
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </ThemeProvider>
-      </RootGard>
+      </RootGuard>
     </AuthProvider>
   );
 }

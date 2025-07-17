@@ -1,35 +1,26 @@
-import { theme } from '@/constants/theme';
+import { useTheme } from '@react-navigation/native';
 import { Stack } from 'expo-router';
+import { StyleSheet } from 'react-native';
+const { colors } = useTheme();
 
 export default function AuthLayout() {
-  const colors = theme.colors.light;
-
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: { backgroundColor: colors.background },
+        contentStyle: styles.content,
         animation: 'slide_from_right',
       }}
     >
-      <Stack.Screen
-        name="welcome"
-        options={{
-          title: 'Welcome',
-        }}
-      />
-      <Stack.Screen
-        name="login"
-        options={{
-          title: 'Login',
-        }}
-      />
-      <Stack.Screen
-        name="sign-up"
-        options={{
-          title: 'Sign Up',
-        }}
-      />
+      <Stack.Screen name="welcome" />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="sign-up" />
     </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: colors.background,
+  },
+});
