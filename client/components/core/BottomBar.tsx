@@ -1,6 +1,5 @@
-import { theme } from '@/constants/theme';
 import { usePathname, useRouter } from 'expo-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   Image,
   Platform,
@@ -11,10 +10,80 @@ import {
 } from 'react-native';
 
 import { bottomTabConfig } from '@/constants/navigation';
+import { useTheme } from '@react-navigation/native';
 
 export default function BottomBar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { colors } = useTheme();
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flexDirection: 'row',
+          height: 80,
+          borderTopWidth: 1,
+          borderTopColor: colors.divider,
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          backgroundColor: colors.primaryLight,
+          ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: -2 },
+              shadowOpacity: 0.05,
+              shadowRadius: 3,
+            },
+            android: {
+              elevation: 4,
+            },
+          }),
+        },
+        itemContainer: {
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        },
+        itemLabel: {
+          marginTop: 4,
+          fontSize: 12,
+          color: colors.textSecondary,
+        },
+        iconContainer: {
+          padding: 4,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        activeItemLabel: {
+          color: colors.primary,
+        },
+        activeIconContainer: {
+          backgroundColor: colors.primary,
+          borderRadius: 12,
+          padding: 4,
+        },
+        middleIconContainer: {
+          backgroundColor: colors.primaryMainBlue,
+          width: 65,
+          height: 65,
+          borderRadius: 32.5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          bottom: 30,
+          alignSelf: 'center',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        },
+      }),
+    [colors]
+  );
 
   const handleNavigation = (route: string) => {
     router.push(route as any);
@@ -29,6 +98,7 @@ export default function BottomBar() {
         return (
           <TouchableOpacity
             key={item.name}
+            activeOpacity={0.8} // Add visual feedback on press
             style={[
               styles.itemContainer,
               isMiddleItem && styles.middleItemContainer,
@@ -57,67 +127,3 @@ export default function BottomBar() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    height: 80,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.light.divider,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    backgroundColor: theme.colors.light.primaryLight,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  itemContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  middleItemContainer: {
-    marginTop: -50,
-  },
-  iconContainer: {
-    width: 35,
-    height: 35,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    marginBottom: 2,
-  },
-  activeIconContainer: {
-    backgroundColor: theme.colors.light.primary,
-    ...theme.shadows.small,
-  },
-  middleIconContainer: {
-    backgroundColor: theme.colors.light.primaryMainBlue,
-    width: 65,
-    height: 65,
-    borderRadius: 32.5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...theme.shadows.medium,
-  },
-  itemLabel: {
-    fontSize: 11,
-    marginTop: 3,
-    color: theme.colors.light.textSecondary,
-    fontWeight: '400',
-  },
-  activeItemLabel: {
-    color: theme.colors.light.primary,
-    fontWeight: '500',
-  },
-});
