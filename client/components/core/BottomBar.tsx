@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   middleIconContainer: {
-    backgroundColor: theme.colors.light.primaryBlue,
+    backgroundColor: theme.colors.light.primaryMainBlue,
     width: 65,
     height: 65,
     borderRadius: 32.5,

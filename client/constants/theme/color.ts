@@ -1,11 +1,11 @@
 // Primary colors
 export const primary = {
-  main: '#00D09E',
-  light: '#DFF7E2',
-  greenWhite: '#F1FFF3',
-  dark: '#0080CC',
-  blue: '#3299FF',
-  oceanBlue: '#0068FF',
+  brand_main_green: '#00D09E',
+  brand_light_green: '#DFF7E2',
+  brand_green_white: '#F1FFF3',
+  brand_main_blue: '#3299FF',
+  brand_dark_blue: '#0080CC',
+  brand_ocean_blue: '#0068FF',
 };
 
 export const shadow = {
@@ -32,21 +32,21 @@ export const status = {
   success: '#4CAF50',
   warning: '#FFC107',
   error: '#F44336',
-  info: primary.main,
+  info: primary.brand_main_green,
 };
 
 export const colors = {
   light: {
     // Primary
-    primary: primary.main,
-    primaryLight: primary.light,
-    primaryGreenWhite: primary.greenWhite,
-    primaryDark: primary.dark,
-    primaryBlue: primary.blue,
-    primaryOceanBlue: primary.oceanBlue,
+    primary: primary.brand_main_green,
+    primaryLight: primary.brand_light_green,
+    primaryGreenWhite: primary.brand_green_white,
+    primaryMainBlue: primary.brand_main_blue,
+    primaryDarkBlue: primary.brand_dark_blue,
+    primaryOceanBlue: primary.brand_ocean_blue,
 
     // Background
-    background: neutral.white,
+    background: primary.brand_main_green,
     surface: neutral.background,
     activeBackground: neutral.gray200,
 
@@ -66,7 +66,7 @@ export const colors = {
     info: status.info,
 
     // Components
-    buttonPrimary: primary.main,
+    buttonPrimary: primary.brand_main_green,
     buttonSecondary: neutral.white,
     inputBackground: neutral.white,
     inputBorder: neutral.gray200,
@@ -74,14 +74,14 @@ export const colors = {
 
     // Navigation
     tabIconDefault: neutral.gray400,
-    tabIconSelected: primary.main,
+    tabIconSelected: primary.brand_main_green,
     headerBackground: neutral.white,
   },
   dark: {
     // Primary
-    primary: primary.light,
-    primaryLight: primary.main,
-    primaryDark: primary.dark,
+    primary: primary.brand_main_green,
+    primaryLight: primary.brand_light_green,
+    primaryDark: primary.brand_dark_blue,
 
     // Background
     background: neutral.gray800,
@@ -103,7 +103,7 @@ export const colors = {
     info: status.info,
 
     // Components
-    buttonPrimary: primary.light,
+    buttonPrimary: primary.brand_light_green,
     buttonSecondary: neutral.gray700,
     inputBackground: neutral.gray700,
     inputBorder: neutral.gray600,
@@ -111,7 +111,7 @@ export const colors = {
 
     // Navigation
     tabIconDefault: neutral.gray500,
-    tabIconSelected: primary.light,
+    tabIconSelected: primary.brand_light_green,
     headerBackground: neutral.gray800,
   },
 } as const;
