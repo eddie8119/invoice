@@ -12,7 +12,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import 'react-native-reanimated';
-import './globals.css';
 
 // 整合 React Navigation 主題與我們的自訂主題
 const AppLightTheme = {
