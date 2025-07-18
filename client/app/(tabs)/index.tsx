@@ -2,11 +2,15 @@ import { BalanceSection } from '@/components/home/BalanceSection';
 import { MenuSection } from '@/components/home/MenuSection';
 import { TransactionsSection } from '@/components/home/TransactionsSection';
 import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/layouts/containers';
-import React from 'react';
+import { createContainerStyles } from '@/style/layouts/containers';
+import { useTheme } from '@react-navigation/native';
+import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function HomeScreen() {
+  const { colors } = useTheme();
+  const containerStyles = useMemo(() => createContainerStyles(colors), [colors]);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.upperSection}>
@@ -24,7 +28,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.light.primary,
   },
   upperSection: {
     paddingHorizontal: 24,

@@ -7,10 +7,11 @@ import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { theme } from '@/constants/theme';
 import { invoiceApi } from '@/services/api/invoice';
 import { pannelStyles } from '@/style/components/pannel';
-import { containerStyles } from '@/style/layouts/containers';
+import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceDetail, InvoiceItem } from '@/types/invoice';
+import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -21,9 +22,12 @@ import {
 
 const AccountsReceivableDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { colors } = useTheme();
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [editVisible, setEditVisible] = useState(false);
+
+  const containerStyles = useMemo(() => createContainerStyles(colors), [colors]);
 
   useEffect(() => {
     const fetchInvoiceDetails = async () => {
@@ -153,7 +157,6 @@ const AccountsReceivableDetailsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.light.primary,
   },
   section: {
     marginBottom: 16,

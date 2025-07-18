@@ -1,12 +1,16 @@
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/layouts/containers';
+import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceFormData } from '@/types/invoice';
+import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function CreateInvoiceManual() {
+  const { colors } = useTheme();
+  const containerStyles = useMemo(() => createContainerStyles(colors), [colors]);
+
   const handleCancel = () => {
     // Navigate back or to home screen
     router.back();
@@ -45,7 +49,6 @@ export default function CreateInvoiceManual() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.light.primary,
   },
   pageTitle: {
     fontSize: 24,
