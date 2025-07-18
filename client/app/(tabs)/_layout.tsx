@@ -6,10 +6,9 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { tabConfig } from '@/constants/navigation';
 import { colors } from '@/constants/theme/color';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { Tabs, usePathname } from 'expo-router';
 import React from 'react';
-import { View } from 'react-native';
+import { useColorScheme, View } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
