@@ -7,20 +7,15 @@ const Loading = () => {
   const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={[styles.text, { color: colors.text }]}>載入中...</Text>
-      </View>
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color={colors.primaryDarkBlue} />
+      <Text style={[styles.text, { color: colors.text }]}>載入中...</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
