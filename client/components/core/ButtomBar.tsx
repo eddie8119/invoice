@@ -12,7 +12,7 @@ import {
 import { bottomTabConfig } from '@/constants/navigation';
 import { useTheme } from '@react-navigation/native';
 
-export default function BottomBar() {
+export default function ButtomBar() {
   const router = useRouter();
   const pathname = usePathname();
   const { colors } = useTheme();
@@ -53,9 +53,13 @@ export default function BottomBar() {
           color: colors.textSecondary,
         },
         iconContainer: {
-          padding: 4,
-          alignItems: 'center',
+          width: 35,
+          height: 35,
+          borderRadius: 12,
           justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'transparent',
+          marginBottom: 2,
         },
         activeItemLabel: {
           color: colors.primary,

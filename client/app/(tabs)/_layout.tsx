@@ -1,5 +1,5 @@
 import { HapticTab } from '@/components/HapticTab';
-import BottomBar from '@/components/core/BottomBar';
+import ButtomBar from '@/components/core/ButtomBar';
 import { HeaderBar } from '@/components/core/HeaderBar';
 import { HomeHeader } from '@/components/core/HomeHeader';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -35,7 +35,7 @@ export default function TabLayout() {
           tabBarBackground: TabBarBackground,
           tabBarStyle: { display: 'none' }, // Hide the default tab bar
         }}
-        tabBar={() => <BottomBar />}
+        tabBar={() => <ButtomBar />}
       >
         {tabConfig.map(({ name, title, icon }) => (
           <Tabs.Screen

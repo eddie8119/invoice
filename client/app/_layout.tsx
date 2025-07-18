@@ -77,10 +77,10 @@ export default function RootLayout() {
     <AuthProvider>
       <RootGuard>
         <ThemeProvider
-          value={colorScheme === 'dark' ? AppDarkTheme : AppLightTheme}
+          value={colorScheme === 'dark' ? AppLightTheme : AppLightTheme}
         >
           <Slot />
-          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
         </ThemeProvider>
       </RootGuard>
     </AuthProvider>
