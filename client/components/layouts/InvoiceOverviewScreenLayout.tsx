@@ -4,11 +4,11 @@ import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
 import { NoData } from '@/components/sign/NoData';
-import { theme } from '@/constants/theme';
-import { containerStyles } from '@/style/layouts/containers';
+import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import React, { useMemo } from 'react';
+import { ScrollView, View } from 'react-native';
 
 interface InvoiceOverviewScreenLayoutProps {
   detailPageRoute: string;
@@ -33,9 +33,15 @@ export const InvoiceOverviewScreenLayout = ({
     handleStatusToggle,
     isLoading,
   } = useInvoices(invoiceType, detailPageRoute);
+  const { colors } = useTheme();
+
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <View style={containerStyles.upperSection}>
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
@@ -43,35 +49,20 @@ export const InvoiceOverviewScreenLayout = ({
       <View style={containerStyles.lowerSection}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
         <InvoiceFilter onFilterChange={handleFilterChange} />
-        <View style={styles.listContainer}>
-          <ScrollView>
-            {isLoading ? (
-              <Loading />
-            ) : invoices.length === 0 ? (
-              <NoData />
-            ) : (
-              <InvoiceList
-                invoices={filteredInvoices}
-                onInvoicePress={handleInvoicePress}
-                onStatusToggle={handleStatusToggle}
-              />
-            )}
-          </ScrollView>
-        </View>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          {isLoading ? (
+            <Loading />
+          ) : invoices.length === 0 ? (
+            <NoData />
+          ) : (
+            <InvoiceList
+              invoices={filteredInvoices}
+              onInvoicePress={handleInvoicePress}
+              onStatusToggle={handleStatusToggle}
+            />
+          )}
+        </ScrollView>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.light.primary,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  listContainer: {
-    flex: 1,
-  },
-});

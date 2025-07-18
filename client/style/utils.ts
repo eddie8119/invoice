@@ -2,10 +2,7 @@ import { theme } from '@/constants/theme';
 
 export const createShadow = (elevation = 1) => {
   return {
-    shadowColor: theme.colors.light.text,
-    shadowOffset: { width: 0, height: elevation },
-    shadowOpacity: 0.1,
-    shadowRadius: elevation * 2,
+    boxShadow: `0px ${elevation}px ${elevation * 2}px rgba(0, 0, 0, 0.1)`,
     elevation,
   };
 };

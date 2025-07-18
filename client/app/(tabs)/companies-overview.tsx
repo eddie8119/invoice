@@ -1,6 +1,5 @@
 import Loading from '@/components/core/Loading';
 import { TagList } from '@/components/ui/tag';
-import { theme } from '@/constants/theme';
 import { companyApi } from '@/services/api/company';
 import { CompanyDTO } from '@/types/company';
 import { router } from 'expo-router';
@@ -73,7 +72,7 @@ export default function CompaniesOverview() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.light.primary },
+  container: { flex: 1 },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,

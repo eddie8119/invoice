@@ -1,7 +1,7 @@
+import { HapticTab } from '@/components/HapticTab';
 import BottomBar from '@/components/core/BottomBar';
 import { HeaderBar } from '@/components/core/HeaderBar';
 import { HomeHeader } from '@/components/core/HomeHeader';
-import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { tabConfig } from '@/constants/navigation';

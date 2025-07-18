@@ -1,4 +1,3 @@
-import { theme } from '@/constants/theme';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -19,7 +18,6 @@ const NotFound = ({ message }: NotFoundProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.light.primary,
   },
   loadingContainer: {
     flex: 1,

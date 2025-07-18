@@ -12,11 +12,9 @@ export const HomeHeader = () => {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
         <View style={styles.titleContainer}>
-          <Text style={[styles.greeting, { color: colors.textSecondary }]}>
-            您好，
-          </Text>
           <Text style={[styles.title, { color: colors.text }]}>
-            歡迎使用發票管理
+            歡迎 <Text style={{ color: colors.textSecondary }}> Eddie </Text>
+            使用發票管理
           </Text>
         </View>
 
