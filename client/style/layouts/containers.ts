@@ -17,6 +17,8 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
       paddingHorizontal: theme.spacing.lg,
       paddingTop: theme.spacing.md,
       backgroundColor: colors.surface,
+      borderTopLeftRadius: theme.radius.xxl,
+      borderTopRightRadius: theme.radius.xxl,
     },
     row: {
       flexDirection: 'row',
