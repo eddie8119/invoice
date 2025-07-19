@@ -14,11 +14,10 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
     },
     lowerSection: {
       flex: 1,
-      paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.md,
-      backgroundColor: colors.surface,
-      borderTopLeftRadius: theme.radius.xxl,
-      borderTopRightRadius: theme.radius.xxl,
+      padding: 24,
+      backgroundColor: colors.primaryGreenWhite,
+      borderTopLeftRadius: 50,
+      borderTopRightRadius: 50,
     },
     row: {
       flexDirection: 'row',

@@ -1,6 +1,7 @@
-import { theme } from '@/constants/theme';
-import { Link, router, Href } from 'expo-router';
-import React, { ReactNode } from 'react';
+import { createContainerStyles } from '@/style/layouts/containers';
+import { useTheme } from '@react-navigation/native';
+import { Href, Link } from 'expo-router';
+import React, { ReactNode, useMemo } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,38 +26,36 @@ export const AuthLayout = ({
   showBackButton = false,
   onBackPress,
 }: AuthLayoutProps) => {
-  const colors = theme.colors.light;
-
-  const handleBackPress = () => {
-    if (onBackPress) {
-      onBackPress();
-    } else {
-      router.back();
-    }
-  };
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
 
   return (
-    <SafeAreaView
-      style={[styles.container, { backgroundColor: colors.background }]}
-    >
-      <View style={styles.content}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
+      <View
+        style={[
+          containerStyles.upperSection,
+          { alignItems: 'center', justifyContent: 'center', height: '20%' },
+        ]}
+      >
         <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
         {subtitle && (
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             {subtitle}
           </Text>
         )}
+      </View>
 
-        {/* Form or other content */}
-        <View style={styles.formContainer}>{children}</View>
+      <View style={containerStyles.lowerSection}>
+        {children}
 
         {/* Footer with link */}
         {footerLinkText && footerLinkHref && (
           <View style={styles.footerContainer}>
             {footerText && (
-              <Text style={[styles.footerText, { color: colors.textSecondary }]}>
-                {footerText}{' '}
-              </Text>
+              <Text style={{ color: colors.textSecondary }}>{footerText} </Text>
             )}
             <Link href={footerLinkHref} asChild>
               <TouchableOpacity>
@@ -73,34 +72,18 @@ export const AuthLayout = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-  },
   title: {
     fontSize: 28,
     fontWeight: '700',
-    marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
-    marginBottom: 32,
-  },
-  formContainer: {
-    gap: 12,
-    marginTop: 32,
   },
   footerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 16,
-  },
-  footerText: {
-    fontSize: 14,
   },
   link: {
     fontSize: 14,

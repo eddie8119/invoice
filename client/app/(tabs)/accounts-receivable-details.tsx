@@ -22,12 +22,16 @@ import {
 
 const AccountsReceivableDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { colors } = useTheme();
+
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [editVisible, setEditVisible] = useState(false);
 
-  const containerStyles = useMemo(() => createContainerStyles(colors), [colors]);
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
 
   useEffect(() => {
     const fetchInvoiceDetails = async () => {
