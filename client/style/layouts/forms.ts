@@ -6,7 +6,10 @@ export const formStyles = StyleSheet.create({
     marginBottom: 32,
   },
   inputContainer: {
-    gap: 8,
+    gap: 20,
+  },
+  submitButton: {
+    marginTop: 20,
   },
   input: {
     height: 48,

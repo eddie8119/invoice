@@ -3,6 +3,7 @@ import { Input } from '@/components/core/Input';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { useAuth } from '@/context/AuthContext';
 import { authApi } from '@/services/api/auth';
+import { formStyles } from '@/style/layouts/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterSchema, registerSchema } from '@shared/schemas/registerSchema';
 import { router } from 'expo-router';
@@ -62,7 +63,7 @@ export default function SignUpScreen() {
       footerLinkText="Log in"
       footerLinkHref="/login"
     >
-      <View style={{ gap: 12 }}>
+      <View style={formStyles.inputContainer}>
         <Controller
           control={control}
           name="name"
@@ -132,6 +133,7 @@ export default function SignUpScreen() {
         />
 
         <ButtonText
+          style={formStyles.submitButton}
           text="Create Account"
           variant="filled"
           size="medium"
