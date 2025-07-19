@@ -2,15 +2,16 @@ import { ButtonText } from '@/components/core/ButtonText';
 import { Input } from '@/components/core/Input';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { useAuth } from '@/context/AuthContext';
+import { t } from '@/i18n';
 import { authApi } from '@/services/api/auth';
 import { createFormStyles } from '@/style/layouts/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTheme } from '@react-navigation/native';
 import { LoginSchema, loginSchema } from '@shared/schemas/loginSchema';
 import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 
 export default function LoginScreen() {
   const { setAuth } = useAuth();
@@ -69,8 +70,8 @@ export default function LoginScreen() {
           name="email"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="Email"
-              placeholder="Enter your email"
+              label={t('label.email')}
+              placeholder={t('placeholder.enterEmail')}
               value={value}
               onChangeText={onChange}
               error={errors.email?.message}
@@ -86,8 +87,8 @@ export default function LoginScreen() {
           name="password"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="Password"
-              placeholder="Enter your password"
+              label={t('label.password')}
+              placeholder={t('placeholder.enterPassword')}
               value={value}
               onChangeText={onChange}
               error={errors.password?.message}
@@ -100,7 +101,7 @@ export default function LoginScreen() {
 
         <ButtonText
           style={formStyles.submitButton}
-          text="Sign In"
+          text={t('button.signIn')}
           variant="filled"
           size="medium"
           disabled={!isValid}
