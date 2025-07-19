@@ -1,9 +1,9 @@
-import { formStyles } from '@/style/layouts/forms';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { StyleProp, Text, View, ViewStyle } from 'react-native';
 import { TextInput } from 'react-native-paper';
+import { createFormStyles } from '@/style/layouts/forms';
 
 // 自定義輸入框屬性，不再繼承 Paper 的 TextInputProps
 interface InputProps {
@@ -70,6 +70,7 @@ export function Input({
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { colors } = useTheme();
+  const formStyles = createFormStyles(colors);
 
   const getHelperColor = () => {
     if (error) return colors.error;
@@ -155,7 +156,7 @@ export function Input({
       />
 
       {(error || success || helperText) && (
-        <Text style={[formStyles.helperText, { color: getHelperColor() }]}>
+        <Text style={formStyles.helperText}>
           {error || success || helperText}
         </Text>
       )}

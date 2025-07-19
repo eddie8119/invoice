@@ -1,6 +1,8 @@
+import { ExtendedTheme } from '@/types/navigation';
 import { StyleSheet } from 'react-native';
 
-export const formStyles = StyleSheet.create({
+export const createFormStyles = (colors: ExtendedTheme['colors']) =>
+  StyleSheet.create({
   form: {
     gap: 24,
     marginBottom: 32,
@@ -41,27 +43,26 @@ export const formStyles = StyleSheet.create({
   helperText: {
     fontSize: 12,
     marginTop: 4,
+    color: colors.textSecondary,
   },
 
   // Error state
   error: {
-    borderColor: 'red',
+    borderColor: colors.error,
   },
   errorText: {
-    color: 'red',
+    color: colors.error,
     fontSize: 12,
     marginTop: 4,
   },
 
   // Success state
   success: {
-    borderColor: 'green',
+    borderColor: colors.success,
   },
   successText: {
-    color: 'green',
+    color: colors.success,
     fontSize: 12,
     marginTop: 4,
   },
 });
-
-export type FormStyleNames = keyof typeof formStyles;

@@ -3,13 +3,14 @@ import { Input } from '@/components/core/Input';
 import { AuthLayout } from '@/components/layouts/AuthLayout';
 import { useAuth } from '@/context/AuthContext';
 import { authApi } from '@/services/api/auth';
-import { formStyles } from '@/style/layouts/forms';
+import { createFormStyles } from '@/style/layouts/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginSchema, loginSchema } from '@shared/schemas/loginSchema';
 import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 export default function LoginScreen() {
   const { setAuth } = useAuth();
@@ -26,6 +27,8 @@ export default function LoginScreen() {
       password: '',
     },
   });
+  const { colors } = useTheme();
+  const formStyles = createFormStyles(colors);
 
   const onSubmit = handleSubmit(async (data: LoginSchema) => {
     try {
