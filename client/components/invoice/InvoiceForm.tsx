@@ -5,9 +5,11 @@ import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceI
 import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
+import { createFormStyles } from '@/style/layouts/forms';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Picker } from '@react-native-picker/picker';
+import { useTheme } from '@react-navigation/native';
 import {
   CreateInvoiceSchema,
   createInvoiceSchema,
@@ -42,6 +44,10 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 }) => {
   // 新增 loading 狀態
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { colors } = useTheme();
+  const formStyles = createFormStyles(colors);
+
   // 設定表單與驗證
   const {
     control,
@@ -248,12 +254,13 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           <View style={styles.inputContainer}>
             <Heading level={3}>{t('title.note')}</Heading>
             <TextInput
-              style={styles.textarea}
+              style={formStyles.textarea}
               value={value}
               onChangeText={onChange}
               multiline
               numberOfLines={4}
               textAlignVertical="top"
+              placeholder="輸入備註"
             />
             {errors.note && (
               <Text style={styles.errorText}>{errors.note.message}</Text>
@@ -320,16 +327,6 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 16,
-  },
-  textarea: {
-    height: 100,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: theme.colors.light.divider,
-    borderRadius: 4,
-    backgroundColor: '#fff',
-    fontSize: 16,
-    textAlignVertical: 'top',
   },
   pickerContainer: {
     borderWidth: 1,
