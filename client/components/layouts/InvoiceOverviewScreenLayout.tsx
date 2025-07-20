@@ -53,7 +53,7 @@ export const InvoiceOverviewScreenLayout = ({
           {isLoading ? (
             <Loading />
           ) : invoices.length === 0 ? (
-            <NoData />
+            <NoData infoShow="發票" />
           ) : (
             <InvoiceList
               invoices={filteredInvoices}

@@ -1,20 +1,28 @@
+import { ButtonText } from '@/components/core/ButtonText';
+import { Heading } from '@/components/core/Heading';
+import Loading from '@/components/core/Loading';
+import { NoData } from '@/components/sign/NoData';
 import { TagList } from '@/components/ui/tag';
+import { t } from '@/i18n';
 import { companyApi } from '@/services/api/company';
+import { pannelStyles } from '@/style/components/pannel';
+import { createContainerStyles } from '@/style/layouts/containers';
 import { CompanyDTO } from '@/types/company';
+import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function CompanyOverview() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [company, setCompany] = useState<CompanyDTO | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
 
   useEffect(() => {
     const fetchCompany = async () => {
@@ -28,79 +36,81 @@ export default function CompanyOverview() {
   }, [id]);
 
   if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#3F51B5" />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!company) {
-    return (
-      <View style={styles.center}>
-        <Text>找不到公司資料</Text>
-      </View>
-    );
+    return <NoData infoShow="公司" />;
   }
 
   return (
-    <ScrollView style={styles.container}>
-      {/* 公司基本資訊 */}
-      <View style={styles.card}>
-        <Text style={styles.title}>{company.name}</Text>
-        {company.phone && (
-          <Text style={styles.info}>電話：{company.phone}</Text>
-        )}
-        {company.address && (
-          <Text style={styles.info}>地址：{company.address}</Text>
-        )}
-        {company.contactPerson && (
-          <Text style={styles.info}>聯絡人：{company.contactPerson}</Text>
-        )}
-        {company.email && (
-          <Text style={styles.info}>Email：{company.email}</Text>
-        )}
-        <Text style={styles.info}>
-          建立日期：{new Date(company.createdAt).toLocaleDateString()}
-        </Text>
-      </View>
+    <View style={{ flex: 1 }}>
+      <View style={containerStyles.upperSection}>
+        {/* 公司基本資訊 */}
+        <View style={pannelStyles.card}>
+          <Text style={styles.title}>{company.name}</Text>
+          <ButtonText
+            style={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              backgroundColor: colors.primaryMainBlue,
+            }}
+            text={t('button.editCompanyInfo')}
+            variant="filled"
+            size="small"
+            onPress={() => {}}
+          />
 
-      {/* Cases 專案列表 */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>專案列表</Text>
-        {company.cases && company.cases.length > 0 ? (
-          <TagList tags={company.cases} />
-        ) : (
-          <Text style={styles.info}>尚無專案</Text>
-        )}
+          <View style={{}}>
+            {company.phone && (
+              <Text style={styles.info}>電話：{company.phone}</Text>
+            )}
+            {company.address && (
+              <Text style={styles.info}>地址：{company.address}</Text>
+            )}
+            {company.contactPerson && (
+              <Text style={styles.info}>聯絡人：{company.contactPerson}</Text>
+            )}
+            {company.email && (
+              <Text style={styles.info}>Email：{company.email}</Text>
+            )}
+            <Text style={styles.info}>
+              建立日期：{new Date(company.createdAt).toLocaleDateString()}
+            </Text>
+          </View>
+        </View>
       </View>
+      <ScrollView
+        style={containerStyles.lowerSection}
+        contentContainerStyle={{ gap: 16 }}
+      >
+        {/* Cases 專案列表 */}
+        <View>
+          <Heading level={2}>{t('title.caseList')}</Heading>
+          {company.cases && company.cases.length > 0 ? (
+            <TagList tags={company.cases} />
+          ) : (
+            <Text style={styles.info}>尚無專案</Text>
+          )}
+        </View>
 
-      {/* 發票列表 */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>發票列表</Text>
-        {/* 假設 company 有 invoices 屬性，否則這裡可根據實際 API 再呼叫一次 getCompanyInvoices */}
-        {/* {company.invoices && company.invoices.length > 0 ? (
+        {/* 發票列表 */}
+        <View>
+          <Heading level={2}>{t('title.invoiceList')}</Heading>
+          {/* 假設 company 有 invoices 屬性，否則這裡可根據實際 API 再呼叫一次 getCompanyInvoices */}
+          {/* {company.invoices && company.invoices.length > 0 ? (
           <InvoiceList invoices={company.invoices} />
         ) : (
           <Text style={styles.info}>尚無發票</Text>
         )} */}
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f6fa', padding: 16 },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 2,
-  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',

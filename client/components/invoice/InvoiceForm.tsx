@@ -3,6 +3,7 @@ import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Input } from '@/components/core/Input';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
+import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,12 +18,12 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   Alert,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { Heading } from '../core/Heading';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -136,156 +137,154 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   });
 
   return (
-    <View>
-      <ScrollView>
-        <Controller
-          control={control}
-          name="company"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              label="公司名稱"
-              placeholder="輸入公司名稱"
+    <View style={{ gap: 16 }}>
+      <Controller
+        control={control}
+        name="company"
+        render={({ field: { onChange, value } }) => (
+          <Input
+            label="公司名稱"
+            placeholder="輸入公司名稱"
+            value={value}
+            onChangeText={onChange}
+            error={errors.company?.message}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="caseName"
+        render={({ field: { onChange, value } }) => (
+          <Input
+            label="專案名稱"
+            placeholder="輸入專案名稱"
+            value={value}
+            onChangeText={onChange}
+            error={errors.caseName?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="invoiceNumber"
+        render={({ field: { onChange, value } }) => (
+          <Input
+            label="發票編號"
+            placeholder="輸入發票編號"
+            value={value}
+            onChangeText={onChange}
+            error={errors.invoiceNumber?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="status"
+        render={({ field: { onChange, value } }) => (
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={value}
+              onValueChange={onChange}
+              style={styles.picker}
+            >
+              <Picker.Item label="未付款" value="unpaid" />
+              <Picker.Item label="已付款" value="paid" />
+              <Picker.Item label="已逾期" value="overdue" />
+            </Picker>
+            {errors.status && (
+              <View style={styles.errorText}>{errors.status.message}</View>
+            )}
+          </View>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="type"
+        render={({ field: { onChange, value } }) => (
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={value}
+              onValueChange={onChange}
+              style={styles.picker}
+            >
+              <Picker.Item label="應收" value="receivable" />
+              <Picker.Item label="應付" value="payable" />
+            </Picker>
+            {errors.type && (
+              <View style={styles.errorText}>{errors.type.message}</View>
+            )}
+          </View>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="dueDate"
+        render={({ field: { onChange, value } }) => (
+          <>
+            <DatePickerInput
+              value={value}
+              onChange={onChange}
+              label="預付款日"
+            />
+            {errors.dueDate && (
+              <View style={styles.errorText}>
+                <Text style={{ color: theme.colors.light.error }}>
+                  {errors.dueDate.message}
+                </Text>
+              </View>
+            )}
+          </>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="note"
+        render={({ field: { onChange, value } }) => (
+          <View style={styles.inputContainer}>
+            <Heading level={3}>{t('title.note')}</Heading>
+            <TextInput
+              style={styles.textarea}
               value={value}
               onChangeText={onChange}
-              error={errors.company?.message}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
             />
-          )}
-        />
-        <Controller
-          control={control}
-          name="caseName"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              label="專案名稱"
-              placeholder="輸入專案名稱"
-              value={value}
-              onChangeText={onChange}
-              error={errors.caseName?.message}
-            />
-          )}
-        />
+            {errors.note && (
+              <Text style={styles.errorText}>{errors.note.message}</Text>
+            )}
+          </View>
+        )}
+      />
 
-        <Controller
-          control={control}
-          name="invoiceNumber"
-          render={({ field: { onChange, value } }) => (
-            <Input
-              label="發票編號"
-              placeholder="輸入發票編號"
-              value={value}
-              onChangeText={onChange}
-              error={errors.invoiceNumber?.message}
-            />
-          )}
-        />
+      {/* 動態表單項目 */}
+      <EditableInvoiceItemsTable
+        items={fields}
+        onItemChange={(index, field, value) => {
+          const currentItem = fields[index];
+          let processedValue: string | number | undefined = value;
 
-        <Controller
-          control={control}
-          name="status"
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={value}
-                onValueChange={onChange}
-                style={styles.picker}
-              >
-                <Picker.Item label="未付款" value="unpaid" />
-                <Picker.Item label="已付款" value="paid" />
-                <Picker.Item label="已逾期" value="overdue" />
-              </Picker>
-              {errors.status && (
-                <View style={styles.errorText}>{errors.status.message}</View>
-              )}
-            </View>
-          )}
-        />
+          if (field === 'quantity' || field === 'unitPrice') {
+            const num = parseFloat(value);
+            // Use undefined for empty/invalid to trigger 'required' validation
+            processedValue = isNaN(num) ? undefined : num;
+          }
 
-        <Controller
-          control={control}
-          name="type"
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={value}
-                onValueChange={onChange}
-                style={styles.picker}
-              >
-                <Picker.Item label="應收" value="receivable" />
-                <Picker.Item label="應付" value="payable" />
-              </Picker>
-              {errors.type && (
-                <View style={styles.errorText}>{errors.type.message}</View>
-              )}
-            </View>
-          )}
-        />
+          const updatedItem = {
+            ...currentItem,
+            [field]: processedValue,
+          };
 
-        <Controller
-          control={control}
-          name="dueDate"
-          render={({ field: { onChange, value } }) => (
-            <>
-              <DatePickerInput
-                value={value}
-                onChange={onChange}
-                label="預付款日"
-              />
-              {errors.dueDate && (
-                <View style={styles.errorText}>
-                  <Text style={{ color: theme.colors.light.error }}>
-                    {errors.dueDate.message}
-                  </Text>
-                </View>
-              )}
-            </>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="note"
-          render={({ field: { onChange, value } }) => (
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>備註</Text>
-              <TextInput
-                style={styles.textarea}
-                value={value}
-                onChangeText={onChange}
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-              />
-              {errors.note && (
-                <Text style={styles.errorText}>{errors.note.message}</Text>
-              )}
-            </View>
-          )}
-        />
-
-        {/* 動態表單項目 */}
-        <EditableInvoiceItemsTable
-          items={fields}
-          onItemChange={(index, field, value) => {
-            const currentItem = fields[index];
-            let processedValue: string | number | undefined = value;
-
-            if (field === 'quantity' || field === 'unitPrice') {
-              const num = parseFloat(value);
-              // Use undefined for empty/invalid to trigger 'required' validation
-              processedValue = isNaN(num) ? undefined : num;
-            }
-
-            const updatedItem = {
-              ...currentItem,
-              [field]: processedValue,
-            };
-
-            update(index, updatedItem);
-          }}
-          onAddItem={handleAddItem}
-          onRemoveItem={remove}
-        />
-      </ScrollView>
+          update(index, updatedItem);
+        }}
+        onAddItem={handleAddItem}
+        onRemoveItem={remove}
+      />
       <View style={styles.buttonRow}>
         <ButtonText
           text={cancelButtonText}

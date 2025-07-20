@@ -1,10 +1,12 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
-import NotFound from '@/components/core/Loading copy';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { InvoiceItemsSection } from '@/components/invoice/InvoiceItemsSection';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
+import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
+import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
 import { pannelStyles } from '@/style/components/pannel';
 import { createContainerStyles } from '@/style/layouts/containers';
@@ -12,13 +14,7 @@ import { InvoiceDetail, InvoiceItem } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const AccountsReceivableDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -96,34 +92,28 @@ const AccountsReceivableDetailsScreen = () => {
   }
 
   if (!invoice) {
-    return <NotFound message="發票" />;
+    return <NoData infoShow="發票" />;
   }
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          position: 'absolute',
-          top: 8,
-          right: 20,
-          zIndex: 2,
-          backgroundColor: 'white',
-          borderRadius: 16,
-          padding: 6,
-          elevation: 2,
-        }}
-      >
-        <TouchableOpacity onPress={() => setEditVisible(true)}>
-          <Text
-            style={{ fontSize: 18, color: theme.colors.light.primaryOceanBlue }}
-          >
-            ✏️
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={[containerStyles.upperSection, { position: 'relative' }]}>
-        <InvoiceBaseInfo invoice={invoice} />
+      <View style={containerStyles.upperSection}>
+        <View>
+          <ButtonText
+            style={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              zIndex: 1,
+              backgroundColor: colors.primaryMainBlue,
+            }}
+            text={t('button.editInvoiceInfo')}
+            variant="filled"
+            size="small"
+            onPress={() => setEditVisible(true)}
+          />
+          <InvoiceBaseInfo invoice={invoice} />
+        </View>
       </View>
 
       <View style={containerStyles.lowerSection}>

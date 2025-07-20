@@ -1,7 +1,8 @@
 import { theme } from '@/constants/theme';
-import React from 'react';
+import { createContainerStyles } from '@/style/layouts/containers';
+import { useTheme } from '@react-navigation/native';
+import React, { useMemo } from 'react';
 import {
-  Dimensions,
   Modal,
   ScrollView,
   StyleProp,
@@ -11,8 +12,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-
-const { height: screenHeight } = Dimensions.get('window');
 
 export interface BaseModalProps {
   visible: boolean;
@@ -35,6 +34,12 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   contentContainerStyle,
   footerContainerStyle,
 }) => {
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
+
   return (
     <Modal
       visible={visible}
@@ -43,14 +48,21 @@ export const BaseModal: React.FC<BaseModalProps> = ({
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={[styles.modalContainer, modalStyle]}>
+        <View style={[containerStyles.modalContainer, modalStyle]}>
           {onClose && (
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
           )}
           {title}
-          <View style={[styles.contentContainer, contentContainerStyle]}>
+
+          <View
+            style={[
+              styles.contentContainer,
+              contentContainerStyle,
+              { marginTop: 16 },
+            ]}
+          >
             <ScrollView style={{ flex: 1 }}>{children}</ScrollView>
           </View>
           {footer && (
@@ -67,26 +79,9 @@ export const BaseModal: React.FC<BaseModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  modalContainer: {
-    width: '90%',
-    maxHeight: screenHeight * 0.85,
-    backgroundColor: theme.colors.light.background,
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'stretch',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    position: 'relative',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   closeButton: {
     position: 'absolute',
@@ -98,11 +93,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.light.surfaceVariant,
+    backgroundColor: theme.colors.surfaceVariant,
   },
   closeButtonText: {
     fontSize: 22,
-    color: theme.colors.light.onSurfaceVariant,
+    color: theme.colors.onSurfaceVariant,
     lineHeight: 28,
     fontWeight: 'bold',
   },

@@ -1,4 +1,6 @@
 import { theme } from '@/constants/theme';
+import { t } from '@/i18n';
+import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {
   StyleSheet,
@@ -7,6 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ButtonText } from '../core/ButtonText';
+import { Heading } from '../core/Heading';
 
 interface Item {
   id: string;
@@ -25,10 +29,11 @@ interface EditableInvoiceItemsTableProps {
 export const EditableInvoiceItemsTable: React.FC<
   EditableInvoiceItemsTableProps
 > = ({ items, onItemChange, onAddItem, onRemoveItem }) => {
+  const { colors } = useTheme();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>項目明細</Text>
-
+      <Heading level={3}>{t('title.itemDetail')}</Heading>
       {items.map((item, index) => (
         <View key={item.id} style={styles.itemContainer}>
           <TouchableOpacity
@@ -65,10 +70,15 @@ export const EditableInvoiceItemsTable: React.FC<
           </View>
         </View>
       ))}
-
-      <TouchableOpacity onPress={onAddItem} style={styles.addButton}>
-        <Text style={styles.addButtonText}>+ 新增項目</Text>
-      </TouchableOpacity>
+      <ButtonText
+        style={{
+          backgroundColor: colors.primary,
+        }}
+        text={'+' + t('button.addItem')}
+        variant="filled"
+        size="small"
+        onPress={onAddItem}
+      />
     </View>
   );
 };
@@ -126,16 +136,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-  },
-  addButton: {
-    backgroundColor: theme.colors.light.primary,
-    padding: 12,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: 'white',
-    fontWeight: '600',
   },
 });
