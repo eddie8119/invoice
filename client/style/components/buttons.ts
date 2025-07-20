@@ -83,7 +83,7 @@ export const buttonStyles = StyleSheet.create({
   // === Text ===
   buttonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: theme.typography.fontWeights.semiBold,
     textAlign: 'center',
   },
   buttonTextSmall: {

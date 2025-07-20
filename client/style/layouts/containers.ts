@@ -1,6 +1,8 @@
 import { theme } from '@/constants/theme';
 import { ExtendedTheme } from '@/types/navigation';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const { height: screenHeight } = Dimensions.get('window');
 
 export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
   StyleSheet.create({
@@ -9,8 +11,7 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
       backgroundColor: colors.background,
     },
     upperSection: {
-      paddingHorizontal: theme.spacing.lg,
-      paddingVertical: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
     lowerSection: {
       flex: 1,
@@ -18,6 +19,38 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
       backgroundColor: colors.primaryGreenWhite,
       borderTopLeftRadius: 50,
       borderTopRightRadius: 50,
+    },
+    cardContainer: {
+      padding: 16,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.primary,
+      marginBottom: 16,
+    },
+    modalContainer: {
+      width: '90%',
+      maxHeight: screenHeight * 0.85,
+      backgroundColor: colors.primaryGreenWhite,
+      borderRadius: 10,
+      padding: 20,
+      alignItems: 'stretch',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      position: 'relative',
+    },
+    iconContainer: {
+      width: 35,
+      height: 35,
+      borderRadius: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.primary,
     },
     row: {
       flexDirection: 'row',
@@ -47,18 +80,6 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
       flex: 1,
       paddingHorizontal: 24,
       paddingTop: 32,
-    },
-    modalContainer: {
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: colors.primaryGreenWhite,
-      borderTopLeftRadius: 50,
-      borderTopRightRadius: 50,
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-      padding: 24,
     },
   });
 

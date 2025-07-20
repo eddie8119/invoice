@@ -4,8 +4,16 @@ const baseCard = {
   backgroundColor: 'white',
   borderRadius: 12,
   padding: 16,
-  boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)',
-  elevation: 1,
+  // iOS shadow
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.23,
+  shadowRadius: 2.62,
+  // Android shadow
+  elevation: 4,
 };
 
 export const pannelStyles = StyleSheet.create({
