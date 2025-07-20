@@ -5,6 +5,7 @@ import { Language } from '@/constants/i18n';
 import button from './locales/button';
 import label from './locales/label';
 import placeholder from './locales/placeholder';
+import sign from './locales/sign';
 
 type Translation = {
   [key: string]: {
@@ -17,11 +18,13 @@ const translations: Record<Language, Translation> = {
     ...placeholder[Language.EN],
     ...label[Language.EN],
     ...button[Language.EN],
+    ...sign[Language.EN],
   },
   [Language.ZH_TW]: {
     ...placeholder[Language.ZH_TW],
     ...label[Language.ZH_TW],
     ...button[Language.ZH_TW],
+    ...sign[Language.ZH_TW],
   },
 };
 

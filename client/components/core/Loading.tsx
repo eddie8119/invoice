@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { t } from '@/i18n';
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
@@ -9,7 +10,9 @@ const Loading = () => {
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color={colors.primaryDarkBlue} />
-      <Text style={[styles.text, { color: colors.text }]}>載入中...</Text>
+      <Text style={[styles.text, { color: colors.primaryDarkBlue }]}>
+        {t('sign.loading')}
+      </Text>
     </View>
   );
 };

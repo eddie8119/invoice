@@ -1,9 +1,11 @@
 import Loading from '@/components/core/Loading';
 import { TagList } from '@/components/ui/tag';
 import { companyApi } from '@/services/api/company';
+import { createContainerStyles } from '@/style/layouts/containers';
 import { CompanyDTO } from '@/types/company';
+import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -16,6 +18,12 @@ export default function CompaniesOverview() {
   const [companies, setCompanies] = useState<CompanyDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -43,7 +51,7 @@ export default function CompaniesOverview() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={containerStyles.lowerSection}>
       <FlatList
         data={companies}
         keyExtractor={item => item.id}
