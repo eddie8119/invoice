@@ -10,8 +10,9 @@ export const typography = {
   fontWeights: {
     regular: '400',
     medium: '500',
+    semiBold: '600',
     bold: '700',
-  },
+  } as const,
   lineHeights: {
     sm: 16,
     md: 20,
