@@ -1,4 +1,6 @@
+import { createFormStyles } from '@/style/layouts/forms';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {
   Platform,
@@ -23,6 +25,9 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
   const [internalDate, setInternalDate] = React.useState<Date | undefined>(
     value ? new Date(value) : undefined
   );
+
+  const { colors } = useTheme();
+  const formStyles = createFormStyles(colors);
 
   const displayValue = value ? value : '請選擇日期';
 
@@ -61,15 +66,7 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
           type="date"
           value={internalDate ? internalDate.toISOString().split('T')[0] : ''}
           onChange={handleWebDateChange}
-          style={{
-            width: '100%',
-            boxSizing: 'border-box',
-            padding: '10px',
-            borderRadius: '8px',
-            border: '1px solid #e0e0e0',
-            backgroundColor: '#f8f8f8',
-            fontSize: '16px',
-          }}
+          style={formStyles.datePicker}
         />
       );
     } else {
@@ -77,7 +74,7 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
       return (
         <>
           <TouchableOpacity
-            style={[styles.input, { width: '100%' }]}
+            style={[formStyles.datePicker, { width: '100%' }]}
             onPress={() => setShow(true)}
             activeOpacity={0.7}
           >
@@ -107,16 +104,6 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
-    padding: 10,
-    backgroundColor: '#f8f8f8',
-    justifyContent: 'center',
-    width: '100%',
-    flex: 1,
-  },
   label: {
     marginBottom: 4,
     color: '#666',

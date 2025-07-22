@@ -59,6 +59,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     resolver: zodResolver(createInvoiceSchema),
     mode: 'onChange',
     defaultValues: {
+      caseName: '',
       company: '',
       invoiceNumber: '',
       dueDate: new Date().toISOString().split('T')[0],
@@ -157,6 +158,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           />
         )}
       />
+
       <Controller
         control={control}
         name="caseName"
@@ -189,11 +191,11 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="status"
         render={({ field: { onChange, value } }) => (
-          <View style={styles.pickerContainer}>
+          <View>
             <Picker
               selectedValue={value}
               onValueChange={onChange}
-              style={styles.picker}
+              style={formStyles.picker}
             >
               <Picker.Item label="未付款" value="unpaid" />
               <Picker.Item label="已付款" value="paid" />
@@ -210,11 +212,11 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="type"
         render={({ field: { onChange, value } }) => (
-          <View style={styles.pickerContainer}>
+          <View>
             <Picker
               selectedValue={value}
               onValueChange={onChange}
-              style={styles.picker}
+              style={formStyles.picker}
             >
               <Picker.Item label="應收" value="receivable" />
               <Picker.Item label="應付" value="payable" />
@@ -328,18 +330,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: 16,
   },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: theme.colors.light.divider,
-    borderRadius: 8,
-    marginBottom: 12,
-    backgroundColor: theme.colors.light.primaryGreenWhite,
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    color: theme.colors.light.text,
-  },
+
   buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
