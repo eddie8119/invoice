@@ -1,13 +1,23 @@
+import { ButtonText } from '@/components/core/ButtonText';
 import ProfileSection from '@/components/settings/ProfileSection';
 import SettingsList from '@/components/settings/SettingsList';
 import { useAuth } from '@/context/AuthContext';
+import { t } from '@/i18n';
+import { createContainerStyles } from '@/style/layouts/containers';
+import { createFormStyles } from '@/style/layouts/forms';
+import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useMemo } from 'react';
+import { ScrollView, View } from 'react-native';
 
 export default function SettingsScreen() {
   const { user, logout } = useAuth();
+  const { colors } = useTheme();
+  const containerStyles = useMemo(
+    () => createContainerStyles(colors),
+    [colors]
+  );
+  const formStyles = createFormStyles(colors);
 
   const handleLogout = async () => {
     await logout();
@@ -15,42 +25,24 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+    <ScrollView style={{ flex: 1 }}>
+      <View style={containerStyles.upperSection}>
         <ProfileSection user={user} />
+      </View>
+      <View style={containerStyles.lowerSection}>
         <SettingsList />
-        <Pressable style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>登出</Text>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+        <ButtonText
+          style={[
+            formStyles.submitButton,
+            { backgroundColor: colors.primaryMainBlue },
+          ]}
+          text={t('button.logout')}
+          variant="filled"
+          size="medium"
+          disabled={false}
+          onPress={handleLogout}
+        />
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f8f8',
-  },
-  scrollView: {
-    flex: 1,
-    padding: 16,
-  },
-  logoutButton: {
-    backgroundColor: '#ff5050',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  logoutButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
