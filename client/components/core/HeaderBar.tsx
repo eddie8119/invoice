@@ -1,4 +1,5 @@
 import { Heading } from '@/components/core/Heading';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,14 +7,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 interface HeaderBarProps {
   title: string;
   showBack?: boolean;
-  rightComponent?: React.ReactNode;
 }
 
-export const HeaderBar = ({
-  title,
-  showBack = true,
-  rightComponent,
-}: HeaderBarProps) => {
+export const HeaderBar = ({ title, showBack = true }: HeaderBarProps) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
@@ -37,7 +33,14 @@ export const HeaderBar = ({
 
         <Heading level={2}>{title}</Heading>
 
-        <View style={styles.rightContainer}>{rightComponent}</View>
+        <View style={styles.rightContainer}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="notifications-outline" size={24} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -55,10 +58,12 @@ const styles = StyleSheet.create({
     minWidth: 40,
   },
   rightContainer: {
-    minWidth: 40,
-    alignItems: 'flex-end',
+    flexDirection: 'row',
   },
   backButton: {
     padding: 4,
+  },
+  iconButton: {
+    padding: 8,
   },
 });
