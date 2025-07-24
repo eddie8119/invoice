@@ -1,17 +1,15 @@
 import { HapticTab } from '@/components/HapticTab';
 import ButtomBar from '@/components/core/ButtomBar';
 import { HeaderBar } from '@/components/core/HeaderBar';
-import { HomeHeader } from '@/components/core/HomeHeader';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { tabConfig } from '@/constants/navigation';
 import { useTheme } from '@react-navigation/native';
 import { Tabs, usePathname } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, useColorScheme } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const pathname = usePathname();
   const { colors } = useTheme();
 
@@ -22,11 +20,9 @@ export default function TabLayout() {
       return false;
     }) || tabConfig[0];
 
-  const isHomePage = pathname === '/';
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
-      {isHomePage ? <HomeHeader /> : <HeaderBar title={currentTab.name} />}
+      <HeaderBar title={currentTab.name} />
 
       <Tabs
         screenOptions={{
