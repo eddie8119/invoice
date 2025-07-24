@@ -1,4 +1,4 @@
-import { ButtonText } from '@/components/core/ButtonText';
+import { EditButton } from '@/components/core/EditButton';
 import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
@@ -6,7 +6,6 @@ import { InvoiceItemsSection } from '@/components/invoice/InvoiceItemsSection';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
-import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
 import { pannelStyles } from '@/style/components/pannel';
 import { createContainerStyles } from '@/style/layouts/containers';
@@ -99,18 +98,10 @@ const AccountsReceivableDetailsScreen = () => {
     <View style={styles.container}>
       <View style={containerStyles.upperSection}>
         <View>
-          <ButtonText
-            style={{
-              position: 'absolute',
-              top: 16,
-              right: 16,
-              zIndex: 1,
-              backgroundColor: colors.primaryMainBlue,
+          <EditButton
+            onPress={() => {
+              setEditVisible(true);
             }}
-            text={t('button.editInvoiceInfo')}
-            variant="filled"
-            size="small"
-            onPress={() => setEditVisible(true)}
           />
           <InvoiceBaseInfo invoice={invoice} />
         </View>

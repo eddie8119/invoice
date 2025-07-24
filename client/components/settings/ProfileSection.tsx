@@ -1,7 +1,7 @@
+import { EditButton } from '@/components/core/EditButton';
 import { UserData } from '@/context/AuthContext';
-import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface ProfileSectionProps {
   user: UserData | null;
@@ -10,16 +10,7 @@ interface ProfileSectionProps {
 const ProfileSection: React.FC<ProfileSectionProps> = ({ user }) => {
   return (
     <View style={styles.profileSection}>
-      <View style={styles.profileImageContainer}>
-        {/* <Image
-          source={require('@/assets/images/default-avatar.png')}
-          style={styles.profileImage}
-          defaultSource={require('@/assets/images/default-avatar.png')}
-        /> */}
-        <TouchableOpacity style={styles.editButton}>
-          <Ionicons name="pencil" size={16} color="#FFF" />
-        </TouchableOpacity>
-      </View>
+      <EditButton onPress={() => {}} />
       <Text style={styles.profileName}>{user?.name || '用戶名稱'}</Text>
       <Text style={styles.profileEmail}>
         {user?.email || 'user@example.com'}
@@ -41,6 +32,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    position: 'relative',
   },
   profileImageContainer: {
     position: 'relative',
@@ -52,19 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: '#f0f0f0',
   },
-  editButton: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: '#5050ff',
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#fff',
-  },
+
   profileName: {
     fontSize: 18,
     fontWeight: '600',

@@ -1,4 +1,4 @@
-import { ButtonText } from '@/components/core/ButtonText';
+import { EditButton } from '@/components/core/EditButton';
 import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
 import { NoData } from '@/components/sign/NoData';
@@ -49,19 +49,7 @@ export default function CompanyOverview() {
         {/* 公司基本資訊 */}
         <View style={pannelStyles.card}>
           <Text style={styles.title}>{company.name}</Text>
-          <ButtonText
-            style={{
-              position: 'absolute',
-              top: 16,
-              right: 16,
-              backgroundColor: colors.primaryMainBlue,
-            }}
-            text={t('button.editCompanyInfo')}
-            variant="filled"
-            size="small"
-            onPress={() => {}}
-          />
-
+          <EditButton onPress={() => {}} />
           <View style={{}}>
             {company.phone && (
               <Text style={styles.info}>電話：{company.phone}</Text>
