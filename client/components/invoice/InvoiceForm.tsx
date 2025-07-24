@@ -191,7 +191,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="status"
         render={({ field: { onChange, value } }) => (
-          <View>
+          <View style={formStyles.pickerWrapper}>
             <Picker
               selectedValue={value}
               onValueChange={onChange}
@@ -212,7 +212,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="type"
         render={({ field: { onChange, value } }) => (
-          <View>
+          <View style={formStyles.pickerWrapper}>
             <Picker
               selectedValue={value}
               onValueChange={onChange}
