@@ -5,14 +5,15 @@ import { HomeHeader } from '@/components/core/HomeHeader';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { tabConfig } from '@/constants/navigation';
-import { colors } from '@/constants/theme/color';
+import { useTheme } from '@react-navigation/native';
 import { Tabs, usePathname } from 'expo-router';
 import React from 'react';
-import { useColorScheme, View } from 'react-native';
+import { SafeAreaView, useColorScheme } from 'react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
+  const { colors } = useTheme();
 
   const currentTab =
     tabConfig.find(tab => {
@@ -24,7 +25,7 @@ export default function TabLayout() {
   const isHomePage = pathname === '/';
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.light.primary }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
       {isHomePage ? <HomeHeader /> : <HeaderBar title={currentTab.name} />}
 
       <Tabs
@@ -50,6 +51,6 @@ export default function TabLayout() {
           />
         ))}
       </Tabs>
-    </View>
+    </SafeAreaView>
   );
 }
