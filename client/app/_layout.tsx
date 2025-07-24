@@ -11,6 +11,7 @@ import { Slot, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 
 // 整合 React Navigation 主題與我們的自訂主題
@@ -79,8 +80,10 @@ export default function RootLayout() {
         <ThemeProvider
           value={colorScheme === 'dark' ? AppLightTheme : AppLightTheme}
         >
-          <Slot />
-          <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
+          <PaperProvider>
+            <Slot />
+            <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
+          </PaperProvider>
         </ThemeProvider>
       </RootGuard>
     </AuthProvider>

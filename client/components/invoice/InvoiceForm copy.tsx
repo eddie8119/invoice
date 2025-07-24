@@ -1,5 +1,4 @@
 import { ButtonText } from '@/components/core/ButtonText';
-import CustomDropdown from '@/components/core/CustomDropdown';
 import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Input } from '@/components/core/Input';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
@@ -8,7 +7,9 @@ import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
 import { createFormStyles } from '@/style/layouts/forms';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
+import { Ionicons } from '@expo/vector-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '@react-navigation/native';
 import {
   CreateInvoiceSchema,
@@ -191,17 +192,30 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="status"
         render={({ field: { onChange, value } }) => (
-          <CustomDropdown
-            label="付款狀態"
-            options={[
-              { label: '未付款', value: 'unpaid' },
-              { label: '已付款', value: 'paid' },
-              { label: '已逾期', value: 'overdue' },
-            ]}
-            selectedValue={value}
-            onValueChange={onChange}
-            error={errors.status?.message}
-          />
+          <View style={formStyles.pickerWrapper}>
+            <View style={formStyles.pickerDisplay}>
+              <Text style={{ fontSize: 16, color: '#4a6462' }}>
+                {value === 'unpaid'
+                  ? '未付款'
+                  : value === 'paid'
+                    ? '已付款'
+                    : '已逾期'}
+              </Text>
+            </View>
+            <Picker
+              selectedValue={value}
+              onValueChange={onChange}
+              style={formStyles.picker}
+            >
+              <Picker.Item label="未付款" value="unpaid" />
+              <Picker.Item label="已付款" value="paid" />
+              <Picker.Item label="已逾期" value="overdue" />
+            </Picker>
+            <Ionicons name="chevron-down" style={formStyles.pickerChevron} />
+            {errors.status && (
+              <View style={styles.errorText}>{errors.status.message}</View>
+            )}
+          </View>
         )}
       />
 
@@ -209,16 +223,25 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         control={control}
         name="type"
         render={({ field: { onChange, value } }) => (
-          <CustomDropdown
-            label="發票類型"
-            options={[
-              { label: '應收', value: 'receivable' },
-              { label: '應付', value: 'payable' },
-            ]}
-            selectedValue={value}
-            onValueChange={onChange}
-            error={errors.type?.message}
-          />
+          <View style={formStyles.pickerWrapper}>
+            <View style={formStyles.pickerDisplay}>
+              <Text style={{ fontSize: 16, color: '#4a6462' }}>
+                {value === 'receivable' ? '應收' : '應付'}
+              </Text>
+            </View>
+            <Picker
+              selectedValue={value}
+              onValueChange={onChange}
+              style={formStyles.picker}
+            >
+              <Picker.Item label="應收" value="receivable" />
+              <Picker.Item label="應付" value="payable" />
+            </Picker>
+            <Ionicons name="chevron-down" style={formStyles.pickerChevron} />
+            {errors.type && (
+              <View style={styles.errorText}>{errors.type.message}</View>
+            )}
+          </View>
         )}
       />
 

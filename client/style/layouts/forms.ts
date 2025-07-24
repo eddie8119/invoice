@@ -78,7 +78,10 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) =>
       textAlignVertical: 'top',
     },
     // 下拉選單系列
-    picker: {
+    pickerWrapper: {
+      position: 'relative',
+    },
+    pickerDisplay: {
       height: 48,
       width: '100%',
       borderColor: colors.primaryLight,
@@ -86,12 +89,32 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) =>
       backgroundColor: colors.primaryLight,
       justifyContent: 'center',
       paddingHorizontal: 16,
+      borderWidth: 1,
+    },
+    picker: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      opacity: 0, // 完全透明 隱藏
+      zIndex: 1, // 確保它在 display view 上方
     },
     pickerFocused: {
       borderColor: colors.primary, // focus 狀態
     },
     pickerError: {
       borderColor: colors.error, // error 狀態
+    },
+    pickerChevron: {
+      position: 'absolute',
+      fontSize: 20,
+      right: 16,
+      top: '50%',
+      transform: [{ translateY: -12 }],
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 2,
     },
     menuContent: {
       backgroundColor: colors.primaryLight,
@@ -109,6 +132,5 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) =>
       borderWidth: 1,
       fontSize: 16,
       color: '#4a6462',
-      boxSizing: 'border-box',
     },
   });
