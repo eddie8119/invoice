@@ -1,3 +1,4 @@
+import { LabelText } from '@/components/core/LabelText';
 import { createFormStyles } from '@/style/layouts/forms';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
@@ -103,13 +104,7 @@ export function Input({
 
   return (
     <View>
-      {label && (
-        <Text
-          style={{ color: colors.text, marginBottom: 2, fontWeight: 'bold' }}
-        >
-          {label}
-        </Text>
-      )}
+      {label && <LabelText label={label} />}
       <TextInput
         mode="outlined"
         secureTextEntry={isPassword && !showPassword}

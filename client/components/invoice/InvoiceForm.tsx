@@ -2,6 +2,7 @@ import { ButtonText } from '@/components/core/ButtonText';
 import CustomDropdown from '@/components/core/CustomDropdown';
 import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Input } from '@/components/core/Input';
+import { LabelText } from '@/components/core/LabelText';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
@@ -25,7 +26,6 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Heading } from '../core/Heading';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -248,7 +248,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         name="note"
         render={({ field: { onChange, value } }) => (
           <View style={styles.inputContainer}>
-            <Heading level={3}>{t('title.note')}</Heading>
+            <LabelText label={t('title.note')} />
             <TextInput
               style={formStyles.textarea}
               value={value}
