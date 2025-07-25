@@ -1,6 +1,6 @@
 import { Heading } from '@/components/core/Heading';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from 'expo-router';
+import { useNavigation, usePathname } from 'expo-router';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -12,12 +12,14 @@ interface HeaderBarProps {
 export const HeaderBar = ({ title, showBack = true }: HeaderBarProps) => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const pathname = usePathname();
+  const shouldShowBack = showBack && pathname !== '/';
 
   return (
     <View style={[{ paddingTop: insets.top }]}>
       <View style={styles.content}>
         <View style={styles.leftContainer}>
-          {showBack && (
+          {shouldShowBack && (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={styles.backButton}
