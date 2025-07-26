@@ -53,7 +53,7 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) => {
     helperText: {
       fontSize: 12,
       marginTop: 4,
-      color: colors.textSecondary,
+      color: colors.error,
     },
 
     // Error state
@@ -78,13 +78,10 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) => {
 
     // 有在使用
     textarea: {
+      ...inputBase,
       height: 160,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: colors.primaryLight,
+      padding: 16,
       borderRadius: 16,
-      backgroundColor: colors.primaryLight,
-      fontSize: 16,
       textAlignVertical: 'top',
     },
     // 下拉選單系列

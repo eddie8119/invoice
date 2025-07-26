@@ -295,10 +295,11 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           size="small"
           onPress={onCancel}
           disabled={isSubmitting}
+          style={{ borderColor: colors.error, textColor: colors.error }}
         />
         {isSubmitting ? (
           <View style={styles.loadingButton}>
-            <ActivityIndicator color={theme.colors.light.primary} />
+            <ActivityIndicator color={colors.primary} />
           </View>
         ) : (
           <ButtonText
@@ -307,6 +308,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             size="small"
             disabled={!isValid || isSubmitting}
             onPress={onSubmit}
+            style={{ backgroundColor: colors.primaryOceanBlue }}
           />
         )}
       </View>

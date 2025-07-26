@@ -1,15 +1,18 @@
-import { buttonStyles } from '@/style/components/buttons';
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import {
   Image,
   ImageSourcePropType,
-  ImageStyle, // Import ImageStyle
+  ImageStyle,
   StyleProp,
+  StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
+
+import { buttonStyles } from '@/style/components/buttons';
 
 type ButtonSize = 'small' | 'medium' | 'large';
 type ButtonVariant = 'filled' | 'outlined' | 'text';
@@ -20,7 +23,7 @@ interface ButtonTextProps {
   size?: ButtonSize;
   variant?: ButtonVariant;
   icon?: ImageSourcePropType;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle & { textColor?: string }>;
   disabled?: boolean;
 }
 
@@ -35,13 +38,14 @@ export function ButtonText({
 }: ButtonTextProps) {
   const { colors } = useTheme();
 
-  // 根據 variant 決定背景色和文字顏色
+  // 扁平化 style prop 以便我們可以安全地提取 textColor
+  const { textColor, ...containerStyle } = StyleSheet.flatten(style) || {};
+
   const getColors = () => {
     // The colors object from useTheme might not have `buttonPrimary`.
     // We'll use `primary` for the button color and `background` for the text color in filled variant.
     // This aligns with the theme structure we defined in _layout.tsx.
-    const buttonPrimaryColor = colors.primary; // Assuming primary is the main button color
-    const buttonTextColor = colors.text;
+    const buttonPrimaryColor = colors.primary;
 
     switch (variant) {
       case 'filled':
@@ -65,7 +69,6 @@ export function ButtonText({
     }
   };
 
-  // 根據 size 獲取對應的樣式
   const getSizeStyle = () => {
     switch (size) {
       case 'small':
@@ -77,7 +80,18 @@ export function ButtonText({
     }
   };
 
-  const { backgroundColor, textColor, borderColor } = getColors();
+  const {
+    backgroundColor,
+    borderColor,
+    textColor: defaultTextColor,
+  } = getColors();
+
+  const textStyle: StyleProp<TextStyle> = [
+    buttonStyles.buttonText,
+    { color: textColor || defaultTextColor }, // 優先使用 style prop 中的 textColor
+    size === 'small' && buttonStyles.buttonTextSmall,
+    size === 'large' && buttonStyles.buttonTextLarge,
+  ];
 
   return (
     <TouchableOpacity
@@ -91,7 +105,7 @@ export function ButtonText({
           opacity: disabled ? 0.6 : 1,
         },
         icon ? buttonStyles.social : undefined,
-        style,
+        containerStyle, // 應用剩餘的樣式
       ]}
       onPress={onPress}
       disabled={disabled}
@@ -104,16 +118,7 @@ export function ButtonText({
           resizeMode="contain"
         />
       )}
-      <Text
-        style={[
-          buttonStyles.buttonText,
-          { color: textColor },
-          size === 'small' && buttonStyles.buttonTextSmall,
-          size === 'large' && buttonStyles.buttonTextLarge,
-        ]}
-      >
-        {text}
-      </Text>
+      <Text style={textStyle}>{text}</Text>
     </TouchableOpacity>
   );
 }
