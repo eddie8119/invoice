@@ -1,8 +1,18 @@
 import { ExtendedTheme } from '@/types/navigation';
 import { StyleSheet } from 'react-native';
 
-export const createFormStyles = (colors: ExtendedTheme['colors']) =>
-  StyleSheet.create({
+export const createFormStyles = (colors: ExtendedTheme['colors']) => {
+  const inputBase = {
+    fontSize: 16,
+    height: 48,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: colors.primaryLight,
+    borderRadius: 999,
+    backgroundColor: colors.primaryLight,
+  };
+
+  return StyleSheet.create({
     form: {
       gap: 24,
       marginBottom: 32,
@@ -82,14 +92,9 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) =>
       position: 'relative',
     },
     pickerDisplay: {
-      height: 48,
+      ...inputBase,
       width: '100%',
-      borderColor: colors.primaryLight,
-      borderRadius: 999,
-      backgroundColor: colors.primaryLight,
       justifyContent: 'center',
-      paddingHorizontal: 16,
-      borderWidth: 1,
     },
     picker: {
       position: 'absolute',
@@ -122,15 +127,9 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) =>
     },
     // 日期選擇器
     datePicker: {
-      height: 48,
+      ...inputBase,
       width: '100%',
-      borderColor: colors.primaryLight,
-      borderRadius: 999,
-      backgroundColor: colors.primaryLight,
       justifyContent: 'center',
-      paddingHorizontal: 16,
-      borderWidth: 1,
-      fontSize: 16,
-      color: '#4a6462',
     },
   });
+};

@@ -1,3 +1,4 @@
+import { LabelText } from '@/components/core/LabelText';
 import { createFormStyles } from '@/style/layouts/forms';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from '@react-navigation/native';
@@ -66,7 +67,12 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
           type="date"
           value={internalDate ? internalDate.toISOString().split('T')[0] : ''}
           onChange={handleWebDateChange}
-          style={formStyles.datePicker}
+          style={{
+            ...formStyles.datePicker,
+            paddingLeft: 16,
+            paddingRight: 16,
+            boxSizing: 'border-box',
+          }}
         />
       );
     } else {
@@ -97,16 +103,10 @@ export const DatePickerInput: React.FC<DatePickerInputProps> = ({
 
   return (
     <View style={{ marginBottom: 12, width: '100%', flex: 1 }}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <LabelText label={label} />}
       {renderDatePicker()}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  label: {
-    marginBottom: 4,
-    color: '#666',
-    fontSize: 14,
-  },
-});
+const styles = StyleSheet.create({});

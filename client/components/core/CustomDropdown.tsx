@@ -36,7 +36,7 @@ const CustomDropdown = ({
     options.find(opt => opt.value === selectedValue)?.label || placeholder;
 
   return (
-    <>
+    <View>
       {label && <LabelText label={label} />}
       <View style={[formStyles.pickerDisplay, error ? formStyles.error : {}]}>
         {/* 顯示選中的值（僅用於視覺效果） */}
@@ -65,7 +65,7 @@ const CustomDropdown = ({
       </View>
 
       {error && <Text style={formStyles.errorText}>{error}</Text>}
-    </>
+    </View>
   );
 };
 
