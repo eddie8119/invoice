@@ -24,16 +24,12 @@ export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
   onCancel: () => void;
   onSave: (data: InvoiceFormData) => void;
-  submitButtonText?: string;
-  cancelButtonText?: string;
 }
 
 export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   initialData,
   onCancel,
   onSave,
-  submitButtonText = 'Save',
-  cancelButtonText = 'Cancel',
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -288,8 +284,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         onSubmit={onSubmit}
         isSubmitting={isSubmitting}
         isSubmitDisabled={!isValid || isSubmitting}
-        cancelButtonText={cancelButtonText}
-        submitButtonText={submitButtonText}
       />
     </View>
   );

@@ -9,8 +9,6 @@ export interface FormButtonGroupProps {
   onSubmit: () => void;
   isSubmitting?: boolean;
   isSubmitDisabled?: boolean;
-  cancelButtonText?: string;
-  submitButtonText?: string;
 }
 
 export const FormButtonGroup: React.FC<FormButtonGroupProps> = ({
@@ -18,15 +16,13 @@ export const FormButtonGroup: React.FC<FormButtonGroupProps> = ({
   onSubmit,
   isSubmitting = false,
   isSubmitDisabled = false,
-  cancelButtonText = 'Cancel',
-  submitButtonText = 'Submit',
 }) => {
   const { colors } = useTheme();
 
   return (
     <View style={styles.buttonRow}>
       <ButtonText
-        text={cancelButtonText}
+        text={'取消'}
         variant="outlined"
         size="small"
         onPress={onCancel}
@@ -39,7 +35,7 @@ export const FormButtonGroup: React.FC<FormButtonGroupProps> = ({
         </View>
       ) : (
         <ButtonText
-          text={submitButtonText}
+          text={'提交'}
           variant="filled"
           size="small"
           disabled={isSubmitDisabled}

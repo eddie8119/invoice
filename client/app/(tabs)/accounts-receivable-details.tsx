@@ -3,6 +3,7 @@ import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { InvoiceItemsSection } from '@/components/invoice/InvoiceItemsSection';
+import { DeleteModal } from '@/components/Modal/DeleteModal';
 import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
@@ -20,7 +21,8 @@ const AccountsReceivableDetailsScreen = () => {
 
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [editVisible, setEditVisible] = useState(false);
+  const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
   const { colors } = useTheme();
   const containerStyles = useMemo(
@@ -55,7 +57,7 @@ const AccountsReceivableDetailsScreen = () => {
   }, [id]);
 
   // 編輯完成時，更新本地 invoice 狀態
-  const handleEditSave = (data: {
+  const handleLocalEditSave = (data: {
     company: string;
     invoiceNumber: string;
     note?: string;
@@ -63,7 +65,7 @@ const AccountsReceivableDetailsScreen = () => {
     items: InvoiceItem[];
   }) => {
     const totalAmount = data.items.reduce(
-      (sum, item) => sum + item.quantity * item.price,
+      (sum, item) => sum + item.quantity * item.unitPrice,
       0
     );
     setInvoice(prev => {
@@ -100,7 +102,10 @@ const AccountsReceivableDetailsScreen = () => {
         <View>
           <EditButton
             onPress={() => {
-              setEditVisible(true);
+              setEditDialogVisible(true);
+            }}
+            onDelete={() => {
+              setDeleteDialogVisible(true);
             }}
           />
           <InvoiceBaseInfo invoice={invoice} />
@@ -126,14 +131,28 @@ const AccountsReceivableDetailsScreen = () => {
       </View>
 
       <EditInvoiceModal
-        visible={editVisible}
+        visible={editDialogVisible}
         invoice={{
           ...invoice,
           company: invoice.company.name,
           invoiceItems: invoice.items,
         }}
-        onClose={() => setEditVisible(false)}
-        onSave={handleEditSave}
+        onClose={() => setEditDialogVisible(false)}
+        onSave={handleLocalEditSave}
+      />
+
+      <DeleteModal
+        visible={deleteDialogVisible}
+        data={invoice}
+        onClose={() => setDeleteDialogVisible(false)}
+        onDelete={async () => {
+          try {
+            await invoiceApi.deleteInvoice(invoice.id);
+            setDeleteDialogVisible(false);
+          } catch (error) {
+            console.error('刪除發票失敗:', error);
+          }
+        }}
       />
     </View>
   );
@@ -145,71 +164,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-  },
-  companyName: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: theme.colors.light.text,
-    marginBottom: 4,
-  },
-  invoiceNumber: {
-    fontSize: 14,
-    color: theme.colors.light.textSecondary,
-  },
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  statusText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 12,
-  },
-  amountContainer: {
-    marginBottom: 16,
-  },
-  amountLabel: {
-    fontSize: 14,
-    color: theme.colors.light.textSecondary,
-    marginBottom: 4,
-  },
-  amount: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  currency: {
-    fontSize: 16,
-    color: theme.colors.light.primary,
-    marginRight: 2,
-  },
-  amountValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: theme.colors.light.primaryOceanBlue,
-  },
-  dateInfo: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  dateItem: {
-    marginRight: 24,
-    marginBottom: 8,
-  },
-  dateLabel: {
-    fontSize: 12,
-    color: theme.colors.light.textSecondary,
-    marginBottom: 2,
-  },
-  dateValue: {
-    fontSize: 14,
-    color: theme.colors.light.text,
   },
   noteText: {
     fontSize: 14,

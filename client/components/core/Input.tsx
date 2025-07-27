@@ -73,12 +73,6 @@ export function Input({
   const { colors } = useTheme();
   const formStyles = createFormStyles(colors);
 
-  const getHelperColor = () => {
-    if (error) return colors.error;
-    if (success) return colors.success;
-    return colors.textSecondary;
-  };
-
   const getBorderColor = () => {
     if (error) return colors.error;
     if (success) return colors.success;
@@ -110,10 +104,8 @@ export function Input({
         secureTextEntry={isPassword && !showPassword}
         outlineColor={getBorderColor()}
         activeOutlineColor={colors.primary}
-        style={[
-          { backgroundColor: colors.primaryLight, height: 48 },
-          inputStyle,
-        ]}
+        textColor="#000"
+        style={[{ backgroundColor: colors.primaryLight, height: 48 }]}
         error={!!error}
         placeholder={placeholder}
         value={value}

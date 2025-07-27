@@ -1,10 +1,10 @@
 import { BaseModal } from '@/components/core/BaseModal';
+import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { Heading } from '@/components/core/Heading';
-import { theme } from '@/constants/theme';
 import { InvoiceFormData } from '@/types/invoice';
 import { CreateInvoiceSchema } from '@shared/schemas/createInvoice';
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Controller } from 'react-hook-form';
 
 export interface EditInvoiceModalProps {
   visible: boolean;
@@ -29,23 +29,41 @@ export const EditInvoiceStatusModal: React.FC<EditInvoiceModalProps> = ({
   };
 
   const modalTitle = (
-    <Heading level={2} style={styles.pageTitle}>
+    <Heading level={2} style={{ textAlign: 'center' }}>
       編輯發票狀態
     </Heading>
   );
 
   return (
     <BaseModal visible={visible} onClose={onClose} title={modalTitle}>
-      <Text>編輯發票狀態</Text>
+      <Controller
+        // control={control}
+        name="dueDate"
+        render={({ field: { onChange, value } }) => (
+          <>
+            <DatePickerInput
+              value={value}
+              onChange={onChange}
+              label="預付款日"
+            />
+            {/* {errors.dueDate && (
+              <View style={styles.errorText}>
+                <Text style={{ color: theme.colors.light.error }}>
+                  {errors.dueDate.message}
+                </Text>
+              </View>
+            )} */}
+          </>
+        )}
+      />
+      {/* <FormButtonGroup
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        isSubmitting={isSubmitting}
+        isSubmitDisabled={!isValid || isSubmitting}
+        cancelButtonText={cancelButtonText}
+        submitButtonText={submitButtonText}
+      /> */}
     </BaseModal>
   );
 };
-
-const styles = StyleSheet.create({
-  pageTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: theme.colors.light.text,
-    textAlign: 'center',
-  },
-});

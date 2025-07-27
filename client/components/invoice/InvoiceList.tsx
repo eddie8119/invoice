@@ -27,6 +27,9 @@ export const InvoiceList = ({
   );
   const [selectedPaidAt, setSelectedPaidAt] = useState<Date>(new Date());
 
+  const handleEditSave = (data: { paidAt: Date }) => {
+    setModalVisible(false);
+  };
   return (
     <View>
       <View>
@@ -104,6 +107,7 @@ export const InvoiceList = ({
         visible={modalVisible}
         invoice={selectedInvoice}
         onClose={() => setModalVisible(false)}
+        onSave={handleEditSave}
       />
     </View>
   );
