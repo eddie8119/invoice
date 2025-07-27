@@ -1,6 +1,6 @@
-import { ButtonText } from '@/components/core/ButtonText';
 import CustomDropdown from '@/components/core/CustomDropdown';
 import { DatePickerInput } from '@/components/core/DatePickerInput';
+import { FormButtonGroup } from '@/components/core/FormButtonGroup';
 import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
@@ -18,14 +18,7 @@ import {
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import {
-  ActivityIndicator,
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -42,7 +35,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   submitButtonText = 'Save',
   cancelButtonText = 'Cancel',
 }) => {
-  // 新增 loading 狀態
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { colors } = useTheme();
@@ -144,206 +136,161 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   });
 
   return (
-    <View style={{ gap: 16 }}>
-      <Controller
-        control={control}
-        name="company"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            label="公司名稱"
-            placeholder="輸入公司名稱"
-            value={value}
-            onChangeText={onChange}
-            error={errors.company?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="caseName"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            label="專案名稱"
-            placeholder="輸入專案名稱"
-            value={value}
-            onChangeText={onChange}
-            error={errors.caseName?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="invoiceNumber"
-        render={({ field: { onChange, value } }) => (
-          <Input
-            label="發票編號"
-            placeholder="輸入發票編號"
-            value={value}
-            onChangeText={onChange}
-            error={errors.invoiceNumber?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="status"
-        render={({ field: { onChange, value } }) => (
-          <CustomDropdown
-            label="付款狀態"
-            options={[
-              { label: '未付款', value: 'unpaid' },
-              { label: '已付款', value: 'paid' },
-              { label: '已逾期', value: 'overdue' },
-            ]}
-            selectedValue={value}
-            onValueChange={onChange}
-            error={errors.status?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="type"
-        render={({ field: { onChange, value } }) => (
-          <CustomDropdown
-            label="發票類型"
-            options={[
-              { label: '應收', value: 'receivable' },
-              { label: '應付', value: 'payable' },
-            ]}
-            selectedValue={value}
-            onValueChange={onChange}
-            error={errors.type?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="dueDate"
-        render={({ field: { onChange, value } }) => (
-          <>
-            <DatePickerInput
-              value={value}
-              onChange={onChange}
-              label="預付款日"
-            />
-            {errors.dueDate && (
-              <View style={styles.errorText}>
-                <Text style={{ color: theme.colors.light.error }}>
-                  {errors.dueDate.message}
-                </Text>
-              </View>
-            )}
-          </>
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="note"
-        render={({ field: { onChange, value } }) => (
-          <View style={styles.inputContainer}>
-            <LabelText label={t('title.note')} />
-            <TextInput
-              style={formStyles.textarea}
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ gap: 16 }}>
+        <Controller
+          control={control}
+          name="company"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="公司名稱"
+              placeholder="輸入公司名稱"
               value={value}
               onChangeText={onChange}
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-              placeholder="輸入備註"
+              error={errors.company?.message}
             />
-            {errors.note && (
-              <Text style={styles.errorText}>{errors.note.message}</Text>
-            )}
-          </View>
-        )}
-      />
-
-      {/* 動態表單項目 */}
-      <EditableInvoiceItemsTable
-        items={fields}
-        onItemChange={(index, field, value) => {
-          const currentItem = fields[index];
-          let processedValue: string | number | undefined = value;
-
-          if (field === 'quantity' || field === 'unitPrice') {
-            const num = parseFloat(value);
-            // Use undefined for empty/invalid to trigger 'required' validation
-            processedValue = isNaN(num) ? undefined : num;
-          }
-
-          const updatedItem = {
-            ...currentItem,
-            [field]: processedValue,
-          };
-
-          update(index, updatedItem);
-        }}
-        onAddItem={handleAddItem}
-        onRemoveItem={remove}
-      />
-      <View style={styles.buttonRow}>
-        <ButtonText
-          text={cancelButtonText}
-          variant="outlined"
-          size="small"
-          onPress={onCancel}
-          disabled={isSubmitting}
-          style={{ borderColor: colors.error, textColor: colors.error }}
+          )}
         />
-        {isSubmitting ? (
-          <View style={styles.loadingButton}>
-            <ActivityIndicator color={colors.primary} />
-          </View>
-        ) : (
-          <ButtonText
-            text={submitButtonText}
-            variant="filled"
-            size="small"
-            disabled={!isValid || isSubmitting}
-            onPress={onSubmit}
-            style={{ backgroundColor: colors.primaryOceanBlue }}
-          />
-        )}
-      </View>
+
+        <Controller
+          control={control}
+          name="caseName"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="專案名稱"
+              placeholder="輸入專案名稱"
+              value={value}
+              onChangeText={onChange}
+              error={errors.caseName?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="invoiceNumber"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="發票編號"
+              placeholder="輸入發票編號"
+              value={value}
+              onChangeText={onChange}
+              error={errors.invoiceNumber?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="status"
+          render={({ field: { onChange, value } }) => (
+            <CustomDropdown
+              label="付款狀態"
+              options={[
+                { label: '未付款', value: 'unpaid' },
+                { label: '已付款', value: 'paid' },
+                { label: '已逾期', value: 'overdue' },
+              ]}
+              selectedValue={value}
+              onValueChange={onChange}
+              error={errors.status?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="type"
+          render={({ field: { onChange, value } }) => (
+            <CustomDropdown
+              label="發票類型"
+              options={[
+                { label: '應收', value: 'receivable' },
+                { label: '應付', value: 'payable' },
+              ]}
+              selectedValue={value}
+              onValueChange={onChange}
+              error={errors.type?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="dueDate"
+          render={({ field: { onChange, value } }) => (
+            <>
+              <DatePickerInput
+                value={value}
+                onChange={onChange}
+                label="預付款日"
+              />
+              {errors.dueDate && (
+                <View style={formStyles.errorText}>
+                  <Text style={{ color: theme.colors.light.error }}>
+                    {errors.dueDate.message}
+                  </Text>
+                </View>
+              )}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="note"
+          render={({ field: { onChange, value } }) => (
+            <View>
+              <LabelText label={t('title.note')} />
+              <TextInput
+                style={formStyles.textarea}
+                value={value}
+                onChangeText={onChange}
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                placeholder="輸入備註"
+              />
+              {errors.note && (
+                <Text style={formStyles.errorText}>{errors.note.message}</Text>
+              )}
+            </View>
+          )}
+        />
+
+        {/* 動態表單項目 */}
+        <EditableInvoiceItemsTable
+          items={fields}
+          onItemChange={(index, field, value) => {
+            const currentItem = fields[index];
+            let processedValue: string | number | undefined = value;
+
+            if (field === 'quantity' || field === 'unitPrice') {
+              const num = parseFloat(value);
+              // Use undefined for empty/invalid to trigger 'required' validation
+              processedValue = isNaN(num) ? undefined : num;
+            }
+
+            const updatedItem = {
+              ...currentItem,
+              [field]: processedValue,
+            };
+
+            update(index, updatedItem);
+          }}
+          onAddItem={handleAddItem}
+          onRemoveItem={remove}
+        />
+      </ScrollView>
+
+      <FormButtonGroup
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        isSubmitting={isSubmitting}
+        isSubmitDisabled={!isValid || isSubmitting}
+        cancelButtonText={cancelButtonText}
+        submitButtonText={submitButtonText}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginBottom: 8,
-    color: theme.colors.light.text,
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  errorText: {
-    color: theme.colors.light.error,
-    fontSize: 12,
-    marginTop: 4,
-    marginLeft: 10,
-  },
-  loadingButton: {
-    backgroundColor: theme.colors.light.background,
-    padding: 12,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 100,
-  },
-});
