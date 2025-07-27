@@ -22,8 +22,8 @@ import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
-  onCancel: () => void;
-  onSave: (data: InvoiceFormData) => void;
+  onCancel?: () => void;
+  onSave?: (data: InvoiceFormData) => void;
 }
 
 export const InvoiceForm: React.FC<InvoiceFormProps> = ({
