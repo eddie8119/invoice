@@ -1,9 +1,7 @@
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { useSubmit } from '@/hooks/useSubmit';
-import { t } from '@/i18n';
 import { invoiceApi } from '@/services/api/invoice';
 import { createContainerStyles } from '@/style/layouts/containers';
-import { InvoiceFormData } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React, { useMemo } from 'react';
@@ -16,9 +14,9 @@ export default function CreateInvoiceManual() {
     [colors]
   );
 
-  const { submit: handleSave, isSubmitting } = useSubmit<InvoiceFormData>({
+  const { submit: handleSave, isSubmitting } = useSubmit({
     apiFunc: invoiceApi.createInvoice,
-    successMessage: t('invoice.createSuccess'),
+    successMessage: '新增發票成功',
     successRedirectPath: '/(tabs)/accounts-receivable',
   });
 

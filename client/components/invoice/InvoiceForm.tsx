@@ -14,7 +14,7 @@ import {
   CreateInvoiceSchema,
   createInvoiceSchema,
 } from '@shared/schemas/createInvoice';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 
@@ -31,7 +31,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   onSave,
   isSubmitting,
 }) => {
-
   const { colors } = useTheme();
   const formStyles = createFormStyles(colors);
 

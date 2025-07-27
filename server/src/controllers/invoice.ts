@@ -388,17 +388,19 @@ export const updateInvoice = async (req: Request, res: Response) => {
     const userId = getUserIdOrUnauthorized(req, res);
     if (!userId) return;
 
+    const snakeCaseData = snakecaseKeys(req.body, { deep: true });
+
     const { id } = req.params;
     const {
-      company_id,
+      company,
+      case_name,
       invoice_number,
-      created_at,
-      due_date,
-      currency,
       status,
+      type,
+      due_date,
       note,
-      items,
-    } = req.body;
+      invoice_items,
+    } = snakeCaseData;
 
     // 檢查發票是否存在並屬於當前用戶
     const { data: existingInvoice, error: checkError } = await supabase
@@ -417,17 +419,18 @@ export const updateInvoice = async (req: Request, res: Response) => {
 
     // 準備更新的發票數據
     const invoiceData: any = {};
-    if (company_id !== undefined) invoiceData.company_id = company_id;
+    if (company !== undefined) invoiceData.company = company;
     if (invoice_number !== undefined)
       invoiceData.invoice_number = invoice_number;
+    if (case_name !== undefined) invoiceData.case_name = case_name;
     if (due_date !== undefined) invoiceData.due_date = due_date;
-    if (currency !== undefined) invoiceData.currency = currency;
     if (status !== undefined) invoiceData.status = status;
+    if (type !== undefined) invoiceData.type = type;
     if (note !== undefined) invoiceData.note = note;
 
     // 如果有項目更新，重新計算總金額
-    if (items && Array.isArray(items)) {
-      invoiceData.total_amount = items.reduce(
+    if (invoice_items && Array.isArray(invoice_items)) {
+      invoiceData.total_amount = invoice_items.reduce(
         (sum, item) => sum + item.quantity * item.unit_price,
         0
       );
@@ -448,7 +451,7 @@ export const updateInvoice = async (req: Request, res: Response) => {
       }
 
       // 插入新項目
-      const invoiceItems = items.map((item) => ({
+      const invoiceItems = invoice_items.map((item) => ({
         invoice_id: id,
         title: item.title,
         quantity: item.quantity,

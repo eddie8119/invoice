@@ -1,30 +1,26 @@
 import { t } from '@/i18n';
-import { InvoiceFormData } from '@/types/invoice';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-interface UseSubmitProps<T> {
-  apiFunc: (data: T) => Promise<any>;
+interface UseSubmitProps {
+  apiFunc: (...args: any[]) => Promise<any>;
   successMessage: string;
   successRedirectPath?: string;
-  onSuccess?: () => void;
 }
 
-export const useSubmit = <T>({
+export const useSubmit = ({
   apiFunc,
   successMessage,
   successRedirectPath,
-  onSuccess,
-}: UseSubmitProps<T>) => {
+}: UseSubmitProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = async (data: T) => {
+  const submit = async (...args: any[]) => {
     setIsSubmitting(true);
     try {
-      let response = await apiFunc(data);
+      let response = await apiFunc(...args);
 
-      // Handle cases where the API function returns a raw Axios response
       if (
         response &&
         response.data &&
@@ -36,13 +32,12 @@ export const useSubmit = <T>({
       const { success, message } = response;
 
       if (success) {
-        Alert.alert(t('alert.successTitle'), successMessage);
-        onSuccess?.();
+        Alert.alert('成功', successMessage);
         if (successRedirectPath) {
           router.push(successRedirectPath as any);
         }
       } else {
-        Alert.alert(t('alert.errorTitle'), message || t('alert.defaultError'));
+        Alert.alert('失敗', message || '發生錯誤');
       }
     } catch (error) {
       console.error('Submit invoice error:', error);

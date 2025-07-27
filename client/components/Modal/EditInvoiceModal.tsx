@@ -1,6 +1,8 @@
 import { BaseModal } from '@/components/core/BaseModal';
 import { Heading } from '@/components/core/Heading';
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
+import { useSubmit } from '@/hooks/useSubmit';
+import { invoiceApi } from '@/services/api/invoice';
 import { InvoiceFormData } from '@/types/invoice';
 import { CreateInvoiceSchema } from '@shared/schemas/createInvoice';
 import React from 'react';
@@ -9,14 +11,12 @@ export interface EditInvoiceModalProps {
   visible: boolean;
   invoice: CreateInvoiceSchema;
   onClose: () => void;
-  onSave: (data: InvoiceFormData) => void;
 }
 
 export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
   visible,
   invoice,
   onClose,
-  onSave,
 }) => {
   const initialData: CreateInvoiceSchema = {
     ...invoice,
@@ -27,9 +27,14 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     invoiceItems: invoice.invoiceItems || [],
   };
 
-  const handleSave = (data: InvoiceFormData) => {
-    onSave(data);
-    onClose();
+  const { submit, isSubmitting } = useSubmit({
+    apiFunc: invoiceApi.updateInvoice,
+    successMessage: '更新發票資訊成功',
+    successRedirectPath: '/(tabs)/accounts-receivable',
+  });
+
+  const handleSave = async (data: InvoiceFormData) => {
+    await submit(invoice.id, data);
   };
 
   const modalTitle = (
@@ -42,8 +47,9 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     <BaseModal visible={visible} onClose={onClose} title={modalTitle}>
       <InvoiceForm
         initialData={initialData}
-        onCancel={onClose}
+        onClose={onClose}
         onSave={handleSave}
+        isSubmitting={isSubmitting}
       />
     </BaseModal>
   );
