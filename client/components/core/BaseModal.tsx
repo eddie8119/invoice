@@ -4,7 +4,6 @@ import { useTheme } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import {
   Modal,
-  ScrollView,
   StyleProp,
   StyleSheet,
   Text,
@@ -60,10 +59,10 @@ export const BaseModal: React.FC<BaseModalProps> = ({
             style={[
               styles.contentContainer,
               contentContainerStyle,
-              { marginTop: 16 },
+              { marginTop: 16, flex: 1 },
             ]}
           >
-            <ScrollView style={{ flex: 1 }}>{children}</ScrollView>
+            {children}
           </View>
           {footer && (
             <View style={[styles.footerContainer, footerContainerStyle]}>
