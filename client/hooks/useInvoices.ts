@@ -1,5 +1,6 @@
 import { invoiceApi } from '@/services/api/invoice';
 import { Invoice, InvoiceType } from '@/types/invoice';
+import { useFocusEffect } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -15,35 +16,9 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
   const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([]);
 
-  useEffect(() => {
-    fetchInvoices();
-  }, [selectedMonth, selectedYear, invoiceType]);
-
-  // 過濾邏輯
-  useEffect(() => {
-    let invoicesForSelectedMonth = invoices.filter(
-      invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
-    );
-    if (activeStatusFilter === '所有') {
-      setFilteredInvoices(invoicesForSelectedMonth);
-    } else if (activeStatusFilter === '已付') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'paid')
-      );
-    } else if (activeStatusFilter === '未付') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'unpaid')
-      );
-    } else if (activeStatusFilter === '逾期') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'overdue')
-      );
-    }
-  }, [selectedMonth, activeStatusFilter, invoices]);
-
   const fetchInvoices = useCallback(async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const res = await invoiceApi.getInvoices({
         type: invoiceType,
         month: selectedMonth,
@@ -68,6 +43,34 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
       setIsLoading(false);
     }
   }, [selectedMonth, selectedYear, invoiceType]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchInvoices();
+    }, [fetchInvoices])
+  );
+
+  // 過濾邏輯
+  useEffect(() => {
+    let invoicesForSelectedMonth = invoices.filter(
+      invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
+    );
+    if (activeStatusFilter === '所有') {
+      setFilteredInvoices(invoicesForSelectedMonth);
+    } else if (activeStatusFilter === '已付') {
+      setFilteredInvoices(
+        invoicesForSelectedMonth.filter(inv => inv.status === 'paid')
+      );
+    } else if (activeStatusFilter === '未付') {
+      setFilteredInvoices(
+        invoicesForSelectedMonth.filter(inv => inv.status === 'unpaid')
+      );
+    } else if (activeStatusFilter === '逾期') {
+      setFilteredInvoices(
+        invoicesForSelectedMonth.filter(inv => inv.status === 'overdue')
+      );
+    }
+  }, [selectedMonth, activeStatusFilter, invoices]);
 
   const handleStatusToggle = useCallback((invoiceToToggle: Invoice) => {
     setInvoices(prevInvoices =>

@@ -5,6 +5,7 @@ import { invoiceApi } from '@/services/api/invoice';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceFormData } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
@@ -21,7 +22,9 @@ export default function CreateInvoiceManual() {
     successRedirectPath: '/(tabs)/accounts-receivable',
   });
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    router.back();
+  };
 
   return (
     <ScrollView
