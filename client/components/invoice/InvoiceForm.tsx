@@ -6,7 +6,6 @@ import { LabelText } from '@/components/core/LabelText';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
-import { invoiceApi } from '@/services/api/invoice';
 import { createFormStyles } from '@/style/layouts/forms';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,23 +14,23 @@ import {
   CreateInvoiceSchema,
   createInvoiceSchema,
 } from '@shared/schemas/createInvoice';
-import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
-  onCancel?: () => void;
-  onSave?: (data: InvoiceFormData) => void;
+  onClose?: () => void;
+  onSave: (data: InvoiceFormData) => Promise<void>;
+  isSubmitting: boolean;
 }
 
 export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   initialData,
-  onCancel,
+  onClose,
   onSave,
+  isSubmitting,
 }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { colors } = useTheme();
   const formStyles = createFormStyles(colors);
@@ -92,48 +91,16 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     });
   };
 
-  const onSubmit = handleSubmit(async (data: CreateInvoiceSchema) => {
-    try {
-      setIsSubmitting(true);
+  const onCancel = () => {
+    reset(initialData);
+    onClose?.();
+  };
 
-      const {
-        data: apiResponseData,
-        message,
-        success,
-      } = await invoiceApi.createInvoice(data);
-
-      if (success && apiResponseData) {
-        Alert.alert('成功', '發票建立成功', [
-          {
-            text: 'OK',
-            onPress: () => {
-              const { type } = data;
-              if (type === 'receivable') {
-                router.replace('/accounts-receivable');
-              } else {
-                router.replace('/accounts-payable');
-              }
-            },
-          },
-        ]);
-
-        return;
-      }
-
-      Alert.alert('錯誤', message || '建立發票失敗，請稍後再試');
-      console.error('Create invoice failed:', message);
-    } catch (error) {
-      console.error('Create invoice error:', error);
-      Alert.alert('系統錯誤', '發生未預期的錯誤，請稍後再試');
-    } finally {
-      // 無論成功或失敗，都將 loading 狀態設為 false
-      setIsSubmitting(false);
-    }
-  });
+  const onSubmit = handleSubmit(onSave);
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ gap: 16 }}>
+      <ScrollView contentContainerStyle={{ gap: 20 }}>
         <Controller
           control={control}
           name="company"

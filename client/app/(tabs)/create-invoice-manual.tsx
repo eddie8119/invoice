@@ -1,5 +1,9 @@
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
+import { useSubmit } from '@/hooks/useSubmit';
+import { t } from '@/i18n';
+import { invoiceApi } from '@/services/api/invoice';
 import { createContainerStyles } from '@/style/layouts/containers';
+import { InvoiceFormData } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
@@ -11,12 +15,24 @@ export default function CreateInvoiceManual() {
     [colors]
   );
 
+  const { submit: handleSave, isSubmitting } = useSubmit<InvoiceFormData>({
+    apiFunc: invoiceApi.createInvoice,
+    successMessage: t('invoice.createSuccess'),
+    successRedirectPath: '/(tabs)/accounts-receivable',
+  });
+
+  const handleCancel = () => {};
+
   return (
     <ScrollView
       style={[styles.scrollView, containerStyles.lowerSection]}
       showsVerticalScrollIndicator={false}
     >
-      <InvoiceForm />
+      <InvoiceForm
+        onClose={handleCancel}
+        onSave={handleSave}
+        isSubmitting={isSubmitting}
+      />
     </ScrollView>
   );
 }
