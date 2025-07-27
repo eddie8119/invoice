@@ -1,5 +1,4 @@
 import { ButtonText } from '@/components/core/ButtonText';
-import InvoiceForm from '@/components/InvoiceForm';
 import useCloudOCR from '@/hooks/useCloudOCR';
 import { pickImageAndConvertBase64 } from '@/utils/pickImage';
 import React, { useState } from 'react';
@@ -35,7 +34,7 @@ export default function InvoiceUploadScreen() {
       {error && (
         <Text style={{ color: 'red', marginVertical: 10 }}>Error: {error}</Text>
       )}
-      {result && <InvoiceForm defaultValues={result} onSubmit={handleSubmit} />}
+      {/* {result && <InvoiceForm defaultValues={result} onSubmit={handleSubmit} />} */}
     </View>
   );
 }
