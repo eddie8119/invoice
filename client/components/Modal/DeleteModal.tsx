@@ -5,22 +5,19 @@ import { Text } from 'react-native';
 
 export interface DeleteModalProps {
   visible: boolean;
-  onClose: () => void;
-  onDelete: () => void;
   data: any;
+  isSubmitting: boolean;
+  onClose: () => void;
+  onSubmit: () => void;
 }
 
 export const DeleteModal: React.FC<DeleteModalProps> = ({
   visible,
-  onClose,
-  onDelete,
   data,
+  isSubmitting,
+  onClose,
+  onSubmit,
 }) => {
-  const handleSave = () => {
-    onDelete();
-    onClose();
-  };
-
   return (
     <BaseModal visible={visible} onClose={onClose} title="刪除選取">
       <Text style={{ textAlign: 'center' }}>
@@ -28,9 +25,8 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
       </Text>
       <FormButtonGroup
         onCancel={onClose}
-        onSubmit={handleSave}
-        // isSubmitting={isSubmitting}
-        // isSubmitDisabled={!isValid || isSubmitting}
+        onSubmit={onSubmit}
+        isSubmitting={isSubmitting}
       />
     </BaseModal>
   );

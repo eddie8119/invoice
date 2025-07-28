@@ -1,12 +1,13 @@
+import { DeleteModal } from '@/components/Modal/DeleteModal';
+import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { EditButton } from '@/components/core/EditButton';
 import { Heading } from '@/components/core/Heading';
 import Loading from '@/components/core/Loading';
 import { InvoiceBaseInfo } from '@/components/invoice/InvoiceBaseInfo';
 import { InvoiceItemsSection } from '@/components/invoice/InvoiceItemsSection';
-import { DeleteModal } from '@/components/Modal/DeleteModal';
-import { EditInvoiceModal } from '@/components/Modal/EditInvoiceModal';
 import { NoData } from '@/components/sign/NoData';
 import { theme } from '@/constants/theme';
+import { useSubmit } from '@/hooks/useSubmit';
 import { invoiceApi } from '@/services/api/invoice';
 import { pannelStyles } from '@/style/components/pannel';
 import { createContainerStyles } from '@/style/layouts/containers';
@@ -88,6 +89,17 @@ const AccountsReceivableDetailsScreen = () => {
     return items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
   };
 
+  const { submit, isSubmitting } = useSubmit({
+    apiFunc: invoiceApi.deleteInvoice,
+    successMessage: '刪除發票成功',
+    successRedirectPath: `/(tabs)/accounts-${invoice?.type}`,
+  });
+
+  const handleDelete = () => {
+    submit(invoice?.id);
+    setDeleteDialogVisible(false);
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -145,14 +157,8 @@ const AccountsReceivableDetailsScreen = () => {
         visible={deleteDialogVisible}
         data={invoice}
         onClose={() => setDeleteDialogVisible(false)}
-        onDelete={async () => {
-          try {
-            await invoiceApi.deleteInvoice(invoice.id);
-            setDeleteDialogVisible(false);
-          } catch (error) {
-            console.error('刪除發票失敗:', error);
-          }
-        }}
+        onSubmit={handleDelete}
+        isSubmitting={isSubmitting}
       />
     </View>
   );

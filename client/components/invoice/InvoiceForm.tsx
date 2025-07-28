@@ -4,6 +4,7 @@ import { FormButtonGroup } from '@/components/core/FormButtonGroup';
 import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
+import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
 import { createFormStyles } from '@/style/layouts/forms';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
