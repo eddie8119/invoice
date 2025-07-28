@@ -1,7 +1,7 @@
 import { theme } from '@/constants/theme';
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ButtonText } from './ButtonText';
 
 export interface FormButtonGroupProps {
@@ -29,20 +29,14 @@ export const FormButtonGroup: React.FC<FormButtonGroupProps> = ({
         disabled={isSubmitting}
         style={{ borderColor: colors.error, textColor: colors.error }}
       />
-      {isSubmitting ? (
-        <View style={styles.loadingButton}>
-          <ActivityIndicator color={colors.primary} />
-        </View>
-      ) : (
-        <ButtonText
-          text={'提交'}
-          variant="filled"
-          size="small"
-          disabled={isSubmitDisabled}
-          onPress={onSubmit}
-          style={{ backgroundColor: colors.primaryOceanBlue }}
-        />
-      )}
+      <ButtonText
+        text={'提交'}
+        variant="filled"
+        size="small"
+        disabled={isSubmitDisabled}
+        onPress={onSubmit}
+        style={{ backgroundColor: colors.primaryOceanBlue }}
+      />
     </View>
   );
 };

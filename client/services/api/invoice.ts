@@ -35,7 +35,7 @@ export const invoiceApi = {
   },
 
   // 更新發票
-  updateInvoice: async (id: string, data: any) => {
+  updateInvoice: async (id: string, data: createInvoiceSchema) => {
     return request.put(`/invoices/${id}`, data);
   },
 
