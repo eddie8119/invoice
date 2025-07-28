@@ -1,3 +1,4 @@
+import { Heading } from '@/components/core/Heading';
 import { theme } from '@/constants/theme';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { useTheme } from '@react-navigation/native';
@@ -53,7 +54,9 @@ export const BaseModal: React.FC<BaseModalProps> = ({
               <Text style={styles.closeButtonText}>×</Text>
             </TouchableOpacity>
           )}
-          {title}
+          <Heading level={2} style={{ textAlign: 'center' }}>
+            {title}
+          </Heading>
 
           <View
             style={[

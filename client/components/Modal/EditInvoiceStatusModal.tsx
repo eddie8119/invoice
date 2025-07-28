@@ -1,6 +1,5 @@
 import { BaseModal } from '@/components/core/BaseModal';
 import { DatePickerInput } from '@/components/core/DatePickerInput';
-import { Heading } from '@/components/core/Heading';
 import { InvoiceFormData } from '@/types/invoice';
 import { CreateInvoiceSchema } from '@shared/schemas/createInvoice';
 import React from 'react';
@@ -28,14 +27,8 @@ export const EditInvoiceStatusModal: React.FC<EditInvoiceModalProps> = ({
     onClose();
   };
 
-  const modalTitle = (
-    <Heading level={2} style={{ textAlign: 'center' }}>
-      編輯發票狀態
-    </Heading>
-  );
-
   return (
-    <BaseModal visible={visible} onClose={onClose} title={modalTitle}>
+    <BaseModal visible={visible} onClose={onClose} title="編輯發票狀態">
       <Controller
         // control={control}
         name="dueDate"

@@ -1,5 +1,4 @@
 import { BaseModal } from '@/components/core/BaseModal';
-import { Heading } from '@/components/core/Heading';
 import { InvoiceForm } from '@/components/invoice/InvoiceForm';
 import { useSubmit } from '@/hooks/useSubmit';
 import { invoiceApi } from '@/services/api/invoice';
@@ -20,11 +19,12 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
 }) => {
   const initialData: CreateInvoiceSchema = {
     ...invoice,
+    caseName: invoice.case.name || '',
     note: invoice.note || '',
     dueDate: invoice.dueDate || new Date().toISOString().split('T')[0],
     status: invoice.status,
     type: invoice.type,
-    invoiceItems: invoice.invoiceItems || [],
+    invoiceItems: invoice.items || [],
   };
 
   const { submit, isSubmitting } = useSubmit({
@@ -37,14 +37,8 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
     await submit(invoice.id, data);
   };
 
-  const modalTitle = (
-    <Heading level={2} style={{ textAlign: 'center' }}>
-      編輯發票資訊
-    </Heading>
-  );
-
   return (
-    <BaseModal visible={visible} onClose={onClose} title={modalTitle}>
+    <BaseModal visible={visible} onClose={onClose} title="編輯發票資訊">
       <InvoiceForm
         initialData={initialData}
         onClose={onClose}
