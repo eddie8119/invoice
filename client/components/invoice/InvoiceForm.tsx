@@ -4,7 +4,6 @@ import { FormButtonGroup } from '@/components/core/FormButtonGroup';
 import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
 import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
-import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
 import { createFormStyles } from '@/style/layouts/forms';
 import { InvoiceFormData, InvoiceStatus, InvoiceType } from '@/types/invoice';
@@ -40,7 +39,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     handleSubmit,
     reset,
     formState: { errors, isValid },
-    setValue,
+    trigger,
   } = useForm<CreateInvoiceSchema>({
     resolver: zodResolver(createInvoiceSchema),
     mode: 'onChange',
@@ -71,16 +70,18 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   // 當有 initialData 時，重設表單值
   useEffect(() => {
     if (initialData) {
-      reset({
+      const transformedData = {
         ...initialData,
-        // 確保 invoiceItems 有 id 屬性
         invoiceItems: initialData.invoiceItems.map(item => ({
           ...item,
           id: item.id || `item-${Date.now()}-${Math.random()}`,
         })),
-      });
+      };
+      reset(transformedData);
+      // 在重設後觸發驗證，確保 isValid 狀態更新
+      trigger();
     }
-  }, [initialData, reset]);
+  }, [initialData, reset, trigger]);
 
   const handleAddItem = () => {
     append({
