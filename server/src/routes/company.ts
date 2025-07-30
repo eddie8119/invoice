@@ -5,7 +5,7 @@ import {
   getCompany,
   updateCompany,
 } from "@/controllers/company";
-import { authMiddleware } from "@/middleware/authMiddleware";
+import { authMiddleware } from "@/middleware/auth";
 import express from "express";
 
 const router = express.Router();

@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { getUserIdOrUnauthorized } from "@/utils/auth";
 import { NextFunction, Request, Response } from "express";
 
 /**
@@ -49,3 +50,11 @@ export const authMiddleware = async (
     });
   }
 };
+
+export function requireUserId(req: Request, res: Response, next: NextFunction) {
+  const userId = getUserIdOrUnauthorized(req, res);
+  if (!userId) return; // 已經回應 401
+  // 可以掛到 req 上，讓後續 handler 直接用
+  (req as any).userId = userId;
+  next();
+}

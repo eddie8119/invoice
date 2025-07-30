@@ -5,7 +5,7 @@ import {
   getInvoices,
   updateInvoice,
 } from "@/controllers/invoice";
-import { authMiddleware } from "@/middleware/authMiddleware";
+import { authMiddleware, requireUserId } from "@/middleware/auth";
 import express from "express";
 
 const router = express.Router();
@@ -13,10 +13,10 @@ const router = express.Router();
 // 所有發票路由都需要身份驗證
 router.use(authMiddleware);
 
-router.get("/invoices", getInvoices);
-router.get("/invoices/:id", getInvoice);
-router.post("/invoices", createInvoice);
-router.patch("/invoices/:id", updateInvoice);
-router.delete("/invoices/:id", deleteInvoice);
+router.get("/invoices", requireUserId, getInvoices);
+router.get("/invoices/:id", requireUserId, getInvoice);
+router.post("/invoices", requireUserId, createInvoice);
+router.patch("/invoices/:id", requireUserId, updateInvoice);
+router.delete("/invoices/:id", requireUserId, deleteInvoice);
 
 export default router;
