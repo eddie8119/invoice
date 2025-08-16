@@ -44,7 +44,11 @@ export const tabConfig: TabConfig[] = [
     route: '/invoice-report',
   },
   {
-    name: '手動創建發票發票',
+    name: '初始現金水位',
+    route: '/cash-flow-initialize',
+  },
+  {
+    name: '手動建發票',
     route: '/create-invoice-manual',
   },
   {
@@ -52,7 +56,7 @@ export const tabConfig: TabConfig[] = [
     route: '/settings',
   },
   {
-    name: '公司列表',
+    name: '廠商名列表',
     route: '/companies-overview',
   },
   {
@@ -98,14 +102,21 @@ export const bottomTabConfig: BottomTabConfig[] = [
 export const menuItems: MenuItem[] = [
   {
     id: '0',
-    title: '手動創建',
+    title: '手動建發票',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/create-invoice-manual',
   },
   {
     id: '1',
-    title: '公司列表',
+    title: '初始現金水位',
+    icon: 'document-text',
+    color: '#3F51B5',
+    url: '/cash-flow-initialize',
+  },
+  {
+    id: '2',
+    title: '廠商名列表',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/companies-overview',
