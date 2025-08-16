@@ -1,4 +1,3 @@
-import { theme } from '@/constants/theme';
 import { useTheme } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -35,7 +34,7 @@ export const FormButtonGroup: React.FC<FormButtonGroupProps> = ({
         size="small"
         disabled={isSubmitDisabled}
         onPress={onSubmit}
-        style={{ backgroundColor: colors.primaryOceanBlue }}
+        style={{ backgroundColor: colors.primary }}
       />
     </View>
   );
@@ -46,13 +45,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  loadingButton: {
-    backgroundColor: theme.colors.light.background,
-    padding: 12,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 100,
   },
 });

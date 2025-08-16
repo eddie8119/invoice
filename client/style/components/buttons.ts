@@ -44,23 +44,20 @@ export const buttonStyles = StyleSheet.create({
   // === Button Sizes ===
   small: {
     height: 36,
-    paddingHorizontal: 16,
+    paddingHorizontal: 40,
   },
   medium: {
     height: 48,
-    paddingHorizontal: 24,
+    paddingHorizontal: 40,
   },
   large: {
     height: 56,
-    paddingHorizontal: 32,
+    paddingHorizontal: 40,
   },
 
   // === Variants ===
   outlined: {
     borderWidth: 1,
-  },
-  text: {
-    backgroundColor: 'transparent',
   },
 
   // === Social Buttons ===

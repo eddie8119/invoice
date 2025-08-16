@@ -51,7 +51,7 @@ export function ButtonText({
       case 'filled':
         return {
           backgroundColor: buttonPrimaryColor,
-          textColor: colors.card, // Use card color for text on primary background for better contrast
+          textColor: 'black', // Use card color for text on primary background for better contrast
           borderColor: 'transparent',
         };
       case 'outlined':
