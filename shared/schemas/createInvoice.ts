@@ -3,7 +3,11 @@ import { z } from "zod";
 export const createInvoiceSchema = z.object({
   company: z.string().min(1, "公司名稱為必填"),
   caseName: z.string().min(1, "專案名稱為必填"),
-  invoiceNumber: z.string().min(1, "發票編號為必填"),
+  invoiceNumber: z.string().optional(),
+  totalAmount: z.number().min(1, "總金額為必填"),
+  issueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date string",
+  }),
   dueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date string",
   }), // 這個字串 能不能被 JS 當作日期 parse 成功」。 只要 parse 成功不是 NaN 就行
@@ -28,7 +32,7 @@ export const createInvoiceSchema = z.object({
           .positive("單價必須大於 0"),
       })
     )
-    .min(1, "至少需要一個發票項目"),
+    .optional(),
 });
 
 export type CreateInvoiceSchema = z.infer<typeof createInvoiceSchema>;

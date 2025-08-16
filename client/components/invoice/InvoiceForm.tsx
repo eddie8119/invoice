@@ -3,7 +3,6 @@ import { DatePickerInput } from '@/components/core/DatePickerInput';
 import { FormButtonGroup } from '@/components/core/FormButtonGroup';
 import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
-import { EditableInvoiceItemsTable } from '@/components/invoice/EditableInvoiceItemsTable';
 import { theme } from '@/constants/theme';
 import { t } from '@/i18n';
 import { createFormStyles } from '@/style/layouts/forms';
@@ -48,17 +47,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       caseName: '',
       company: '',
       invoiceNumber: '',
+      totalAmount: undefined,
+      issueDate: new Date().toISOString().split('T')[0],
       dueDate: new Date().toISOString().split('T')[0],
       type: 'receivable' as InvoiceType,
       status: 'unpaid' as InvoiceStatus,
       note: '',
-      invoiceItems: [
-        {
-          title: '',
-          quantity: undefined,
-          unitPrice: undefined,
-        },
-      ],
     },
   });
 
@@ -73,10 +67,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     if (initialData) {
       const transformedData = {
         ...initialData,
-        invoiceItems: initialData.invoiceItems.map(item => ({
-          ...item,
-          id: item.id || `item-${Date.now()}-${Math.random()}`,
-        })),
       };
       reset(transformedData);
       // 在重設後觸發驗證，確保 isValid 狀態更新
@@ -132,6 +122,20 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
+          name="totalAmount"
+          render={({ field: { onChange, value } }) => (
+            <Input
+              label="發票總金額"
+              placeholder="輸入總金額"
+              value={value}
+              onChangeText={onChange}
+              error={errors.totalAmount?.message}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
           name="invoiceNumber"
           render={({ field: { onChange, value } }) => (
             <Input
@@ -181,13 +185,34 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
+          name="issueDate"
+          render={({ field: { onChange, value } }) => (
+            <>
+              <DatePickerInput
+                value={value}
+                onChange={onChange}
+                label="開立發票日期"
+              />
+              {errors.issueDate && (
+                <View style={formStyles.errorText}>
+                  <Text style={{ color: theme.colors.light.error }}>
+                    {errors.issueDate.message}
+                  </Text>
+                </View>
+              )}
+            </>
+          )}
+        />
+
+        <Controller
+          control={control}
           name="dueDate"
           render={({ field: { onChange, value } }) => (
             <>
               <DatePickerInput
                 value={value}
                 onChange={onChange}
-                label="預付款日"
+                label="預計付款日"
               />
               {errors.dueDate && (
                 <View style={formStyles.errorText}>
@@ -223,7 +248,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         />
 
         {/* 動態表單項目 */}
-        <EditableInvoiceItemsTable
+        {/* <EditableInvoiceItemsTable
           items={fields}
           onItemChange={(index, field, value) => {
             const currentItem = fields[index];
@@ -244,7 +269,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           }}
           onAddItem={handleAddItem}
           onRemoveItem={remove}
-        />
+        /> */}
       </ScrollView>
 
       <FormButtonGroup
