@@ -1,16 +1,16 @@
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
-import { FilterOption } from '@/components/core/Filter';
 import { SummaryCard } from '@/components/core/SummaryCard';
 import { CashFlowSummary } from '@/components/invoice/CashFlowSummary';
 import { PayFilter } from '@/components/invoice/PayFilter';
 import { createContainerStyles } from '@/style/layouts/containers';
+import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 export default function CashFlowPredict() {
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<FilterOption>('receivable');
+  const [activeFilter, setActiveFilter] = useState<InvoiceType>('receivable');
 
   const { colors } = useTheme();
   const containerStyles = useMemo(

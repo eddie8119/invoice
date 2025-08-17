@@ -48,6 +48,10 @@ export const tabConfig: TabConfig[] = [
     route: '/cash-flow-initialize',
   },
   {
+    name: '現金水位預測',
+    route: '/cash-flow-predict',
+  },
+  {
     name: '手動建發票',
     route: '/create-invoice-manual',
   },
@@ -91,10 +95,10 @@ export const bottomTabConfig: BottomTabConfig[] = [
     route: '/accounts-payable',
   },
   {
-    name: '收益報告',
-    title: '收益報告',
+    name: '現金水位',
+    title: '現金水位',
     icon: require('@/assets/icons/chartPieSlice.png'),
-    route: '/invoice-report',
+    route: '/cash-flow-predict',
   },
 ];
 
@@ -116,6 +120,13 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: '2',
+    title: '現金水位預測',
+    icon: 'document-text',
+    color: '#3F51B5',
+    url: '/cash-flow-predict',
+  },
+  {
+    id: '3',
     title: '廠商名列表',
     icon: 'document-text',
     color: '#3F51B5',
