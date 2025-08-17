@@ -1,7 +1,6 @@
-import { theme } from '@/constants/theme';
-import { pannelStyles } from '@/style/components/pannel';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SummaryCard } from '@/components/core/SummaryCard';
 
 interface InvoiceSummaryProps {
   unpaidTotal: string;
@@ -12,25 +11,19 @@ export const InvoiceSummary = ({
   unpaidTotal,
   overdueTotal,
 }: InvoiceSummaryProps) => {
-  const colors = theme.colors.light;
-
   return (
     <View style={styles.container}>
-      <View style={[pannelStyles.summaryCard]}>
-        <Text style={styles.summaryLabel}>未付總額</Text>
-        <Text style={styles.summaryAmount}>
-          <Text style={styles.dollarSign}>TWD$</Text>
-          <Text style={styles.summaryAmount}>{unpaidTotal}</Text>
-        </Text>
-      </View>
-
-      <View style={[pannelStyles.summaryCard]}>
-        <Text style={[styles.summaryLabel]}>逾期總額</Text>
-        <Text style={[styles.summaryAmount, { color: colors.error }]}>
-          <Text style={styles.dollarSign}>TWD$</Text>
-          {overdueTotal}
-        </Text>
-      </View>
+      <SummaryCard 
+        label="未付總額" 
+        amount={unpaidTotal} 
+        cardStyle={styles.card}
+      />
+      <SummaryCard 
+        label="逾期總額" 
+        amount={overdueTotal} 
+        isError={true}
+        cardStyle={styles.card}
+      />
     </View>
   );
 };
@@ -40,19 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-
-  summaryLabel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  summaryAmount: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: theme.colors.light.primaryOceanBlue,
-  },
-  dollarSign: {
-    fontSize: 16,
-    color: theme.colors.light.primary,
-  },
+  card: {
+    marginHorizontal: 4,
+  }
 });
