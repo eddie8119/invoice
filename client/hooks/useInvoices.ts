@@ -1,3 +1,4 @@
+import { FilterOption } from '@/components/core/Filter';
 import { invoiceApi } from '@/services/api/invoice';
 import { Invoice, InvoiceType } from '@/types/invoice';
 import { useFocusEffect } from '@react-navigation/native';
@@ -13,7 +14,9 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
   const [selectedMonth, setSelectedMonth] = useState(
     (new Date().getMonth() + 1).toString()
   );
-  const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // New state for status filter
+  const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // 付款狀態過濾
+  const [activeInvoiceNumberFilter, setActiveInvoiceNumberFilter] =
+    useState<FilterOption>('所有'); // 發票號碼過濾
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([]);
 
   const fetchInvoices = useCallback(async () => {
@@ -52,25 +55,45 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
 
   // 過濾邏輯
   useEffect(() => {
-    let invoicesForSelectedMonth = invoices.filter(
+    // 先按月份過濾
+    let filteredByMonth = invoices.filter(
       invoice => invoice.createdAt.getMonth() + 1 === Number(selectedMonth)
     );
-    if (activeStatusFilter === '所有') {
-      setFilteredInvoices(invoicesForSelectedMonth);
-    } else if (activeStatusFilter === '已付') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'paid')
-      );
-    } else if (activeStatusFilter === '未付') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'unpaid')
-      );
-    } else if (activeStatusFilter === '逾期') {
-      setFilteredInvoices(
-        invoicesForSelectedMonth.filter(inv => inv.status === 'overdue')
-      );
+
+    // 按付款狀態過濾
+    let filteredByStatus = filteredByMonth;
+    if (activeStatusFilter !== '所有') {
+      if (activeStatusFilter === '已付') {
+        filteredByStatus = filteredByMonth.filter(inv => inv.status === 'paid');
+      } else if (activeStatusFilter === '未付') {
+        filteredByStatus = filteredByMonth.filter(
+          inv => inv.status === 'unpaid'
+        );
+      } else if (activeStatusFilter === '逾期') {
+        filteredByStatus = filteredByMonth.filter(
+          inv => inv.status === 'overdue'
+        );
+      }
     }
-  }, [selectedMonth, activeStatusFilter, invoices]);
+
+    // 按發票號碼過濾
+    let finalFiltered = filteredByStatus;
+    if (activeInvoiceNumberFilter !== '所有') {
+      if (activeInvoiceNumberFilter === '已開立') {
+        // 篩選有發票號碼的發票（非空字符串）
+        finalFiltered = filteredByStatus.filter(
+          inv => inv.invoiceNumber && inv.invoiceNumber.trim() !== ''
+        );
+      } else if (activeInvoiceNumberFilter === '未開立') {
+        // 篩選沒有發票號碼的發票（空字符串或null或undefined）
+        finalFiltered = filteredByStatus.filter(
+          inv => !inv.invoiceNumber || inv.invoiceNumber.trim() === ''
+        );
+      }
+    }
+
+    setFilteredInvoices(finalFiltered);
+  }, [selectedMonth, activeStatusFilter, activeInvoiceNumberFilter, invoices]);
 
   const handleStatusToggle = useCallback((invoiceToToggle: Invoice) => {
     setInvoices(prevInvoices =>
@@ -90,6 +113,10 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
 
   const handleFilterChange = (filter: string) => {
     setActiveStatusFilter(filter);
+  };
+
+  const handleInvoiceNumberFilterChange = (filter: FilterOption) => {
+    setActiveInvoiceNumberFilter(filter);
   };
 
   const handleInvoicePress = (invoice: Invoice) => {
@@ -115,6 +142,8 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
     setSelectedYear,
     activeStatusFilter,
     handleFilterChange,
+    activeInvoiceNumberFilter,
+    handleInvoiceNumberFilterChange,
     handleStatusToggle,
     handleInvoicePress,
     unpaidTotal,

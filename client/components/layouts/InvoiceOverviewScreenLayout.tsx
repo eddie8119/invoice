@@ -3,6 +3,7 @@ import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
+import { NoInvoiceNumberFilter } from '@/components/invoice/NoInvoiceNumberFilter';
 import { NoData } from '@/components/sign/NoData';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
@@ -29,6 +30,8 @@ export const InvoiceOverviewScreenLayout = ({
     unpaidTotal,
     overdueTotal,
     handleFilterChange,
+    activeInvoiceNumberFilter,
+    handleInvoiceNumberFilterChange,
     handleInvoicePress,
     handleStatusToggle,
     isLoading,
@@ -48,7 +51,12 @@ export const InvoiceOverviewScreenLayout = ({
 
       <View style={containerStyles.lowerSection}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
+
         <InvoiceFilter onFilterChange={handleFilterChange} />
+        <NoInvoiceNumberFilter 
+          active={activeInvoiceNumberFilter}
+          onFilterChange={handleInvoiceNumberFilterChange}
+        />
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {isLoading ? (
             <Loading />
