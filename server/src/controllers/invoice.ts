@@ -573,7 +573,7 @@ export const deleteInvoice = async (req: Request, res: Response) => {
 export const getMonthlyTotals = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
-    const { type, monthsCount } = req.query;
+    const { monthsCount } = req.query;
 
     const currentDate = new Date();
     const results = [];
@@ -594,21 +594,28 @@ export const getMonthlyTotals = async (req: Request, res: Response) => {
         0
       );
 
-      // 查詢該月的發票總額
+      // 查詢該月的發票總額，包含類型
       const { data, error } = await supabase
         .from("Invoices")
-        .select("total_amount")
+        .select("total_amount, type")
         .eq("user_id", userId)
-        .eq("type", type)
         .gte("due_date", startOfMonth.toISOString())
         .lte("due_date", endOfMonth.toISOString());
 
       if (error) throw error;
 
-      const totalAmount = data.reduce(
-        (sum, invoice) => sum + Number(invoice.total_amount),
-        0
-      );
+      // 按類型分組計算總額
+      let receivableTotal = 0;
+      let payableTotal = 0;
+
+      data.forEach(invoice => {
+        const amount = Number(invoice.total_amount);
+        if (invoice.type === 'receivable') {
+          receivableTotal += amount;
+        } else if (invoice.type === 'payable') {
+          payableTotal += amount;
+        }
+      });
 
       // 添加月份名稱以便前端顯示
       const monthNames = [
@@ -630,7 +637,8 @@ export const getMonthlyTotals = async (req: Request, res: Response) => {
         year: targetDate.getFullYear(),
         month: targetDate.getMonth() + 1,
         monthName: monthNames[targetDate.getMonth()],
-        totalAmount,
+        receivableTotal,
+        payableTotal,
         label: i === 0 ? "本月" : i === 1 ? "下月" : `${i}個月後`,
       });
     }

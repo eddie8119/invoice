@@ -11,7 +11,7 @@ interface CashFlowSummaryProps {
 }
 
 export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
-  const { monthlyTotals, isLoading } = useMonthlyTotals(activeFilter);
+  const { monthlyTotals, isLoading } = useMonthlyTotals();
 
   // 獲取本月、下月和後月的數據
   const currentMonth = monthlyTotals.find(item => item.label === '本月');
@@ -32,12 +32,20 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
     return <Loading />;
   }
 
+  // 根據 activeFilter 選擇顯示的金額屬性
+  const getAmountByFilter = (item: any) => {
+    if (!item) return '0';
+    return activeFilter === 'receivable' 
+      ? item.receivableTotal.toString() 
+      : item.payableTotal.toString();
+  };
+
   return (
     <>
       {currentMonth && (
         <SummaryCard
           label={`本月將${activeFilter}`}
-          amount={currentMonth.totalAmount.toString()}
+          amount={getAmountByFilter(currentMonth)}
           cardStyle={styles.card}
           onPress={() => {
             handleCardPress(currentMonth.month);
@@ -48,7 +56,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
         {nextMonth && (
           <SummaryCard
             label={`下月將${activeFilter}`}
-            amount={nextMonth.totalAmount.toString()}
+            amount={getAmountByFilter(nextMonth)}
             cardStyle={styles.card}
             onPress={() => {
               handleCardPress(nextMonth.month);
@@ -58,7 +66,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
         {futureMonth && (
           <SummaryCard
             label={`${futureMonth.label}將${activeFilter}`}
-            amount={futureMonth.totalAmount.toString()}
+            amount={getAmountByFilter(futureMonth)}
             cardStyle={styles.card}
             onPress={() => {
               handleCardPress(futureMonth.month);
