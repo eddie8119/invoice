@@ -52,6 +52,10 @@ export const tabConfig: TabConfig[] = [
     route: '/cash-flow-predict',
   },
   {
+    name: '稅收比',
+    route: '/tax-saving-gap',
+  },
+  {
     name: '手動建發票',
     route: '/create-invoice-manual',
   },
@@ -89,16 +93,16 @@ export const bottomTabConfig: BottomTabConfig[] = [
     route: '/scanner',
   },
   {
-    name: '應付帳款',
-    title: '應付帳款',
-    icon: require('@/assets/icons/money.png'),
-    route: '/accounts-payable',
-  },
-  {
     name: '現金水位',
     title: '現金水位',
     icon: require('@/assets/icons/chartPieSlice.png'),
     route: '/cash-flow-predict',
+  },
+  {
+    name: '稅收比',
+    title: '稅收比',
+    icon: require('@/assets/icons/chartPieSlice.png'),
+    route: '/tax-saving-gap',
   },
 ];
 
@@ -124,6 +128,13 @@ export const menuItems: MenuItem[] = [
     icon: 'document-text',
     color: '#3F51B5',
     url: '/cash-flow-predict',
+  },
+  {
+    id: '3',
+    title: '稅收比',
+    icon: 'document-text',
+    color: '#3F51B5',
+    url: '/tax-saving-gap',
   },
   {
     id: '3',

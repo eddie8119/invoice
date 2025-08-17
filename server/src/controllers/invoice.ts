@@ -608,11 +608,11 @@ export const getMonthlyTotals = async (req: Request, res: Response) => {
       let receivableTotal = 0;
       let payableTotal = 0;
 
-      data.forEach(invoice => {
+      data.forEach((invoice) => {
         const amount = Number(invoice.total_amount);
-        if (invoice.type === 'receivable') {
+        if (invoice.type === "receivable") {
           receivableTotal += amount;
-        } else if (invoice.type === 'payable') {
+        } else if (invoice.type === "payable") {
           payableTotal += amount;
         }
       });
@@ -639,6 +639,7 @@ export const getMonthlyTotals = async (req: Request, res: Response) => {
         monthName: monthNames[targetDate.getMonth()],
         receivableTotal,
         payableTotal,
+        balanceGap: receivableTotal - payableTotal,
         label: i === 0 ? "本月" : i === 1 ? "下月" : `${i}個月後`,
       });
     }
