@@ -162,6 +162,8 @@ export const createInvoice = async (req: Request, res: Response) => {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
       invoice_number,
       case_name,
+      total_amount,
+      issue_date,
       due_date,
       status = "unpaid",
       note,
@@ -170,14 +172,7 @@ export const createInvoice = async (req: Request, res: Response) => {
     } = snakeCaseData;
 
     // 驗證必要欄位
-    if (
-      !company ||
-      !case_name ||
-      !invoice_number ||
-      !due_date ||
-      !invoice_items ||
-      !Array.isArray(invoice_items)
-    ) {
+    if (!company || !case_name || !total_amount || !issue_date || !due_date) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -185,11 +180,11 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 計算總金額
-    const total_amount: number = invoice_items.reduce(
-      (sum, item) =>
-        sum + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0),
-      0
-    );
+    // const total_amount: number = invoice_items.reduce(
+    //   (sum, item) =>
+    //     sum + (Number(item.quantity) || 0) * (Number(item.unit_price) || 0),
+    //   0
+    // );
 
     // 步驟 1: 檢查公司是否已存在，如果不存在則創建
     let company_id: string;
@@ -292,7 +287,8 @@ export const createInvoice = async (req: Request, res: Response) => {
           company_id, // 使用上面獲取或創建的公司 ID
           invoice_number,
           case_id,
-          due_date: new Date(due_date), // String to Date
+          issue_date: new Date(issue_date), // String to Date
+          due_date: new Date(due_date),
           total_amount,
           status,
           note,
@@ -312,13 +308,15 @@ export const createInvoice = async (req: Request, res: Response) => {
     }
 
     // 步驟 4: 創建發票項目
-    const invoiceItems: InvoiceItemInsert[] = invoice_items.map((item) => ({
-      user_id: userId,
-      invoice_id: invoiceData.id,
-      title: item.title || "",
-      quantity: Number(item.quantity) || 0,
-      unit_price: Number(item.unit_price) || 0,
-    }));
+    const invoiceItems: InvoiceItemInsert[] = invoice_items.map(
+      (item: any) => ({
+        user_id: userId,
+        invoice_id: invoiceData.id,
+        title: item.title || "",
+        quantity: Number(item.quantity) || 0,
+        unit_price: Number(item.unit_price) || 0,
+      })
+    );
 
     const { error: itemsError } = await supabase
       .from("InvoiceItems")

@@ -97,8 +97,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           name="company"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="公司名稱"
-              placeholder="輸入公司名稱"
+              label="廠商名稱"
+              placeholder="輸入廠商名稱"
               value={value}
               onChangeText={onChange}
               error={errors.company?.message}
@@ -127,8 +127,19 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             <Input
               label="發票總金額"
               placeholder="輸入總金額"
-              value={value}
-              onChangeText={onChange}
+              value={value?.toString()}
+              onChangeText={text => {
+                // 允許數字和小數點
+                const numericValue = text.replace(/[^0-9.]/g, '');
+                // 確保只有一個小數點
+                const parts = numericValue.split('.');
+                const formattedValue =
+                  parts[0] +
+                  (parts.length > 1 ? '.' + parts.slice(1).join('') : '');
+                // 轉換為數字並更新
+                onChange(formattedValue ? Number(formattedValue) : undefined);
+              }}
+              keyboardType="numeric"
               error={errors.totalAmount?.message}
             />
           )}
