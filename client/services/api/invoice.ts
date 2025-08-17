@@ -43,4 +43,14 @@ export const invoiceApi = {
   deleteInvoice: async (id: string) => {
     return request.delete(`/invoices/${id}`);
   },
+
+  // 獲取指定數量的月度總額
+  getMonthlyTotals: async (params: {
+    type: InvoiceType;
+    monthsCount: number;
+  }) => {
+    return request.get(`/monthly-totals`, {
+      params,
+    });
+  },
 };

@@ -569,5 +569,84 @@ export const deleteInvoice = async (req: Request, res: Response) => {
   }
 };
 
+// 獲取指定數量的各月金錢總額
+export const getMonthlyTotals = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).userId;
+    const { type, monthsCount } = req.query;
+
+    const currentDate = new Date();
+    const results = [];
+
+    // 獲取指定數量的月份數據
+    for (let i = 0; i < Number(monthsCount); i++) {
+      const targetDate = new Date(currentDate);
+      targetDate.setMonth(currentDate.getMonth() + i);
+
+      const startOfMonth = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth(),
+        1
+      );
+      const endOfMonth = new Date(
+        targetDate.getFullYear(),
+        targetDate.getMonth() + 1,
+        0
+      );
+
+      // 查詢該月的發票總額
+      const { data, error } = await supabase
+        .from("Invoices")
+        .select("total_amount")
+        .eq("user_id", userId)
+        .eq("type", type)
+        .gte("due_date", startOfMonth.toISOString())
+        .lte("due_date", endOfMonth.toISOString());
+
+      if (error) throw error;
+
+      const totalAmount = data.reduce(
+        (sum, invoice) => sum + Number(invoice.total_amount),
+        0
+      );
+
+      // 添加月份名稱以便前端顯示
+      const monthNames = [
+        "一月",
+        "二月",
+        "三月",
+        "四月",
+        "五月",
+        "六月",
+        "七月",
+        "八月",
+        "九月",
+        "十月",
+        "十一月",
+        "十二月",
+      ];
+
+      results.push({
+        year: targetDate.getFullYear(),
+        month: targetDate.getMonth() + 1,
+        monthName: monthNames[targetDate.getMonth()],
+        totalAmount,
+        label: i === 0 ? "本月" : i === 1 ? "下月" : `${i}個月後`,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.error("Error getting monthly totals:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get monthly totals",
+    });
+  }
+};
+
 // 原則
 // 日期型別統一：前端和 API 之間使用 ISO 格式的字串 ("YYYY-MM-DD") 進行通訊，而在存入資料庫時，則轉換為 Date 物件。
