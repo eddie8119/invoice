@@ -1,11 +1,15 @@
 import {
   createInvoice,
   deleteInvoice,
-  getBalanceByMonthRange,
   getInvoice,
   getInvoices,
   updateInvoice,
 } from "@/controllers/invoice";
+
+import {
+  getBalanceByMonthRange,
+  getInvoicesByMonthRange,
+} from "@/controllers/invoice-report.controller";
 import { authMiddleware, requireUserId } from "@/middleware/auth";
 import express from "express";
 
@@ -20,6 +24,7 @@ router.post("/invoices", requireUserId, createInvoice);
 router.patch("/invoices/:id", requireUserId, updateInvoice);
 router.delete("/invoices/:id", requireUserId, deleteInvoice);
 
-router.get("/monthly-totals", requireUserId, getBalanceByMonthRange);
+router.get("/monthly-balance", requireUserId, getBalanceByMonthRange);
+router.get("/monthly-invoices", requireUserId, getInvoicesByMonthRange);
 
 export default router;
