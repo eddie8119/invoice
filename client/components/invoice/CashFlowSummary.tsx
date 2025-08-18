@@ -1,6 +1,6 @@
 import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
-import { useMonthlyTotals } from '@/hooks/useMonthlyTotals';
+import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
 import { InvoiceType } from '@/types/invoice';
 import { router } from 'expo-router';
 import React from 'react';
@@ -11,12 +11,12 @@ interface CashFlowSummaryProps {
 }
 
 export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
-  const { monthlyTotals, isLoading } = useMonthlyTotals();
+  const { monthlyBalance, isLoading } = useMonthlyBalance();
 
   // 獲取本月、下月和後月的數據
-  const currentMonth = monthlyTotals.find(item => item.label === '本月');
-  const nextMonth = monthlyTotals.find(item => item.label === '下月');
-  const futureMonth = monthlyTotals.find(
+  const currentMonth = monthlyBalance.find(item => item.label === '本月');
+  const nextMonth = monthlyBalance.find(item => item.label === '下月');
+  const futureMonth = monthlyBalance.find(
     item => item.label !== '本月' && item.label !== '下月'
   );
 
@@ -35,8 +35,8 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
   // 根據 activeFilter 選擇顯示的金額屬性
   const getAmountByFilter = (item: any) => {
     if (!item) return '0';
-    return activeFilter === 'receivable' 
-      ? item.receivableTotal.toString() 
+    return activeFilter === 'receivable'
+      ? item.receivableTotal.toString()
       : item.payableTotal.toString();
   };
 

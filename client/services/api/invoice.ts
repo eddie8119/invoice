@@ -46,7 +46,14 @@ export const invoiceApi = {
 
   // 獲取指定數量的月度總額
   getBalanceByMonthRange: async (params: { monthsCount: number }) => {
-    return request.get(`/monthly-totals`, {
+    return request.get(`/monthly-balance`, {
+      params,
+    });
+  },
+
+  // 獲取指定數量的月度發票
+  getInvoicesByMonthRange: async (params: { monthsCount: number }) => {
+    return request.get(`/monthly-invoices`, {
       params,
     });
   },
