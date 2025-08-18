@@ -2,7 +2,7 @@ import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
 import { SummaryCard } from '@/components/core/SummaryCard';
 import { CashFlowSummary } from '@/components/invoice/CashFlowSummary';
 import { PayFilter } from '@/components/invoice/PayFilter';
-import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
+import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
@@ -12,7 +12,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 export default function CashFlowPredict() {
   const [activeFilter, setActiveFilter] = useState<InvoiceType>('receivable');
 
-  const { monthlyBalance } = useMonthlyBalance();
+  const { monthlyInvoices } = useMonthlyInvoices();
   const { colors } = useTheme();
   const containerStyles = useMemo(
     () => createContainerStyles(colors),
