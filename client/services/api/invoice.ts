@@ -9,7 +9,7 @@ import type {
 import type { ApiResponse } from '@/types/request';
 
 interface GetInvoicesParams {
-  type: InvoiceType;
+  type?: InvoiceType;
   month?: string;
   year: string;
 }
@@ -45,7 +45,7 @@ export const invoiceApi = {
   },
 
   // 獲取指定數量的月度總額
-  getMonthlyTotals: async (params: { monthsCount: number }) => {
+  getBalanceByMonthRange: async (params: { monthsCount: number }) => {
     return request.get(`/monthly-totals`, {
       params,
     });
