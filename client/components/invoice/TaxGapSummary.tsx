@@ -1,5 +1,6 @@
 import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
+import { router } from 'expo-router';
 
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
@@ -46,11 +47,23 @@ export const TaxGapSummary = ({
           label={`${month.label}收入`}
           amount={formatAmount(month.receivableTotal)}
           cardStyle={styles.card}
+          onPress={() => {
+            router.push({
+              pathname: `/accounts-receivable`,
+              params: { month: month.month.toString() },
+            } as any);
+          }}
         />
         <SummaryCard
           label={`${month.label}支出`}
           amount={formatAmount(month.payableTotal)}
           cardStyle={styles.card}
+          onPress={() => {
+            router.push({
+              pathname: `/accounts-payable`,
+              params: { month: month.month.toString() },
+            } as any);
+          }}
         />
       </View>
     </View>
