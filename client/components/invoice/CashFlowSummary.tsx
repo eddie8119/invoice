@@ -80,7 +80,6 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 4,
     flex: 1,
   },
   loadingContainer: {

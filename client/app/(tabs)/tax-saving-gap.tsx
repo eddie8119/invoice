@@ -1,5 +1,4 @@
 import { BalanceGapChart } from '@/components/core/chart/BalanceGapChart';
-import { SummaryCard } from '@/components/core/SummaryCard';
 import { TaxGapSummary } from '@/components/invoice/TaxGapSummary';
 import { useMonthlyTotals } from '@/hooks/useMonthlyTotals';
 import { createContainerStyles } from '@/style/layouts/containers';
@@ -23,11 +22,6 @@ export default function TaxSavingGap() {
   return (
     <View style={{ flex: 1 }}>
       <View style={containerStyles.upperSection}>
-        <SummaryCard
-          label={`目前帳戶現金水位`}
-          amount="20000"
-          cardStyle={styles.card}
-        />
         <BalanceGapChart isLoading={isLoading} monthlyTotals={monthlyTotals} />
       </View>
       <ScrollView

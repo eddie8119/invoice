@@ -33,7 +33,7 @@ export const SummaryCard = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     flex: 1,
-    marginHorizontal: 4,
     justifyContent: 'center',
     alignItems: 'center',
   },

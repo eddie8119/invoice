@@ -18,7 +18,7 @@ export const BalanceGapChart = ({
   monthlyTotals,
   isLoading,
 }: BalanceGapChartProps) => {
-  const screenWidth = Dimensions.get('window').width - 32;
+  const screenWidth = Dimensions.get('window').width - 22;
 
   if (isLoading || !monthlyTotals || monthlyTotals.length === 0) {
     return (
@@ -46,24 +46,25 @@ export const BalanceGapChart = ({
 
       <VictoryChart
         width={screenWidth}
+        height={220} // 設定適當的高度
         theme={VictoryTheme.material}
         domainPadding={{ x: 30 }}
       >
-        <VictoryAxis style={{ tickLabels: { fontSize: 12, fill: '#666' } }} />
+        <VictoryAxis style={{ tickLabels: { fontSize: 16, fill: '#666' } }} />
         <VictoryAxis
           dependentAxis
           tickFormat={t => `${t / 1000}k`}
-          style={{ tickLabels: { fontSize: 12, fill: '#666' } }}
+          style={{ tickLabels: { fontSize: 16, fill: '#666' } }}
         />
 
         <VictoryGroup offset={20}>
           <VictoryBar
             data={incomeData}
-            style={{ data: { fill: '#0068FF', width: 16 } }}
+            style={{ data: { fill: '#0068FF', width: 12 } }}
           />
           <VictoryBar
             data={expenseData}
-            style={{ data: { fill: '#00D09E', width: 16 } }}
+            style={{ data: { fill: '#00D09E', width: 12 } }}
           />
         </VictoryGroup>
       </VictoryChart>
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 16,
     textAlign: 'left',
     color: '#333',
   },
@@ -110,8 +110,6 @@ const styles = StyleSheet.create({
   legend: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 5,
   },
   legendItem: {
     flexDirection: 'row',
@@ -125,7 +123,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   legendText: {
-    fontSize: 12,
+    fontSize: 16,
     color: '#666',
   },
 });
