@@ -1,9 +1,9 @@
 import {
   createInvoice,
   deleteInvoice,
+  getBalanceByMonthRange,
   getInvoice,
   getInvoices,
-  getMonthlyTotals,
   updateInvoice,
 } from "@/controllers/invoice";
 import { authMiddleware, requireUserId } from "@/middleware/auth";
@@ -20,6 +20,6 @@ router.post("/invoices", requireUserId, createInvoice);
 router.patch("/invoices/:id", requireUserId, updateInvoice);
 router.delete("/invoices/:id", requireUserId, deleteInvoice);
 
-router.get("/monthly-totals", requireUserId, getMonthlyTotals);
+router.get("/monthly-totals", requireUserId, getBalanceByMonthRange);
 
 export default router;

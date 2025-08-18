@@ -31,10 +31,12 @@ export const getInvoices = async (req: Request, res: Response) => {
     );
 
     // 獲取查詢參數
-    const { type = "receivable", month, year } = req.query;
+    const { type, month, year } = req.query;
 
     query = query.eq("user_id", userId);
-    query = query.eq("type", type);
+    if (type) {
+      query = query.eq("type", type);
+    }
 
     if (year && month) {
       const formattedMonth = month.toString().padStart(2, "0");
@@ -570,7 +572,7 @@ export const deleteInvoice = async (req: Request, res: Response) => {
 };
 
 // 獲取指定數量的各月金錢總額
-export const getMonthlyTotals = async (req: Request, res: Response) => {
+export const getBalanceByMonthRange = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
     const { monthsCount } = req.query;

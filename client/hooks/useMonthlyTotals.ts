@@ -10,7 +10,7 @@ export function useMonthlyTotals() {
   const fetchMonthlyTotals = async (monthsCount: number) => {
     setIsLoading(true);
     try {
-      const res = await invoiceApi.getMonthlyTotals({ monthsCount });
+      const res = await invoiceApi.getBalanceByMonthRange({ monthsCount });
       if (res.data) {
         setMonthlyTotals(res.data);
       }
