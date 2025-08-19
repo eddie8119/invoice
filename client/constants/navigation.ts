@@ -32,6 +32,10 @@ export const tabConfig: TabConfig[] = [
     route: '/accounts-receivable',
   },
   {
+    name: '發票',
+    route: '/invoice',
+  },
+  {
     name: '掃描',
     route: '/scanner',
   },
@@ -163,5 +167,12 @@ export const menuItems: MenuItem[] = [
     icon: 'document-text',
     color: '#3F51B5',
     url: '/settings',
+  },
+  {
+    id: '5',
+    title: '發票',
+    icon: 'document-text',
+    color: '#3F51B5',
+    url: '/invoice',
   },
 ];

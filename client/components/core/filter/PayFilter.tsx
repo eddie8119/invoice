@@ -1,4 +1,4 @@
-import { Filter, FilterOption } from '@/components/core/Filter';
+import { Filter, FilterOption } from '@/components/core/filter/Filter';
 import { theme } from '@/constants/theme';
 import React from 'react';
 

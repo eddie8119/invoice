@@ -35,12 +35,15 @@ export const CashFlowChart = () => {
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
-    
+
     // 創建月份範圍的開始和結束日期
     const monthStart = new Date(currentYear, currentMonth, 1);
     const monthEnd = new Date(currentYear, currentMonth + 3, 0); // 三個月後的最後一天
-    const totalDays = Math.floor((monthEnd.getTime() - monthStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-    
+    const totalDays =
+      Math.floor(
+        (monthEnd.getTime() - monthStart.getTime()) / (1000 * 60 * 60 * 24)
+      ) + 1;
+
     // 生成三個月的標籤
     const threeMonths: string[] = [];
     for (let i = 0; i < 3; i++) {
@@ -66,7 +69,7 @@ export const CashFlowChart = () => {
     allInvoices.sort(
       (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
     );
-    
+
     // 創建時間軸上的所有數據點
     interface ChartPoint {
       date: Date;
@@ -75,9 +78,9 @@ export const CashFlowChart = () => {
       label: string;
       dateStr: string;
     }
-    
+
     const chartPoints: ChartPoint[] = [];
-    
+
     // 加入起始點 - 設定為當前日期
     const startDate = new Date();
     chartPoints.push({
@@ -85,7 +88,7 @@ export const CashFlowChart = () => {
       x: 1, // 起始位置固定在 x=1
       y: initialCashLevel,
       label: `$${initialCashLevel.toLocaleString()}`,
-      dateStr: '現在'
+      dateStr: '現在',
     });
 
     // 將所有發票依照到期日計算現金水位
@@ -96,7 +99,7 @@ export const CashFlowChart = () => {
       const month = dueDate.getMonth() + 1; // 月份（1-12）
       const day = dueDate.getDate();
       const dateStr = `${month}/${day}`;
-      
+
       // 計算在三個月內的相對位置
       // 將日期轉換為相對的x座標位置
       // 使用實際日期計算相對位置，而不是依照月份分組
@@ -106,22 +109,25 @@ export const CashFlowChart = () => {
       if (dueDateTimeSpan >= 0 && dueDateTimeSpan <= totalTimeSpan) {
         // 計算相對位置，結果在 1-3 之間
         const relativePosition = (dueDateTimeSpan / totalTimeSpan) * 2 + 1;
-        
+
         // 應收發票增加現金水位，應付發票減少現金水位
-        const amount = invoice.type === 'receivable' ? invoice.totalAmount : -invoice.totalAmount;
+        const amount =
+          invoice.type === 'receivable'
+            ? invoice.totalAmount
+            : -invoice.totalAmount;
         currentCashLevel += amount;
 
         // 儲存日期和對應的現金水位
         dateLabels.push(dateStr);
         dailyCashLevels.push(currentCashLevel);
-        
+
         // 將點加入到圖表數據中，使用準確的相對位置
         chartPoints.push({
           date: dueDate,
           x: relativePosition,
           y: currentCashLevel,
-          label: `$${currentCashLevel.toLocaleString()} (${invoice.type === 'receivable' ? '+' : '-'}$${Math.abs(amount).toLocaleString()})`,
-          dateStr: dateStr
+          label: `$${currentCashLevel.toLocaleString()}`,
+          dateStr: dateStr,
         });
       }
     });
@@ -132,23 +138,27 @@ export const CashFlowChart = () => {
     monthPositions.forEach(monthPosition => {
       // 計算每個月的中間點位置
       const middleOfMonth = monthPosition;
-      
+
       // 檢查是否已經有點接近這個月位置
-      const hasPointNearMonth = chartPoints.some(point => 
-        Math.abs(point.x - middleOfMonth) < 0.5
+      const hasPointNearMonth = chartPoints.some(
+        point => Math.abs(point.x - middleOfMonth) < 0.5
       );
-      
+
       if (!hasPointNearMonth) {
         // 如果沒有點，則使用前一個點的現金水位
         const lastPoint = chartPoints[chartPoints.length - 1];
         if (lastPoint) {
-          const monthDate = new Date(currentYear, currentMonth + monthPosition - 1, 15);
+          const monthDate = new Date(
+            currentYear,
+            currentMonth + monthPosition - 1,
+            15
+          );
           chartPoints.push({
             date: monthDate,
             x: middleOfMonth,
             y: lastPoint.y,
             label: lastPoint.label,
-            dateStr: threeMonths[monthPosition - 1]
+            dateStr: threeMonths[monthPosition - 1],
           });
         }
       }
@@ -177,15 +187,15 @@ export const CashFlowChart = () => {
     // 將數據點排序
     const sortedPoints = [...monthlyDataPoints];
     sortedPoints.sort((a, b) => a.x - b.x);
-    
+
     // 轉換為圖表所需的格式
     const chartPoints = sortedPoints.map(point => ({
       x: point.x,
       y: point.y,
       label: point.label,
-      date: point.dateStr
+      date: point.dateStr,
     }));
-    
+
     return chartPoints;
   }, [monthlyDataPoints]);
 

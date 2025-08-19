@@ -1,7 +1,7 @@
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
+import { PayFilter } from '@/components/core/filter/PayFilter';
 import { SummaryCard } from '@/components/core/SummaryCard';
 import { CashFlowSummary } from '@/components/invoice/CashFlowSummary';
-import { PayFilter } from '@/components/invoice/PayFilter';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';

@@ -1,4 +1,4 @@
-import { FilterOption } from '@/components/core/Filter';
+import { FilterOption } from '@/components/core/filter/Filter';
 import { invoiceApi } from '@/services/api/invoice';
 import { Invoice, InvoiceType } from '@/types/invoice';
 import { useFocusEffect } from '@react-navigation/native';
@@ -125,13 +125,10 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
 
   const unpaidTotal = invoices
     .filter(inv => inv.status === 'unpaid')
-    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0)
-    .toFixed(2);
-
+    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0);
   const overdueTotal = invoices
     .filter(inv => inv.status === 'overdue')
-    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0)
-    .toFixed(2);
+    .reduce((sum, inv) => sum + parseFloat(inv.totalAmount), 0);
 
   return {
     invoices,

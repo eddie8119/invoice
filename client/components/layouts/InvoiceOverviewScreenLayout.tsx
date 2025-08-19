@@ -1,9 +1,9 @@
 import Loading from '@/components/core/Loading';
-import { InvoiceFilter } from '@/components/invoice/InvoiceFilter';
+import { InvoiceFilter } from '@/components/core/filter/InvoiceFilter';
+import { NoInvoiceNumberFilter } from '@/components/core/filter/NoInvoiceNumberFilter';
 import { InvoiceList } from '@/components/invoice/InvoiceList';
 import { InvoiceSummary } from '@/components/invoice/InvoiceSummary';
 import { MounthFilter } from '@/components/invoice/MounthFilter';
-import { NoInvoiceNumberFilter } from '@/components/invoice/NoInvoiceNumberFilter';
 import { NoData } from '@/components/sign/NoData';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
@@ -53,7 +53,7 @@ export const InvoiceOverviewScreenLayout = ({
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
 
         <InvoiceFilter onFilterChange={handleFilterChange} />
-        <NoInvoiceNumberFilter 
+        <NoInvoiceNumberFilter
           active={activeInvoiceNumberFilter}
           onFilterChange={handleInvoiceNumberFilterChange}
         />
