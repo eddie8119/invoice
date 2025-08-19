@@ -52,7 +52,13 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
           }}
         />
       )}
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          gap: 16,
+        }}
+      >
         {nextMonth && (
           <SummaryCard
             label={`下月將${activeFilter}`}
