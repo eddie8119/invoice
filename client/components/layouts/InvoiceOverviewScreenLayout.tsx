@@ -49,7 +49,7 @@ export const InvoiceOverviewScreenLayout = ({
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
 
-      <View style={containerStyles.lowerSection}>
+      <View style={[containerStyles.lowerSection, { gap: 16 }]}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
 
         <InvoiceFilter onFilterChange={handleFilterChange} />

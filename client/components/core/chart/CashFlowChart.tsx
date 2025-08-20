@@ -126,7 +126,7 @@ export const CashFlowChart = () => {
           date: dueDate,
           x: relativePosition,
           y: currentCashLevel,
-          label: `$${currentCashLevel.toLocaleString()} (${invoice.type === 'receivable' ? '+' : '-'}$${Math.abs(amount).toLocaleString()})`,
+          label: `$${currentCashLevel.toLocaleString()}`,
           dateStr: dateStr,
         });
       }
@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 6,
     elevation: 5,
-    marginVertical: 8,
   },
   title: {
     fontSize: 20,

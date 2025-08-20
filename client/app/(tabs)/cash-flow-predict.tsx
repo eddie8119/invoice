@@ -23,7 +23,7 @@ export default function CashFlowPredict() {
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={containerStyles.upperSection}>
+      <View style={[containerStyles.upperSection, { gap: 16 }]}>
         <SummaryCard
           label={`目前帳戶現金水位`}
           amount="20000"

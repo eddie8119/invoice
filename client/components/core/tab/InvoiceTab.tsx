@@ -1,5 +1,5 @@
 import React from 'react';
-import { FilterOption, Tab } from './Tab';
+import { Filter, FilterOption } from '../filter/Filter';
 
 const statusOptions: FilterOption[] = ['receivable', 'payable'];
 
@@ -10,6 +10,6 @@ interface InvoiceTabProps {
 
 export const InvoiceTab = ({ active, onFilterChange }: InvoiceTabProps) => {
   return (
-    <Tab options={statusOptions} active={active} onChange={onFilterChange} />
+    <Filter options={statusOptions} active={active} onChange={onFilterChange} />
   );
 };

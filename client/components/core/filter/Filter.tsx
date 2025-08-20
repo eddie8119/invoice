@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
   },
   filterContainer: {
     flexDirection: 'row',
@@ -69,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   filterButton: {
-    paddingVertical: 8,
+    paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 20,
     alignItems: 'center',
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   filterText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
     color: '#666',
   },
