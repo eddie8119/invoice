@@ -51,7 +51,7 @@ export const TaxGapSummary = ({
             router.push({
               pathname: '/invoice',
               params: { type: 'receivable', month: month.month.toString() },
-            });
+            } as any);
           }}
         />
         <SummaryCard
@@ -62,7 +62,7 @@ export const TaxGapSummary = ({
             router.push({
               pathname: '/invoice',
               params: { type: 'payable', month: month.month.toString() },
-            });
+            } as any);
           }}
         />
       </View>

@@ -25,8 +25,8 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
   // 路由跳轉處理
   const handleCardPress = (month: number) => {
     router.push({
-      pathname: `/accounts-${activeFilter}`,
-      params: { month: month.toString() },
+      pathname: '/invoice',
+      params: { type: activeFilter, month: month.toString() },
     } as any);
   };
 

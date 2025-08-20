@@ -248,15 +248,16 @@ export const CashFlowChart = () => {
           data={chartData.filter((point, index, array) => {
             // 只保留y值大於0的點，以及與它們相連的點
             if (point.y >= 0) return true;
-            
+
             // 如果當前點小於0，但前一個點大於0，保留這個點以連接線段
             const prevPoint = index > 0 ? array[index - 1] : null;
             if (prevPoint && prevPoint.y >= 0) return true;
-            
+
             // 如果當前點小於0，但後一個點大於0，保留這個點以連接線段
-            const nextPoint = index < array.length - 1 ? array[index + 1] : null;
+            const nextPoint =
+              index < array.length - 1 ? array[index + 1] : null;
             if (nextPoint && nextPoint.y >= 0) return true;
-            
+
             return false;
           })}
           x="x"
@@ -266,21 +267,22 @@ export const CashFlowChart = () => {
           }}
           interpolation="linear"
         />
-        
+
         {/* 小於0的線段顯示紅色 */}
         <VictoryLine
           data={chartData.filter((point, index, array) => {
             // 只保留y值小於0的點，以及與它們相連的點
             if (point.y < 0) return true;
-            
+
             // 如果當前點大於等於0，但前一個點小於0，保留這個點以連接線段
             const prevPoint = index > 0 ? array[index - 1] : null;
             if (prevPoint && prevPoint.y < 0) return true;
-            
+
             // 如果當前點大於等於0，但後一個點小於0，保留這個點以連接線段
-            const nextPoint = index < array.length - 1 ? array[index + 1] : null;
+            const nextPoint =
+              index < array.length - 1 ? array[index + 1] : null;
             if (nextPoint && nextPoint.y < 0) return true;
-            
+
             return false;
           })}
           x="x"
@@ -322,7 +324,7 @@ export const CashFlowChart = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 16,
     backgroundColor: '#ffffff',
     borderRadius: 20,
     shadowColor: '#000',
