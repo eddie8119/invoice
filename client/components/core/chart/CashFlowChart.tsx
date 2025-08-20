@@ -242,15 +242,53 @@ export const CashFlowChart = () => {
           }}
         />
 
-        {/* 現金水位線 */}
+        {/* 現金水位線 - 分段顯示不同顏色 */}
+        {/* 大於0的線段顯示綠色 */}
         <VictoryLine
-          data={chartData}
+          data={chartData.filter((point, index, array) => {
+            // 只保留y值大於0的點，以及與它們相連的點
+            if (point.y >= 0) return true;
+            
+            // 如果當前點小於0，但前一個點大於0，保留這個點以連接線段
+            const prevPoint = index > 0 ? array[index - 1] : null;
+            if (prevPoint && prevPoint.y >= 0) return true;
+            
+            // 如果當前點小於0，但後一個點大於0，保留這個點以連接線段
+            const nextPoint = index < array.length - 1 ? array[index + 1] : null;
+            if (nextPoint && nextPoint.y >= 0) return true;
+            
+            return false;
+          })}
           x="x"
           y="y"
           style={{
             data: { stroke: '#00C896', strokeWidth: 3 },
           }}
-          interpolation="monotoneX"
+          interpolation="linear"
+        />
+        
+        {/* 小於0的線段顯示紅色 */}
+        <VictoryLine
+          data={chartData.filter((point, index, array) => {
+            // 只保留y值小於0的點，以及與它們相連的點
+            if (point.y < 0) return true;
+            
+            // 如果當前點大於等於0，但前一個點小於0，保留這個點以連接線段
+            const prevPoint = index > 0 ? array[index - 1] : null;
+            if (prevPoint && prevPoint.y < 0) return true;
+            
+            // 如果當前點大於等於0，但後一個點小於0，保留這個點以連接線段
+            const nextPoint = index < array.length - 1 ? array[index + 1] : null;
+            if (nextPoint && nextPoint.y < 0) return true;
+            
+            return false;
+          })}
+          x="x"
+          y="y"
+          style={{
+            data: { stroke: '#FF5252', strokeWidth: 3 },
+          }}
+          interpolation="linear"
         />
         <VictoryScatter
           data={chartData}

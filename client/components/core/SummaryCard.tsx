@@ -7,6 +7,8 @@ interface SummaryCardProps {
   amount: string;
   isError?: boolean;
   cardStyle?: object;
+  backgroundColor?: string;
+  textColor?: string;
   onPress?: () => void;
 }
 
@@ -15,15 +17,34 @@ export const SummaryCard = ({
   amount,
   isError = false,
   cardStyle,
+  backgroundColor,
+  textColor,
   onPress,
 }: SummaryCardProps) => {
   const colors = theme.colors.light;
 
   return (
-    <TouchableOpacity style={[styles.card, cardStyle]} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.card,
+        cardStyle,
+        backgroundColor ? { backgroundColor } : null,
+      ]}
+      onPress={onPress}
+    >
       <Text style={styles.label}>{label}</Text>
-      <Text style={[styles.amount, isError && { color: colors.error }]}>
-        <Text style={styles.dollarSign}>TWD$ </Text>
+      <Text
+        style={[
+          styles.amount,
+          isError && { color: colors.error },
+          textColor ? { color: textColor } : null,
+        ]}
+      >
+        <Text
+          style={[styles.dollarSign, textColor ? { color: textColor } : null]}
+        >
+          TWD${' '}
+        </Text>
         {amount}
       </Text>
     </TouchableOpacity>
@@ -46,7 +67,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: '#666',
     marginBottom: 8,
   },
   amount: {

@@ -2,6 +2,7 @@ import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
 import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
 import { InvoiceType } from '@/types/invoice';
+import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -12,6 +13,7 @@ interface CashFlowSummaryProps {
 
 export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
   const { monthlyBalance, isLoading } = useMonthlyBalance();
+  const { colors } = useTheme();
 
   // 獲取本月、下月和後月的數據
   const currentMonth = monthlyBalance.find(item => item.label === '本月');
@@ -47,6 +49,8 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
           label={`本月將${activeFilter}`}
           amount={getAmountByFilter(currentMonth)}
           cardStyle={styles.card}
+          backgroundColor={colors.primaryLightBlue}
+          textColor={'#FFFFFF'}
           onPress={() => {
             handleCardPress(currentMonth.month);
           }}

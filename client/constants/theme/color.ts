@@ -4,6 +4,7 @@ export const primary = {
   brand_light_green: '#DFF7E2',
   brand_green_white: '#F1FFF3',
   brand_main_blue: '#3299FF',
+  brand_light_blue: '#6DB6FE',
   brand_dark_blue: '#0080CC',
   brand_ocean_blue: '#0068FF',
 };
@@ -42,6 +43,7 @@ export const colors = {
     primaryLight: primary.brand_light_green,
     primaryGreenWhite: primary.brand_green_white,
     primaryMainBlue: primary.brand_main_blue,
+    primaryLightBlue: primary.brand_light_blue,
     primaryDarkBlue: primary.brand_dark_blue,
     primaryOceanBlue: primary.brand_ocean_blue,
 
