@@ -12,7 +12,6 @@ export const createContainerStyles = (colors: ExtendedTheme['colors']) =>
     },
     upperSection: {
       padding: theme.spacing.lg,
-      paddingTop: 0,
     },
     lowerSection: {
       flex: 1,

@@ -4,19 +4,14 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export type FilterOption = string;
 
-export interface FilterProps {
+export interface TabProps {
   options: FilterOption[];
   active: FilterOption;
   onChange: (filter: FilterOption) => void;
   rightIcon?: React.ReactNode;
 }
 
-export const Filter = ({
-  options,
-  active,
-  onChange,
-  rightIcon,
-}: FilterProps) => {
+export const Tab = ({ options, active, onChange, rightIcon }: TabProps) => {
   const colors = theme.colors.light;
 
   return (
@@ -59,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    // paddingVertical: 8,
   },
   filterContainer: {
     flexDirection: 'row',

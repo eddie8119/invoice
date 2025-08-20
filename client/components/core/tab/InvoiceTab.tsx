@@ -1,7 +1,7 @@
 import React from 'react';
-import { Filter, FilterOption } from '../filter/Filter';
+import { FilterOption, Tab } from './Tab';
 
-const statusOptions = ['應收帳款', '應付帳款'] as FilterOption[];
+const statusOptions: FilterOption[] = ['receivable', 'payable'];
 
 interface InvoiceTabProps {
   active: FilterOption;
@@ -10,6 +10,6 @@ interface InvoiceTabProps {
 
 export const InvoiceTab = ({ active, onFilterChange }: InvoiceTabProps) => {
   return (
-    <Filter options={statusOptions} active={active} onChange={onFilterChange} />
+    <Tab options={statusOptions} active={active} onChange={onFilterChange} />
   );
 };
