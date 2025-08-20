@@ -4,7 +4,7 @@ import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { useTheme } from '@react-navigation/native';
 import { useMemo } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 export default function TaxSavingGap() {
   const { monthlyBalance, isLoading } = useMonthlyBalance();
@@ -15,10 +15,6 @@ export default function TaxSavingGap() {
     [colors]
   );
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
-
   return (
     <View style={{ flex: 1 }}>
       <View style={containerStyles.upperSection}>
@@ -28,14 +24,8 @@ export default function TaxSavingGap() {
         style={containerStyles.lowerSection}
         contentContainerStyle={{ gap: 16 }}
       >
-        <TaxGapSummary isLoading={isLoading} monthlyTotals={monthlyBalance} />
+        <TaxGapSummary isLoading={isLoading} monthlyBalance={monthlyBalance} />
       </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginHorizontal: 4,
-  },
-});

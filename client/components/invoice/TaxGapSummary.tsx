@@ -6,12 +6,12 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 interface TaxGapSummaryProps {
-  monthlyTotals: any;
+  monthlyBalance: any;
   isLoading: boolean;
 }
 
 export const TaxGapSummary = ({
-  monthlyTotals,
+  monthlyBalance,
   isLoading,
 }: TaxGapSummaryProps) => {
   if (isLoading) {
@@ -49,9 +49,9 @@ export const TaxGapSummary = ({
           cardStyle={styles.card}
           onPress={() => {
             router.push({
-              pathname: `/invoice?type=receivable`,
-              params: { month: month.month.toString() },
-            } as any);
+              pathname: '/invoice',
+              params: { type: 'receivable', month: month.month.toString() },
+            });
           }}
         />
         <SummaryCard
@@ -60,9 +60,9 @@ export const TaxGapSummary = ({
           cardStyle={styles.card}
           onPress={() => {
             router.push({
-              pathname: `/invoice?type=payable`,
-              params: { month: month.month.toString() },
-            } as any);
+              pathname: '/invoice',
+              params: { type: 'payable', month: month.month.toString() },
+            });
           }}
         />
       </View>
@@ -71,7 +71,7 @@ export const TaxGapSummary = ({
 
   return (
     <FlatList
-      data={monthlyTotals}
+      data={monthlyBalance}
       renderItem={renderMonthItem}
       keyExtractor={(item, index) => `month-${index}`}
       showsVerticalScrollIndicator={false}
