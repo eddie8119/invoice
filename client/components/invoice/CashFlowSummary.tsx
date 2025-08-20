@@ -49,8 +49,6 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
           label={`本月將${activeFilter}`}
           amount={getAmountByFilter(currentMonth)}
           cardStyle={styles.card}
-          backgroundColor={colors.primaryLightBlue}
-          textColor={'#FFFFFF'}
           onPress={() => {
             handleCardPress(currentMonth.month);
           }}

@@ -17,10 +17,6 @@ export default function CashFlowPredict() {
     [colors]
   );
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
-
   return (
     <View style={{ flex: 1 }}>
       <View style={[containerStyles.upperSection, { gap: 16 }]}>
@@ -28,6 +24,7 @@ export default function CashFlowPredict() {
           label={`目前帳戶現金水位`}
           amount="20000"
           cardStyle={styles.card}
+          borderColor={colors.primaryLightBlue}
         />
         <CashFlowChart />
       </View>

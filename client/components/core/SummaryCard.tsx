@@ -8,6 +8,7 @@ interface SummaryCardProps {
   isError?: boolean;
   cardStyle?: object;
   backgroundColor?: string;
+  borderColor?: string;
   textColor?: string;
   onPress?: () => void;
 }
@@ -18,6 +19,7 @@ export const SummaryCard = ({
   isError = false,
   cardStyle,
   backgroundColor,
+  borderColor,
   textColor,
   onPress,
 }: SummaryCardProps) => {
@@ -29,6 +31,7 @@ export const SummaryCard = ({
         styles.card,
         cardStyle,
         backgroundColor ? { backgroundColor } : null,
+        borderColor ? { borderColor } : null,
       ]}
       onPress={onPress}
     >
