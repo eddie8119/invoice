@@ -30,7 +30,7 @@ export const EditInvoiceModal: React.FC<EditInvoiceModalProps> = ({
   const { submit, isSubmitting } = useSubmit({
     apiFunc: invoiceApi.updateInvoice,
     successMessage: '更新發票資訊成功',
-    successRedirectPath: '/(tabs)/accounts-receivable',
+    successRedirectPath: '/(tabs)/invoice',
   });
 
   const handleSave = async (data: InvoiceFormData) => {

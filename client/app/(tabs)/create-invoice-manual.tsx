@@ -17,7 +17,7 @@ export default function CreateInvoiceManual() {
   const { submit: handleSave, isSubmitting } = useSubmit({
     apiFunc: invoiceApi.createInvoice,
     successMessage: '新增發票成功',
-    successRedirectPath: '/(tabs)/accounts-receivable',
+    successRedirectPath: '/(tabs)/invoice',
   });
 
   const handleCancel = () => {

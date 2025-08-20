@@ -49,7 +49,7 @@ export const TaxGapSummary = ({
           cardStyle={styles.card}
           onPress={() => {
             router.push({
-              pathname: `/accounts-receivable`,
+              pathname: `/invoice?type=receivable`,
               params: { month: month.month.toString() },
             } as any);
           }}
@@ -60,7 +60,7 @@ export const TaxGapSummary = ({
           cardStyle={styles.card}
           onPress={() => {
             router.push({
-              pathname: `/accounts-payable`,
+              pathname: `/invoice?type=payable`,
               params: { month: month.month.toString() },
             } as any);
           }}

@@ -28,20 +28,12 @@ export const tabConfig: TabConfig[] = [
     route: '/',
   },
   {
-    name: '應收帳款',
-    route: '/accounts-receivable',
-  },
-  {
     name: '發票',
     route: '/invoice',
   },
   {
     name: '掃描',
     route: '/scanner',
-  },
-  {
-    name: '應付帳款',
-    route: '/accounts-payable',
   },
   {
     name: '收益報告',
@@ -85,10 +77,10 @@ export const bottomTabConfig: BottomTabConfig[] = [
     route: '/',
   },
   {
-    name: '應收帳款',
-    title: '應收帳款',
-    icon: require('@/assets/icons/pig.png'),
-    route: '/accounts-receivable',
+    name: '現金水位',
+    title: '現金水位',
+    icon: require('@/assets/icons/chartPieSlice.png'),
+    route: '/cash-flow-predict',
   },
   {
     name: '掃描',
@@ -97,10 +89,10 @@ export const bottomTabConfig: BottomTabConfig[] = [
     route: '/scanner',
   },
   {
-    name: '現金水位',
-    title: '現金水位',
-    icon: require('@/assets/icons/chartPieSlice.png'),
-    route: '/cash-flow-predict',
+    name: '發票',
+    title: '發票',
+    icon: require('@/assets/icons/pig.png'),
+    route: '/invoice',
   },
   {
     name: '稅收比',
@@ -146,13 +138,6 @@ export const menuItems: MenuItem[] = [
     icon: 'document-text',
     color: '#3F51B5',
     url: '/companies-overview',
-  },
-  {
-    id: '2',
-    title: '應付帳款',
-    icon: 'document-text',
-    color: '#3F51B5',
-    url: '/accounts-payable',
   },
   {
     id: '3',
