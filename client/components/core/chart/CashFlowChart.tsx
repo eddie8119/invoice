@@ -1,7 +1,7 @@
 import Loading from '@/components/core/Loading';
 import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
 import React, { useMemo } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import {
   VictoryAxis,
   VictoryChart,
@@ -203,7 +203,7 @@ export const CashFlowChart = () => {
   if (!chartData || chartData.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>現金水位預測</Text>
+        {/* <Text style={styles.title}>現金水位預測</Text> */}
         <View style={styles.emptyChart}>
           <Loading />
         </View>
@@ -213,11 +213,11 @@ export const CashFlowChart = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>現金水位預測</Text>
+      {/* <Text style={styles.title}>現金水位預測</Text> */}
 
       <VictoryChart
         width={screenWidth}
-        height={240}
+        height={350}
         theme={VictoryTheme.material}
         domainPadding={{ y: 25 }}
         domain={{ x: [0.8, 3.2] }} // 設定 x 軸範圍為三個月，並移除左側空白
@@ -242,53 +242,13 @@ export const CashFlowChart = () => {
           }}
         />
 
-        {/* 現金水位線 - 分段顯示不同顏色 */}
-        {/* 大於0的線段顯示綠色 */}
+        {/* 現金水位線 */}
         <VictoryLine
-          data={chartData.filter((point, index, array) => {
-            // 只保留y值大於0的點，以及與它們相連的點
-            if (point.y >= 0) return true;
-
-            // 如果當前點小於0，但前一個點大於0，保留這個點以連接線段
-            const prevPoint = index > 0 ? array[index - 1] : null;
-            if (prevPoint && prevPoint.y >= 0) return true;
-
-            // 如果當前點小於0，但後一個點大於0，保留這個點以連接線段
-            const nextPoint =
-              index < array.length - 1 ? array[index + 1] : null;
-            if (nextPoint && nextPoint.y >= 0) return true;
-
-            return false;
-          })}
+          data={chartData}
           x="x"
           y="y"
           style={{
             data: { stroke: '#00C896', strokeWidth: 3 },
-          }}
-          interpolation="linear"
-        />
-
-        {/* 小於0的線段顯示紅色 */}
-        <VictoryLine
-          data={chartData.filter((point, index, array) => {
-            // 只保留y值小於0的點，以及與它們相連的點
-            if (point.y < 0) return true;
-
-            // 如果當前點大於等於0，但前一個點小於0，保留這個點以連接線段
-            const prevPoint = index > 0 ? array[index - 1] : null;
-            if (prevPoint && prevPoint.y < 0) return true;
-
-            // 如果當前點大於等於0，但後一個點小於0，保留這個點以連接線段
-            const nextPoint =
-              index < array.length - 1 ? array[index + 1] : null;
-            if (nextPoint && nextPoint.y < 0) return true;
-
-            return false;
-          })}
-          x="x"
-          y="y"
-          style={{
-            data: { stroke: '#FF5252', strokeWidth: 3 },
           }}
           interpolation="linear"
         />
@@ -324,9 +284,8 @@ export const CashFlowChart = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     backgroundColor: '#ffffff',
-    borderRadius: 20,
+    // borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.12,
@@ -344,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   emptyChart: {
-    height: 240,
+    height: 340,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f8f8f8',

@@ -1,12 +1,11 @@
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
 import { PayFilter } from '@/components/core/filter/PayFilter';
-import { SummaryCard } from '@/components/core/SummaryCard';
 import { CashFlowSummary } from '@/components/invoice/CashFlowSummary';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 
 export default function CashFlowPredict() {
   const [activeFilter, setActiveFilter] = useState<InvoiceType>('receivable');
@@ -17,17 +16,14 @@ export default function CashFlowPredict() {
     [colors]
   );
 
+  const calcHeight = Dimensions.get('window').height - 326 - 80 - 56;
+
   return (
     <ScrollView style={{ flex: 1 }}>
-      <View style={[containerStyles.upperSection, { gap: 16 }]}>
-        <SummaryCard
-          label={`目前帳戶現金水位`}
-          amount="20000"
-          cardStyle={styles.card}
-          borderColor={colors.primaryLightBlue}
-        />
+      <View style={{ height: calcHeight }}>
         <CashFlowChart />
       </View>
+
       <View style={[containerStyles.lowerSection, { gap: 16 }]}>
         <PayFilter
           activeFilter={activeFilter}
@@ -39,9 +35,3 @@ export default function CashFlowPredict() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    marginHorizontal: 4,
-  },
-});
