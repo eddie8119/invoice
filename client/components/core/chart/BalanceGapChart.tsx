@@ -60,22 +60,22 @@ export const BalanceGapChart = ({
         <VictoryGroup offset={20}>
           <VictoryBar
             data={incomeData}
-            style={{ data: { fill: '#0068FF', width: 12 } }}
+            style={{ data: { fill: '#00D09E', width: 12 } }}
           />
           <VictoryBar
             data={expenseData}
-            style={{ data: { fill: '#00D09E', width: 12 } }}
+            style={{ data: { fill: '#0068FF', width: 12 } }}
           />
         </VictoryGroup>
       </VictoryChart>
 
       <View style={styles.legend}>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: '#0068FF' }]} />
+          <View style={[styles.legendColor, { backgroundColor: '#00D09E' }]} />
           <Text style={styles.legendText}>收入</Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, { backgroundColor: '#00D09E' }]} />
+          <View style={[styles.legendColor, { backgroundColor: '#0068FF' }]} />
           <Text style={styles.legendText}>支出</Text>
         </View>
       </View>

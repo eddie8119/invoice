@@ -43,11 +43,7 @@ export const SummaryCard = ({
           textColor ? { color: textColor } : null,
         ]}
       >
-        <Text
-          style={[styles.dollarSign, textColor ? { color: textColor } : null]}
-        >
-          TWD${' '}
-        </Text>
+        <Text style={[styles.dollarSign]}>TWD$ </Text>
         {amount}
       </Text>
     </TouchableOpacity>
@@ -62,7 +58,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
-    shadowRadius: 4,
+    shadowRadius: 2,
     elevation: 2,
     flex: 1,
     justifyContent: 'center',
@@ -79,6 +75,6 @@ const styles = StyleSheet.create({
   },
   dollarSign: {
     fontSize: 16,
-    color: theme.colors.light.primary,
+    color: 'gray',
   },
 });

@@ -197,70 +197,72 @@ export const CashFlowChart = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <VictoryChart
-        width={screenWidth}
-        height={350}
-        theme={VictoryTheme.material}
-        domainPadding={{ y: 20 }}
-        domain={{ x: [0.8, 3.2] }} // 設定 x 軸範圍為三個月，並移除左側空白
-        padding={{ top: 20, bottom: 20, left: 50, right: 20 }}
-      >
-        <VictoryAxis
-          tickValues={[1, 2, 3]}
-          tickFormat={threeMonthLabels}
-          style={{
-            tickLabels: { fontSize: 12, fontWeight: 'bold', fill: '#555' },
-            grid: { stroke: '#ECECEC' },
-            axis: { stroke: '#CCCCCC', strokeWidth: 1 },
-          }}
-        />
-        <VictoryAxis
-          dependentAxis
-          tickFormat={(t: number) => `$${(t / 1000).toFixed(0)}k`}
-          style={{
-            tickLabels: { fontSize: 11, fill: '#555' },
-            grid: { stroke: '#ECECEC', strokeDasharray: '5,5' },
-            axis: { stroke: '#CCCCCC', strokeWidth: 1 },
-          }}
-        />
+    <View>
+      <View style={styles.container}>
+        <VictoryChart
+          width={screenWidth}
+          height={350}
+          theme={VictoryTheme.material}
+          domainPadding={{ y: 20 }}
+          domain={{ x: [0.8, 3.2] }} // 設定 x 軸範圍為三個月，並移除左側空白
+          padding={{ top: 20, bottom: 20, left: 50, right: 20 }}
+        >
+          <VictoryAxis
+            tickValues={[1, 2, 3]}
+            tickFormat={threeMonthLabels}
+            style={{
+              tickLabels: { fontSize: 12, fontWeight: 'bold', fill: '#555' },
+              grid: { stroke: '#ECECEC' },
+              axis: { stroke: '#CCCCCC', strokeWidth: 1 },
+            }}
+          />
+          <VictoryAxis
+            dependentAxis
+            tickFormat={(t: number) => `$${(t / 1000).toFixed(0)}k`}
+            style={{
+              tickLabels: { fontSize: 11, fill: '#555' },
+              grid: { stroke: '#ECECEC', strokeDasharray: '5,5' },
+              axis: { stroke: '#CCCCCC', strokeWidth: 1 },
+            }}
+          />
 
-        {/* 現金水位線 */}
-        <VictoryLine
-          data={chartData}
-          x="x"
-          y="y"
-          style={{
-            data: { stroke: '#00C896', strokeWidth: 3 },
-          }}
-          interpolation="linear"
-        />
-        <VictoryScatter
-          data={chartData}
-          x="x"
-          y="y"
-          size={6}
-          style={{
-            data: { fill: '#00C896', stroke: 'white', strokeWidth: 1 },
-          }}
-          labels={({ datum }) => datum.label}
-          labelComponent={
-            <VictoryTooltip
-              flyoutStyle={{
-                fill: 'white',
-                stroke: '#DDDDDD',
-                strokeWidth: 1,
-                filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.2))',
-              }}
-              style={{ fontSize: 11, fill: '#333' }}
-              cornerRadius={4}
-              pointerLength={8}
-              flyoutPadding={{ top: 6, bottom: 6, left: 10, right: 10 }}
-              renderInPortal={true}
-            />
-          }
-        />
-      </VictoryChart>
+          {/* 現金水位線 */}
+          <VictoryLine
+            data={chartData}
+            x="x"
+            y="y"
+            style={{
+              data: { stroke: '#00C896', strokeWidth: 3 },
+            }}
+            interpolation="linear"
+          />
+          <VictoryScatter
+            data={chartData}
+            x="x"
+            y="y"
+            size={6}
+            style={{
+              data: { fill: '#00C896', stroke: 'white', strokeWidth: 1 },
+            }}
+            labels={({ datum }) => datum.label}
+            labelComponent={
+              <VictoryTooltip
+                flyoutStyle={{
+                  fill: 'white',
+                  stroke: '#DDDDDD',
+                  strokeWidth: 1,
+                  filter: 'drop-shadow(0px 2px 3px rgba(0,0,0,0.2))',
+                }}
+                style={{ fontSize: 11, fill: '#333' }}
+                cornerRadius={4}
+                pointerLength={8}
+                flyoutPadding={{ top: 6, bottom: 6, left: 10, right: 10 }}
+                renderInPortal={true}
+              />
+            }
+          />
+        </VictoryChart>
+      </View>
       <CashFlowWarning negativeDates={negativeCashFlowDates} />
     </View>
   );

@@ -1,7 +1,7 @@
 import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
+import { theme } from '@/constants/theme';
 import { router } from 'expo-router';
-
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
@@ -14,6 +14,8 @@ export const TaxGapSummary = ({
   monthlyBalance,
   isLoading,
 }: TaxGapSummaryProps) => {
+  const colors = theme.colors.light;
+
   if (isLoading) {
     return <Loading />;
   }
@@ -39,6 +41,11 @@ export const TaxGapSummary = ({
         label={`${month.label}收支差額`}
         amount={formatAmount(month.balanceGap)}
         cardStyle={styles.card}
+        textColor={
+          Number(formatAmount(month.balanceGap)) < 0
+            ? colors.error
+            : colors.primary
+        }
       />
 
       {/* 收入和支出卡片 */}
@@ -47,6 +54,7 @@ export const TaxGapSummary = ({
           label={`${month.label}收入`}
           amount={formatAmount(month.receivableTotal)}
           cardStyle={styles.card}
+          textColor={theme.colors.light.primary}
           onPress={() => {
             router.push({
               pathname: '/invoice',
