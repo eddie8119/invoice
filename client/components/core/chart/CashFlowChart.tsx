@@ -1,4 +1,5 @@
 import Loading from '@/components/core/Loading';
+import { CashFlowWarning } from '@/components/core/chart/CashFlowWarning';
 import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
 import React, { useMemo } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
@@ -199,11 +200,20 @@ export const CashFlowChart = () => {
     return chartPoints;
   }, [monthlyDataPoints]);
 
+  // 檢查是否有現金流為負的日期
+  const negativeCashFlowDates = useMemo(() => {
+    if (!monthlyDataPoints) return [];
+
+    return monthlyDataPoints
+      .filter(point => point.y < 0)
+      .map(point => point.dateStr)
+      .filter(date => date !== '現在'); // 排除「現在」標籤
+  }, [monthlyDataPoints]);
+
   // 檢查是否有數據
   if (!chartData || chartData.length === 0) {
     return (
       <View style={styles.container}>
-        {/* <Text style={styles.title}>現金水位預測</Text> */}
         <View style={styles.emptyChart}>
           <Loading />
         </View>
@@ -213,15 +223,13 @@ export const CashFlowChart = () => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>現金水位預測</Text> */}
-
       <VictoryChart
         width={screenWidth}
         height={350}
         theme={VictoryTheme.material}
-        domainPadding={{ y: 25 }}
+        domainPadding={{ y: 20 }}
         domain={{ x: [0.8, 3.2] }} // 設定 x 軸範圍為三個月，並移除左側空白
-        padding={{ top: 20, bottom: 40, left: 50, right: 20 }}
+        padding={{ top: 20, bottom: 20, left: 50, right: 20 }}
       >
         <VictoryAxis
           tickValues={[1, 2, 3]}
@@ -278,6 +286,7 @@ export const CashFlowChart = () => {
           }
         />
       </VictoryChart>
+      <CashFlowWarning negativeDates={negativeCashFlowDates} />
     </View>
   );
 };
@@ -285,25 +294,14 @@ export const CashFlowChart = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff',
-    // borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.12,
     shadowRadius: 6,
     elevation: 5,
   },
-  title: {
-    fontSize: 20,
-    // fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#333',
-  },
-  chart: {
-    marginVertical: 10,
-    borderRadius: 16,
-  },
   emptyChart: {
-    height: 340,
+    height: 350,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f8f8f8',
