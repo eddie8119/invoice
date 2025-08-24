@@ -44,7 +44,7 @@ export const InvoiceOverviewScreenLayout = ({
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       <View style={containerStyles.upperSection}>
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
@@ -71,6 +71,6 @@ export const InvoiceOverviewScreenLayout = ({
           )}
         </ScrollView>
       </View>
-    </View>
+    </ScrollView>
   );
 };

@@ -18,7 +18,7 @@ export default function CashFlowPredict() {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       <View style={[containerStyles.upperSection, { gap: 16 }]}>
         <SummaryCard
           label={`目前帳戶現金水位`}
@@ -28,18 +28,15 @@ export default function CashFlowPredict() {
         />
         <CashFlowChart />
       </View>
-      <ScrollView
-        style={containerStyles.lowerSection}
-        contentContainerStyle={{ gap: 16 }}
-      >
+      <View style={[containerStyles.lowerSection, { gap: 16 }]}>
         <PayFilter
           activeFilter={activeFilter}
           setActiveFilter={setActiveFilter}
           onFilterChange={() => {}}
         />
         <CashFlowSummary activeFilter={activeFilter} />
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 

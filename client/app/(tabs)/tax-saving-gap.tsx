@@ -16,16 +16,13 @@ export default function TaxSavingGap() {
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }}>
       <View style={containerStyles.upperSection}>
         <BalanceGapChart isLoading={isLoading} monthlyTotals={monthlyBalance} />
       </View>
-      <ScrollView
-        style={containerStyles.lowerSection}
-        contentContainerStyle={{ gap: 16 }}
-      >
+      <View style={[containerStyles.lowerSection, { gap: 16 }]}>
         <TaxGapSummary isLoading={isLoading} monthlyBalance={monthlyBalance} />
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
