@@ -16,7 +16,7 @@ export default function TaxSavingGap() {
   );
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={containerStyles.upperSection}>
         <BalanceGapChart isLoading={isLoading} monthlyTotals={monthlyBalance} />
       </View>

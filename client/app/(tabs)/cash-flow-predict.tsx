@@ -19,7 +19,7 @@ export default function CashFlowPredict() {
   const calcHeight = Dimensions.get('window').height - 326 - 80 - 56;
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={{ height: calcHeight }}>
         <CashFlowChart />
       </View>

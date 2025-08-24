@@ -44,12 +44,12 @@ export const InvoiceOverviewScreenLayout = ({
   );
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={containerStyles.upperSection}>
         <InvoiceSummary unpaidTotal={unpaidTotal} overdueTotal={overdueTotal} />
       </View>
 
-      <View style={[containerStyles.lowerSection, { gap: 16 }]}>
+      <View style={[containerStyles.lowerSection, { flex: 1 }]}>
         <MounthFilter value={selectedMonth} onChange={setSelectedMonth} />
 
         <InvoiceFilter onFilterChange={handleFilterChange} />
@@ -57,7 +57,7 @@ export const InvoiceOverviewScreenLayout = ({
           active={activeInvoiceNumberFilter}
           onFilterChange={handleInvoiceNumberFilterChange}
         />
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={{ flex: 1 }}>
           {isLoading ? (
             <Loading />
           ) : invoices.length === 0 ? (
@@ -69,7 +69,7 @@ export const InvoiceOverviewScreenLayout = ({
               onStatusToggle={handleStatusToggle}
             />
           )}
-        </ScrollView>
+        </View>
       </View>
     </ScrollView>
   );
