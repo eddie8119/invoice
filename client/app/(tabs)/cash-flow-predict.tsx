@@ -5,7 +5,7 @@ import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 export default function CashFlowPredict() {
   const [activeFilter, setActiveFilter] = useState<InvoiceType>('receivable');
@@ -16,11 +16,9 @@ export default function CashFlowPredict() {
     [colors]
   );
 
-  const calcHeight = Dimensions.get('window').height - 326 - 80 - 56;
-
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={{ height: calcHeight }}>
+      <View style={{ marginBottom: 32 }}>
         <CashFlowChart />
       </View>
 

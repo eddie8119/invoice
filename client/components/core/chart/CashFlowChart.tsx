@@ -19,19 +19,6 @@ export const CashFlowChart = () => {
 
   // 從 monthlyInvoices 計算現金流數據
   const { dailyCashFlow, threeMonthLabels, monthlyDataPoints } = useMemo(() => {
-    // 定義數據點的類型
-    interface DataPoint {
-      x: number;
-      y: number;
-      label: string;
-      date: string;
-    }
-
-    // 定義月份數據的類型
-    interface MonthlyPoints {
-      [key: number]: DataPoint[];
-    }
-
     // 生成三個月的標籤（當前月份開始的三個月）
     const today = new Date();
     const currentMonth = today.getMonth();
@@ -40,10 +27,6 @@ export const CashFlowChart = () => {
     // 創建月份範圍的開始和結束日期
     const monthStart = new Date(currentYear, currentMonth, 1);
     const monthEnd = new Date(currentYear, currentMonth + 3, 0); // 三個月後的最後一天
-    const totalDays =
-      Math.floor(
-        (monthEnd.getTime() - monthStart.getTime()) / (1000 * 60 * 60 * 24)
-      ) + 1;
 
     // 生成三個月的標籤
     const threeMonths: string[] = [];
@@ -177,14 +160,6 @@ export const CashFlowChart = () => {
 
   // 為 Victory 圖表準備數據
   const chartData = useMemo(() => {
-    // 定義數據點的類型
-    interface DataPoint {
-      x: number;
-      y: number;
-      label: string;
-      dateStr: string;
-    }
-
     // 將數據點排序
     const sortedPoints = [...monthlyDataPoints];
     sortedPoints.sort((a, b) => a.x - b.x);

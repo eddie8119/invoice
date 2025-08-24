@@ -1,10 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import { CashFlowWarningProps } from '@/types/chart';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-interface CashFlowWarningProps {
-  negativeDates: string[];
-}
 
 export const CashFlowWarning: React.FC<CashFlowWarningProps> = ({ negativeDates }) => {
   if (negativeDates.length === 0) return null;
