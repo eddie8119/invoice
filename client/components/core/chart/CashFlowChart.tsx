@@ -263,7 +263,9 @@ export const CashFlowChart = () => {
           />
         </VictoryChart>
       </View>
-      <CashFlowWarning negativeDates={negativeCashFlowDates} />
+      <View style={{ paddingHorizontal: 0 }}>
+        <CashFlowWarning negativeDates={negativeCashFlowDates} />
+      </View>
     </View>
   );
 };

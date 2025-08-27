@@ -1,5 +1,6 @@
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
 import { PayFilter } from '@/components/core/filter/PayFilter';
+import { SummaryCard } from '@/components/core/SummaryCard';
 import { CashFlowSummary } from '@/components/invoice/CashFlowSummary';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
@@ -18,11 +19,14 @@ export default function CashFlowPredict() {
 
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={{ marginBottom: 32 }}>
-        <CashFlowChart />
-      </View>
-
       <View style={[containerStyles.lowerSection, { gap: 16 }]}>
+        <SummaryCard
+          label={`今日現金流`}
+          amount="2000"
+          cardStyle={{}}
+          onPress={() => {}}
+        />
+        <CashFlowChart />
         <PayFilter
           activeFilter={activeFilter}
           setActiveFilter={setActiveFilter}
