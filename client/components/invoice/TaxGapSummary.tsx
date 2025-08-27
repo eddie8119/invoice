@@ -1,8 +1,10 @@
 import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
+import { RevenueDetailModal } from '@/components/Modal/RevenueDetailModal';
 import { theme } from '@/constants/theme';
+import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 interface TaxGapSummaryProps {
@@ -15,6 +17,11 @@ export const TaxGapSummary = ({
   isLoading,
 }: TaxGapSummaryProps) => {
   const colors = theme.colors.light;
+  const { monthlyInvoices } = useMonthlyInvoices();
+
+  const [revenueDetailModalVisible, setRevenueDetailModalVisible] =
+    useState(false);
+  const [selectedMonthData, setSelectedMonthData] = useState<any>(undefined);
 
   if (isLoading) {
     return <Loading />;
@@ -46,6 +53,10 @@ export const TaxGapSummary = ({
             ? colors.error
             : colors.primary
         }
+        onPress={() => {
+          setSelectedMonthData(monthlyInvoices[index]);
+          setRevenueDetailModalVisible(true);
+        }}
       />
 
       {/* 收入和支出卡片 */}
@@ -78,13 +89,20 @@ export const TaxGapSummary = ({
   );
 
   return (
-    <FlatList
-      data={monthlyBalance}
-      renderItem={renderMonthItem}
-      keyExtractor={(item, index) => `month-${index}`}
-      showsVerticalScrollIndicator={false}
-      ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
-    />
+    <>
+      <FlatList
+        data={monthlyBalance}
+        renderItem={renderMonthItem}
+        keyExtractor={(item, index) => `month-${index}`}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View style={{ height: 32 }} />}
+      />
+      <RevenueDetailModal
+        visible={revenueDetailModalVisible}
+        selectedMonthData={selectedMonthData}
+        onClose={() => setRevenueDetailModalVisible(false)}
+      />
+    </>
   );
 };
 
