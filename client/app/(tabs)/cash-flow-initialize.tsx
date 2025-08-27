@@ -1,4 +1,4 @@
-import { CashFlowInit } from '@/components/invoice/CashFlowInit';
+import { CashFlowInit } from '@/components/cash/CashFlowInit';
 import { useSubmit } from '@/hooks/useSubmit';
 import { invoiceApi } from '@/services/api/invoice';
 import { createContainerStyles } from '@/style/layouts/containers';
