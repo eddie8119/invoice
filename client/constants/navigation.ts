@@ -36,19 +36,15 @@ export const tabConfig: TabConfig[] = [
     route: '/scanner',
   },
   {
-    name: '收益報告',
-    route: '/invoice-report',
-  },
-  {
     name: '初始現金水位',
     route: '/cash-flow-initialize',
   },
   {
-    name: '現金水位預測',
+    name: '現金水位',
     route: '/cash-flow-predict',
   },
   {
-    name: '稅收比',
+    name: '收益比',
     route: '/tax-saving-gap',
   },
   {
@@ -66,6 +62,10 @@ export const tabConfig: TabConfig[] = [
   {
     name: '公司管理',
     route: '/company-overview',
+  },
+  {
+    name: '專案合約',
+    route: '/project-contract',
   },
 ];
 
@@ -95,8 +95,8 @@ export const bottomTabConfig: BottomTabConfig[] = [
     route: '/invoice',
   },
   {
-    name: '稅收比',
-    title: '稅收比',
+    name: '收益比',
+    title: '收益比',
     icon: require('@/assets/icons/chartPieSlice.png'),
     route: '/tax-saving-gap',
   },
@@ -120,34 +120,34 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: '2',
-    title: '現金水位預測',
+    title: '現金水位',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/cash-flow-predict',
   },
   {
     id: '3',
-    title: '稅收比',
+    title: '收益比',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/tax-saving-gap',
   },
   {
-    id: '3',
+    id: '4',
+    title: '專案合約',
+    icon: 'document-text',
+    color: '#3F51B5',
+    url: '/project-contract',
+  },
+  {
+    id: '5',
     title: '廠商名列表',
     icon: 'document-text',
     color: '#3F51B5',
     url: '/companies-overview',
   },
   {
-    id: '3',
-    title: '收益報告',
-    icon: 'document-text',
-    color: '#3F51B5',
-    url: '/invoice-report',
-  },
-  {
-    id: '4',
+    id: '6',
     title: '設定',
     icon: 'document-text',
     color: '#3F51B5',

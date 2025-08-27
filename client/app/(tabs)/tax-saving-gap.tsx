@@ -1,5 +1,5 @@
+import { TaxGapSummary } from '@/components/cash/TaxGapSummary';
 import { BalanceGapChart } from '@/components/core/chart/BalanceGapChart';
-import { TaxGapSummary } from '@/components/invoice/TaxGapSummary';
 import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { useTheme } from '@react-navigation/native';
