@@ -30,10 +30,6 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
     } as any);
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   // 根據 activeFilter 選擇顯示的金額屬性
   const getAmountByFilter = (item: any) => {
     if (!item) return '0';
@@ -42,6 +38,13 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
       : item.payableTotal.toString();
   };
 
+  const textColor: string | undefined =
+    activeFilter === 'receivable' ? colors.primary : undefined;
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
       {currentMonth && (
@@ -49,6 +52,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
           label={`本月將${activeFilter}`}
           amount={getAmountByFilter(currentMonth)}
           cardStyle={styles.card}
+          textColor={textColor}
           onPress={() => {
             handleCardPress(currentMonth.month);
           }}
@@ -66,6 +70,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
             label={`下月將${activeFilter}`}
             amount={getAmountByFilter(nextMonth)}
             cardStyle={styles.card}
+            textColor={textColor}
             onPress={() => {
               handleCardPress(nextMonth.month);
             }}
@@ -76,6 +81,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
             label={`${futureMonth.label}將${activeFilter}`}
             amount={getAmountByFilter(futureMonth)}
             cardStyle={styles.card}
+            textColor={textColor}
             onPress={() => {
               handleCardPress(futureMonth.month);
             }}

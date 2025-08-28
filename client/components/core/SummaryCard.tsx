@@ -34,6 +34,8 @@ export const SummaryCard = ({
         borderColor ? { borderColor } : null,
       ]}
       onPress={onPress}
+      activeOpacity={onPress ? 0.2 : 1}
+      disabled={!onPress}
     >
       <Text style={styles.label}>{label}</Text>
       <Text

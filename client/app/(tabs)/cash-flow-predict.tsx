@@ -20,12 +20,7 @@ export default function CashFlowPredict() {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={[containerStyles.lowerSection, { gap: 16 }]}>
-        <SummaryCard
-          label={`今日現金流`}
-          amount="2000"
-          cardStyle={{}}
-          onPress={() => {}}
-        />
+        <SummaryCard label={`今日即時現金流`} amount="2000" cardStyle={{}} />
         <CashFlowChart />
         <PayFilter
           activeFilter={activeFilter}

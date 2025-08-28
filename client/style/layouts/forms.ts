@@ -79,7 +79,7 @@ export const createFormStyles = (colors: ExtendedTheme['colors']) => {
     // 有在使用
     textarea: {
       ...inputBase,
-      height: 160,
+      height: 150,
       padding: 16,
       borderRadius: 16,
       textAlignVertical: 'top',
