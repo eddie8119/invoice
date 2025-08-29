@@ -69,7 +69,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
 
   const handleAddItem = () => {
     append({
-      installmentNumber: undefined,
+      installmentOrder: undefined,
       percentage: undefined,
       amount: undefined,
       paymentDate: undefined,
@@ -146,7 +146,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
             const currentItem = fields[index];
             let processedValue: string | number | undefined = value;
 
-            if (field === 'installmentNumber' || field === 'percentage') {
+            if (field === 'installmentOrder' || field === 'percentage') {
               const num = parseFloat(value);
               // Use undefined for empty/invalid to trigger 'required' validation
               processedValue = isNaN(num) ? undefined : num;
