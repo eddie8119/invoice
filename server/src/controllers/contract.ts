@@ -56,7 +56,73 @@ export const getContracts = async (req: Request, res: Response) => {
   }
 };
 
-export const getContract = async () => {};
+export const getContract = async (req: Request, res: Response) => {
+  try {
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
+
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Contract ID is required",
+      });
+    }
+
+    const { data: contract, error } = await supabase
+      .from("Contracts")
+      .select(
+        `
+        id,
+        project_name,
+        contract_number,
+        contract_amount,
+        note,
+        created_at,
+        user_id,
+        installments:Installments(
+            id,
+            installment_order,
+            percentage,
+            amount,
+            payment_date
+        )
+      `
+      )
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        return res.status(404).json({
+          success: false,
+          message: "Contract not found",
+        });
+      }
+
+      console.error("Error fetching contract:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch contract",
+        error: error.message,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: camelcaseKeys(contract, { deep: true }),
+    });
+  } catch (error: any) {
+    console.error("Error in getContract:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred",
+      error: error.message,
+    });
+  }
+};
 
 export const createContract = async (req: Request, res: Response) => {
   try {
@@ -183,6 +249,250 @@ export const createContract = async (req: Request, res: Response) => {
   }
 };
 
-export const updateContract = async () => {};
+export const updateContract = async (req: Request, res: Response) => {
+  try {
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
 
-export const deleteContract = async () => {};
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Contract ID is required",
+      });
+    }
+
+    // 檢查合約是否存在且屬於當前用戶
+    const { data: existingContract, error: fetchError } = await supabase
+      .from("Contracts")
+      .select("id")
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError) {
+      if (fetchError.code === "PGRST116") {
+        return res.status(404).json({
+          success: false,
+          message: "Contract not found or you don't have permission to update it",
+        });
+      }
+
+      console.error("Error fetching contract:", fetchError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch contract",
+        error: fetchError.message,
+      });
+    }
+
+    // 轉換請求數據為 snake_case
+    const snakeCaseData = snakecaseKeys(req.body, { deep: true });
+    const {
+      project_name,
+      contract_number,
+      contract_amount,
+      note,
+      installments,
+    } = snakeCaseData;
+
+    // 更新合約基本信息
+    const { error: updateError } = await supabase
+      .from("Contracts")
+      .update({
+        project_name,
+        contract_number,
+        contract_amount,
+        note,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (updateError) {
+      console.error("Error updating contract:", updateError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update contract",
+        error: updateError.message,
+      });
+    }
+
+    // 如果提供了分期付款項目，則更新它們
+    if (installments && installments.length > 0) {
+      // 先刪除現有的分期付款項目
+      const { error: deleteError } = await supabase
+        .from("Installments")
+        .delete()
+        .eq("contract_id", id)
+        .eq("user_id", userId);
+
+      if (deleteError) {
+        console.error("Error deleting existing installments:", deleteError);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update installments",
+          error: deleteError.message,
+        });
+      }
+
+      // 添加新的分期付款項目
+      const installmentItems = installments.map((item: any) => {
+        const { installment_order, percentage, amount, payment_date } = item;
+        return {
+          user_id: userId,
+          contract_id: id,
+          installment_order,
+          percentage,
+          amount,
+          payment_date,
+        };
+      });
+
+      const { error: insertError } = await supabase
+        .from("Installments")
+        .insert(installmentItems);
+
+      if (insertError) {
+        console.error("Error inserting new installments:", insertError);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to update installments",
+          error: insertError.message,
+        });
+      }
+    }
+
+    // 獲取更新後的完整合約信息
+    const { data: updatedContract, error: fetchUpdatedError } = await supabase
+      .from("Contracts")
+      .select(
+        `
+        id,
+        project_name,
+        contract_number,
+        contract_amount,
+        note,
+        created_at,
+        user_id,
+        installments:Installments(
+            id,
+            installment_order,
+            percentage,
+            amount,
+            payment_date
+        )
+      `
+      )
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchUpdatedError) {
+      console.error("Error fetching updated contract:", fetchUpdatedError);
+      return res.status(500).json({
+        success: false,
+        message: "Contract updated but failed to fetch updated data",
+        error: fetchUpdatedError.message,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Contract updated successfully",
+      data: camelcaseKeys(updatedContract, { deep: true }),
+    });
+  } catch (error: any) {
+    console.error("Error in updateContract:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred",
+      error: error.message,
+    });
+  }
+};
+
+export const deleteContract = async (req: Request, res: Response) => {
+  try {
+    const userId = getUserIdOrUnauthorized(req, res);
+    if (!userId) return;
+
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Contract ID is required",
+      });
+    }
+
+    // 檢查合約是否存在且屬於當前用戶
+    const { data: existingContract, error: fetchError } = await supabase
+      .from("Contracts")
+      .select("id")
+      .eq("id", id)
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError) {
+      if (fetchError.code === "PGRST116") {
+        return res.status(404).json({
+          success: false,
+          message: "Contract not found or you don't have permission to delete it",
+        });
+      }
+
+      console.error("Error fetching contract:", fetchError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to fetch contract",
+        error: fetchError.message,
+      });
+    }
+
+    // 先刪除關聯的分期付款項目
+    const { error: deleteInstallmentsError } = await supabase
+      .from("Installments")
+      .delete()
+      .eq("contract_id", id)
+      .eq("user_id", userId);
+
+    if (deleteInstallmentsError) {
+      console.error("Error deleting installments:", deleteInstallmentsError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete installments",
+        error: deleteInstallmentsError.message,
+      });
+    }
+
+    // 刪除合約
+    const { error: deleteContractError } = await supabase
+      .from("Contracts")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
+
+    if (deleteContractError) {
+      console.error("Error deleting contract:", deleteContractError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete contract",
+        error: deleteContractError.message,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Contract deleted successfully",
+    });
+  } catch (error: any) {
+    console.error("Error in deleteContract:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred",
+      error: error.message,
+    });
+  }
+};
