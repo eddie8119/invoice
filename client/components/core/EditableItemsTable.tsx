@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ButtonText } from '../core/ButtonText';
-import { Heading } from '../core/Heading';
+import { ButtonText } from './ButtonText';
+import { Heading } from './Heading';
 
 interface Item {
   id: string;
@@ -19,16 +19,19 @@ interface Item {
   unitPrice: number;
 }
 
-interface EditableInvoiceItemsTableProps {
+interface EditableItemsTableProps {
   items: Item[];
   onItemChange: (index: number, field: keyof Item, value: any) => void;
   onAddItem: () => void;
   onRemoveItem: (index: number) => void;
 }
 
-export const EditableInvoiceItemsTable: React.FC<
-  EditableInvoiceItemsTableProps
-> = ({ items, onItemChange, onAddItem, onRemoveItem }) => {
+export const EditableItemsTable: React.FC<EditableItemsTableProps> = ({
+  items,
+  onItemChange,
+  onAddItem,
+  onRemoveItem,
+}) => {
   const { colors } = useTheme();
 
   return (

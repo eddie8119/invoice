@@ -2,9 +2,9 @@ import { ButtonText } from '@/components/core/ButtonText';
 import Loading from '@/components/core/Loading';
 import { EditContractModal } from '@/components/Modal/EditContractModal';
 import { t } from '@/i18n';
-import { companyApi } from '@/services/api/company';
+import { contractApi } from '@/services/api/contract';
 import { createContainerStyles } from '@/style/layouts/containers';
-import { CompanyDTO } from '@/types/company';
+import { ContractDTO } from '@/types/contract';
 import { useTheme } from '@react-navigation/native';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -12,7 +12,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 export default function ProjectContract() {
   const [editContractModalVisible, setEditContractModalVisible] =
     useState(false);
-  const [companies, setCompanies] = useState<CompanyDTO[]>([]);
+  const [contracts, setContracts] = useState<ContractDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,17 +23,17 @@ export default function ProjectContract() {
   );
 
   useEffect(() => {
-    const fetchCompanies = async () => {
-      const res = await companyApi.getCompanies();
+    const fetchContracts = async () => {
+      const res = await contractApi.getContracts();
       if (res.success && res.data) {
-        setCompanies(res.data);
+        setContracts(res.data);
         setLoading(false);
       } else {
-        setError(t('sign.error.fetchCompanies'));
+        setError(t('sign.error.fetchContracts'));
         setLoading(false);
       }
     };
-    fetchCompanies();
+    fetchContracts();
   }, []);
 
   if (loading) {
@@ -54,9 +54,9 @@ export default function ProjectContract() {
           <ButtonText
             style={[
               { alignSelf: 'flex-end' },
-              { backgroundColor: colors.primaryMainBlue },
+              { backgroundColor: colors.primaryMainBlue, width: '100%' },
             ]}
-            text="建立合約"
+            text="建立合約費用"
             variant="filled"
             size="medium"
             onPress={() => {

@@ -259,7 +259,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         />
 
         {/* 動態表單項目 */}
-        {/* <EditableInvoiceItemsTable
+        {/* <EditableItemsTable
           items={fields}
           onItemChange={(index, field, value) => {
             const currentItem = fields[index];

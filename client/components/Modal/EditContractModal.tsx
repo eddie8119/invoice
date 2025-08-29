@@ -3,12 +3,12 @@ import { BaseModal } from '@/components/core/BaseModal';
 import { useSubmit } from '@/hooks/useSubmit';
 import { invoiceApi } from '@/services/api/invoice';
 import { InvoiceFormData } from '@/types/invoice';
-import { CreateInvoiceSchema } from '@shared/schemas/createInvoice';
+import { CreateContractSchema } from '@shared/schemas/createContract';
 import React from 'react';
 
 export interface EditContractModalProps {
   visible: boolean;
-  contractData?: CreateInvoiceSchema;
+  contractData?: CreateContractSchema;
   onClose: () => void;
 }
 
@@ -17,7 +17,7 @@ export const EditContractModal: React.FC<EditContractModalProps> = ({
   contractData,
   onClose,
 }) => {
-  const initialData: CreateInvoiceSchema = {
+  const initialData: CreateContractSchema = {
     ...contractData,
   };
 
