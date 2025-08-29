@@ -44,7 +44,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     resolver: zodResolver(createInvoiceSchema),
     mode: 'onChange',
     defaultValues: {
-      caseName: '',
+      projectName: '',
       company: '',
       invoiceNumber: '',
       totalAmount: undefined,
@@ -108,14 +108,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
-          name="caseName"
+          name="projectName"
           render={({ field: { onChange, value } }) => (
             <Input
               label="專案名稱"
               placeholder="輸入專案名稱"
               value={value}
               onChangeText={onChange}
-              error={errors.caseName?.message}
+              error={errors.projectName?.message}
             />
           )}
         />

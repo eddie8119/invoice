@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createContractSchema = z.object({
-  caseName: z.string().min(1, "專案名稱為必填"),
+  projectName: z.string().min(1, "專案名稱為必填"),
   contractNumber: z.string().optional(),
   contractAmount: z.number().min(1, "合約總金額為必填"),
   note: z.string().optional(),
