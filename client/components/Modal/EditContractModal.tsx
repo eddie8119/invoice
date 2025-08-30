@@ -1,18 +1,19 @@
 import { ContractForm } from '@/components/contract/ContractForm';
 import { BaseModal } from '@/components/core/BaseModal';
 import { useSubmit } from '@/hooks/useSubmit';
-import { invoiceApi } from '@/services/api/invoice';
-import { InvoiceFormData } from '@/types/invoice';
+import { contractApi } from '@/services/api/contract';
 import { CreateContractSchema } from '@shared/schemas/createContract';
 import React from 'react';
 
 export interface EditContractModalProps {
+  type: 'create' | 'edit';
   visible: boolean;
   contractData?: CreateContractSchema;
   onClose: () => void;
 }
 
 export const EditContractModal: React.FC<EditContractModalProps> = ({
+  type,
   visible,
   contractData,
   onClose,
@@ -22,13 +23,20 @@ export const EditContractModal: React.FC<EditContractModalProps> = ({
   };
 
   const { submit, isSubmitting } = useSubmit({
-    apiFunc: invoiceApi.updateInvoice,
+    apiFunc:
+      type === 'create'
+        ? contractApi.createContract
+        : contractApi.updateContract,
     successMessage: '更新合約費用成功',
     successRedirectPath: '/(tabs)/invoice',
   });
 
-  const handleSave = async (data: InvoiceFormData) => {
-    await submit(contractData.id, data);
+  const handleSave = async (data: any) => {
+    if (type === 'create') {
+      await submit(data);
+    } else {
+      await submit(contractData.id, data);
+    }
   };
 
   return (

@@ -68,6 +68,7 @@ export default function ProjectContract() {
       </ScrollView>
 
       <EditContractModal
+        type="create"
         visible={editContractModalVisible}
         onClose={() => setEditContractModalVisible(false)}
       />

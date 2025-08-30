@@ -4,7 +4,6 @@ import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
 import { t } from '@/i18n';
 import { createFormStyles } from '@/style/layouts/forms';
-import { InvoiceFormData } from '@/types/invoice';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTheme } from '@react-navigation/native';
 import {
@@ -16,9 +15,9 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { ScrollView, Text, TextInput, View } from 'react-native';
 
 export interface ContractFormProps {
-  initialData?: InvoiceFormData;
+  initialData?: CreateContractSchema;
   onClose?: () => void;
-  onSave: (data: InvoiceFormData) => Promise<void>;
+  onSave: (data: CreateContractSchema) => Promise<void>;
   isSubmitting: boolean;
 }
 
