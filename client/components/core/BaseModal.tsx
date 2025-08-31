@@ -1,5 +1,4 @@
 import { Heading } from '@/components/core/Heading';
-import { theme } from '@/constants/theme';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { useTheme } from '@react-navigation/native';
 import React, { useMemo } from 'react';
@@ -47,8 +46,16 @@ export const BaseModal: React.FC<BaseModalProps> = ({
       transparent
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
-        <View style={[containerStyles.modalContainer, modalStyle]}>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={0.7}
+        onPress={onClose}
+      >
+        <TouchableOpacity
+          activeOpacity={1}
+          style={[containerStyles.modalContainer, modalStyle]}
+          onPress={e => e.stopPropagation()}
+        >
           {onClose && (
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.closeButtonText}>×</Text>
@@ -72,8 +79,8 @@ export const BaseModal: React.FC<BaseModalProps> = ({
               {footer}
             </View>
           )}
-        </View>
-      </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   );
 };
@@ -95,11 +102,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: theme.colors.surfaceVariant,
   },
   closeButtonText: {
     fontSize: 22,
-    color: theme.colors.onSurfaceVariant,
     lineHeight: 28,
     fontWeight: 'bold',
   },

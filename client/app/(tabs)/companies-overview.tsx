@@ -18,7 +18,7 @@ import {
   View,
 } from 'react-native';
 
-export default function CompaniesOverview() {
+export default function CompaniesOverviewScreen() {
   const [companies, setCompanies] = useState<CompanyDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
