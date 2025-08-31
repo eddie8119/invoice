@@ -42,7 +42,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
     resolver: zodResolver(createContractSchema),
     mode: 'onChange',
     defaultValues: {
-      projectName: '',
+      caseName: '',
       contractNumber: '',
       contractAmount: undefined,
       note: '',
@@ -104,14 +104,14 @@ export const ContractForm: React.FC<ContractFormProps> = ({
       <ScrollView contentContainerStyle={{ gap: 20 }}>
         <Controller
           control={control}
-          name="projectName"
+          name="caseName"
           render={({ field: { onChange, value } }) => (
             <Input
               label="專案名稱"
               placeholder="輸入專案名稱"
               value={value}
               onChangeText={onChange}
-              error={errors.projectName?.message}
+              error={errors.caseName?.message}
             />
           )}
         />

@@ -14,7 +14,7 @@ export const getContracts = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        project_name,
+        case_Name,
         contract_number,
         contract_amount,
         note,
@@ -75,7 +75,7 @@ export const getContract = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        project_name,
+        case_Name,
         contract_number,
         contract_amount,
         note,
@@ -130,16 +130,11 @@ export const createContract = async (req: Request, res: Response) => {
     if (!userId) return;
 
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
-    const {
-      project_name,
-      contract_number,
-      contract_amount,
-      note,
-      installments,
-    } = snakeCaseData;
+    const { case_Name, contract_number, contract_amount, note, installments } =
+      snakeCaseData;
 
     // 驗證必要欄位
-    if (!project_name || !contract_amount) {
+    if (!case_Name || !contract_amount) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -151,7 +146,7 @@ export const createContract = async (req: Request, res: Response) => {
       .from("Contracts")
       .insert([
         {
-          project_name,
+          case_Name,
           contract_number,
           contract_amount,
           note,
@@ -207,7 +202,7 @@ export const createContract = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        project_name,
+        case_Name,
         contract_number,
         contract_amount,
         note,
@@ -275,7 +270,8 @@ export const updateContract = async (req: Request, res: Response) => {
       if (fetchError.code === "PGRST116") {
         return res.status(404).json({
           success: false,
-          message: "Contract not found or you don't have permission to update it",
+          message:
+            "Contract not found or you don't have permission to update it",
         });
       }
 
@@ -289,19 +285,14 @@ export const updateContract = async (req: Request, res: Response) => {
 
     // 轉換請求數據為 snake_case
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
-    const {
-      project_name,
-      contract_number,
-      contract_amount,
-      note,
-      installments,
-    } = snakeCaseData;
+    const { case_Name, contract_number, contract_amount, note, installments } =
+      snakeCaseData;
 
     // 更新合約基本信息
     const { error: updateError } = await supabase
       .from("Contracts")
       .update({
-        project_name,
+        case_Name,
         contract_number,
         contract_amount,
         note,
@@ -370,7 +361,7 @@ export const updateContract = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        project_name,
+        case_Name,
         contract_number,
         contract_amount,
         note,
@@ -439,7 +430,8 @@ export const deleteContract = async (req: Request, res: Response) => {
       if (fetchError.code === "PGRST116") {
         return res.status(404).json({
           success: false,
-          message: "Contract not found or you don't have permission to delete it",
+          message:
+            "Contract not found or you don't have permission to delete it",
         });
       }
 
