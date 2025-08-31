@@ -3,6 +3,7 @@ import { SummaryCard } from '@/components/core/SummaryCard';
 import { RevenueDetailModal } from '@/components/Modal/RevenueDetailModal';
 import { theme } from '@/constants/theme';
 import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
+
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
@@ -27,11 +28,6 @@ export const TaxGapSummary = ({
     return <Loading />;
   }
 
-  // 格式化金額顯示
-  const formatAmount = (amount: number) => {
-    return amount.toString();
-  };
-
   // 渲染每個月份的項目
   const renderMonthItem = ({
     item: month,
@@ -46,13 +42,9 @@ export const TaxGapSummary = ({
       {/* 收支差額卡片 */}
       <SummaryCard
         label={`${month.label}收支差額`}
-        amount={formatAmount(month.balanceGap)}
+        amount={month.balanceGap}
         cardStyle={styles.card}
-        textColor={
-          Number(formatAmount(month.balanceGap)) < 0
-            ? colors.error
-            : colors.primary
-        }
+        textColor={Number(month.balanceGap) < 0 ? colors.error : colors.primary}
         onPress={() => {
           setSelectedMonthData(monthlyInvoices[index]);
           setRevenueDetailModalVisible(true);
@@ -63,7 +55,7 @@ export const TaxGapSummary = ({
       <View style={styles.rowContainer}>
         <SummaryCard
           label={`${month.label}收入`}
-          amount={formatAmount(month.receivableTotal)}
+          amount={month.receivableTotal}
           cardStyle={styles.card}
           textColor={theme.colors.light.primary}
           onPress={() => {
@@ -75,7 +67,7 @@ export const TaxGapSummary = ({
         />
         <SummaryCard
           label={`${month.label}支出`}
-          amount={formatAmount(month.payableTotal)}
+          amount={month.payableTotal}
           cardStyle={styles.card}
           onPress={() => {
             router.push({

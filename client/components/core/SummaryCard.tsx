@@ -1,7 +1,7 @@
 import { theme } from '@/constants/theme';
+import { formatMoneyShow } from '@/utils/formatNumber';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-
 interface SummaryCardProps {
   label: string;
   amount: string;
@@ -46,7 +46,7 @@ export const SummaryCard = ({
         ]}
       >
         <Text style={[styles.dollarSign]}>TWD$ </Text>
-        {amount}
+        {formatMoneyShow(Number(amount))}
       </Text>
     </TouchableOpacity>
   );
