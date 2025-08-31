@@ -12,10 +12,6 @@ export default function Invoice() {
 
   // Update invoiceType based on activeTab
   const invoiceType = activeTab === 'receivable' ? 'receivable' : 'payable';
-  const detailPageRoute =
-    activeTab === 'receivable'
-      ? '/accounts-receivable-details'
-      : '/accounts-payable-details';
 
   // Initialize URL with filter parameter if not present
   useEffect(() => {
@@ -34,7 +30,7 @@ export default function Invoice() {
         }}
       />
       <InvoiceOverviewScreenLayout
-        detailPageRoute={detailPageRoute}
+        detailPageRoute={'/invoice-details'}
         invoiceType={invoiceType}
       />
     </>

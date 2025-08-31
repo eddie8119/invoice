@@ -31,7 +31,7 @@ export const InvoiceList = ({
     setModalVisible(false);
   };
   return (
-    <View>
+    <>
       <View>
         {invoices.map(invoice => (
           <TouchableOpacity
@@ -109,7 +109,7 @@ export const InvoiceList = ({
         onClose={() => setModalVisible(false)}
         onSave={handleEditSave}
       />
-    </View>
+    </>
   );
 };
 

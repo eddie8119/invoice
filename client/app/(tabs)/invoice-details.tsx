@@ -17,7 +17,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-const AccountsReceivableDetailsScreen = () => {
+export default function InvoiceDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
   const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
@@ -162,7 +162,7 @@ const AccountsReceivableDetailsScreen = () => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -177,5 +177,3 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
 });
-
-export default AccountsReceivableDetailsScreen;
