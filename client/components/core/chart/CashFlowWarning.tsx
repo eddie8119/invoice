@@ -1,22 +1,29 @@
-import { Ionicons } from '@expo/vector-icons';
 import { CashFlowWarningProps } from '@/types/chart';
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-export const CashFlowWarning: React.FC<CashFlowWarningProps> = ({ negativeDates }) => {
+export const CashFlowWarning: React.FC<CashFlowWarningProps> = ({
+  negativeDates,
+}) => {
   if (negativeDates.length === 0) return null;
 
   return (
     <View style={styles.warningContainer}>
-      <View style={styles.warningIconContainer}>
-        <Ionicons name="warning-outline" size={24} color="#F5A623" />
+      {/* Header row with icon and text */}
+      <View style={styles.headerRow}>
+        <View style={styles.warningIconContainer}>
+          <Ionicons name="warning-outline" size={24} color="#F5A623" />
+        </View>
+        <View style={styles.warningTextContainer}>
+          <Text style={styles.warningText}>
+            你的現金水位 {negativeDates.join(' ')} 不足以支付 應付帳款，
+            請提早應對
+          </Text>
+        </View>
       </View>
-      <View style={styles.warningTextContainer}>
-        <Text style={styles.warningText}>
-          你的現金水位 {negativeDates.join(' ')} 不足以支付
-          應付帳款， 請提早應對
-        </Text>
-      </View>
+
+      {/* Buttons row */}
       <View style={styles.warningButtonsContainer}>
         <TouchableOpacity style={styles.warningButton}>
           <Text style={styles.warningButtonText}>調整付款日</Text>
@@ -37,9 +44,11 @@ const styles = StyleSheet.create({
     borderColor: '#F5A623',
     padding: 16,
     marginTop: 16,
+    flexDirection: 'column',
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: 'wrap',
   },
   warningIconContainer: {
     marginRight: 12,
