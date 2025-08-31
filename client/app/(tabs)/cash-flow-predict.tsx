@@ -8,7 +8,7 @@ import { useTheme } from '@react-navigation/native';
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-export default function CashFlowPredict() {
+export default function CashFlowPredictScreen() {
   const [activeFilter, setActiveFilter] = useState<InvoiceType>('receivable');
 
   const { colors } = useTheme();

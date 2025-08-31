@@ -7,7 +7,7 @@ import { router } from 'expo-router';
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
-export default function CashFlowInitialize() {
+export default function CashFlowInitializeScreen() {
   const { colors } = useTheme();
   const containerStyles = useMemo(
     () => createContainerStyles(colors),

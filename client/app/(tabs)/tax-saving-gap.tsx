@@ -6,7 +6,7 @@ import { useTheme } from '@react-navigation/native';
 import { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 
-export default function TaxSavingGap() {
+export default function TaxSavingGapScreen() {
   const { monthlyBalance, isLoading } = useMonthlyBalance();
 
   const { colors } = useTheme();
