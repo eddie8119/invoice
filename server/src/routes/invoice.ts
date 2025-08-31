@@ -9,7 +9,7 @@ import {
 import {
   getBalanceByMonthRange,
   getInvoicesByMonthRange,
-} from "@/controllers/invoice-report.controller";
+} from "@/controllers/invoice-report";
 import { authMiddleware, requireUserId } from "@/middleware/auth";
 import express from "express";
 
