@@ -22,17 +22,16 @@ export const EditContractModal: React.FC<EditContractModalProps> = ({
     ...contractData,
   };
 
+  const isCreate = type === 'create';
+
   const { submit, isSubmitting } = useSubmit({
-    apiFunc:
-      type === 'create'
-        ? contractApi.createContract
-        : contractApi.updateContract,
+    apiFunc: isCreate ? contractApi.createContract : contractApi.updateContract,
     successMessage: '更新合約費用成功',
     successRedirectPath: '/(tabs)/invoice',
   });
 
   const handleSave = async (data: any) => {
-    if (type === 'create') {
+    if (isCreate) {
       await submit(data);
     } else {
       await submit(contractData.id, data);
@@ -40,7 +39,11 @@ export const EditContractModal: React.FC<EditContractModalProps> = ({
   };
 
   return (
-    <BaseModal visible={visible} onClose={onClose} title="編輯合約費用">
+    <BaseModal
+      visible={visible}
+      onClose={onClose}
+      title={isCreate ? '建立合約費用' : '編輯合約費用'}
+    >
       <ContractForm
         initialData={initialData}
         onClose={onClose}

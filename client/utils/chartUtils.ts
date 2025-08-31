@@ -169,7 +169,7 @@ export function generateLegendData(
         })
         // Sort by amount (descending) and take top 5
         .sort((a, b) => b.value - a.value)
-        .slice(0, 5)
+      // .slice(0, 5)
     );
   }
 }
