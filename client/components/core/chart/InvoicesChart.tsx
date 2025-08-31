@@ -1,26 +1,45 @@
+import {
+  LegendItem as LegendItemType,
+  ShowPayableReceivableType,
+} from '@/types/chart';
+import {
+  generateLegendData,
+  getChartTitle,
+  getTotalAmount,
+  getTotalLabel,
+  InvoiceData,
+  processInvoiceData,
+} from '@/utils/chartUtils';
+import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { VictoryPie } from 'victory';
 
-interface Invoice {
-  id: string;
-  invoiceNumber: string;
-  dueDate: string;
-  totalAmount: number;
-  status: string;
-  caseId: string;
-  paidAt: string | null;
-  type: 'receivable' | 'payable';
-  company: {
-    id: string;
-    name: string;
+// Component for legend items that handles navigation
+const LegendItem = ({ item }: { item: LegendItemType }) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (item.id) {
+      // Using string for pathname to avoid TypeScript issues
+      router.push({
+        pathname: '/(tabs)/invoice-details' as any,
+        params: { id: item.id },
+      });
+    }
   };
-}
+
+  return (
+    <Pressable onPress={item.id ? handlePress : undefined}>
+      <Text style={styles.legendText}>{item.name}</Text>
+    </Pressable>
+  );
+};
 
 interface InvoicesChartProps {
-  data: any[] | undefined;
+  data: InvoiceData[] | undefined;
   chartTitle?: string;
-  chartType?: 'payable' | 'receivable' | 'mixed';
+  chartType?: ShowPayableReceivableType;
 }
 
 export const InvoicesChart = ({
@@ -28,101 +47,11 @@ export const InvoicesChart = ({
   chartTitle = '發票金額統計',
   chartType = 'mixed',
 }: InvoicesChartProps) => {
-  const screenWidth = Dimensions.get('window').width - 32;
-  // Process data for the chart
-  const { pieData, totalReceivable, totalPayable, colorScale } = useMemo(() => {
-    // If no data, return empty arrays
-    if (!data || data.length === 0) {
-      return {
-        pieData: [],
-        totalReceivable: 0,
-        totalPayable: 0,
-        colorScale: [],
-      };
-    }
-
-    // Calculate totals by type
-    let totalReceivable = 0;
-    let totalPayable = 0;
-
-    // Group invoices by company and type for more detailed visualization
-    const invoicesByCompany: Record<string, { amount: number; type: string }> =
-      {};
-
-    // Process each invoice
-    data.forEach(invoice => {
-      const companyName = invoice.company?.name || 'Unknown';
-      const companyKey = `${companyName}-${invoice.type}`;
-
-      if (!invoicesByCompany[companyKey]) {
-        invoicesByCompany[companyKey] = {
-          amount: 0,
-          type: invoice.type,
-        };
-      }
-
-      invoicesByCompany[companyKey].amount += invoice.totalAmount;
-
-      if (invoice.type === 'receivable') {
-        totalReceivable += invoice.totalAmount;
-      } else {
-        totalPayable += invoice.totalAmount;
-      }
-    });
-
-    // Define color schemes based on chart type
-    const greenShades = ['#00D09E', '#00A67E', '#008C68', '#007255', '#005842'];
-    const blueShades = ['#0068FF', '#0055D4', '#0047B3', '#003A91', '#002D70'];
-
-    // Create pie chart data
-    let pieData: Array<{ x: string; y: number; color: string; label: string }> =
-      [];
-    let colorScale: string[] = [];
-
-    if (chartType === 'mixed') {
-      // For mixed type, show receivable vs payable
-      pieData = [
-        {
-          x: '應收',
-          y: totalReceivable,
-          color: '#00D09E',
-          label: `應收: $${totalReceivable.toLocaleString()}`,
-        },
-        {
-          x: '應付',
-          y: totalPayable,
-          color: '#0068FF',
-          label: `應付: $${totalPayable.toLocaleString()}`,
-        },
-      ];
-      colorScale = ['#00D09E', '#0068FF'];
-    } else {
-      // For single type (payable or receivable), show breakdown by company
-      const companyEntries = Object.entries(invoicesByCompany);
-      const selectedShades =
-        chartType === 'receivable' ? greenShades : blueShades;
-
-      pieData = companyEntries
-        .filter(([key, value]) => key.includes(chartType))
-        .map(([key, value], index) => {
-          const companyName = key.split('-')[0];
-          const colorIndex = index % selectedShades.length;
-          return {
-            x: companyName,
-            y: value.amount,
-            color: selectedShades[colorIndex],
-            label: `${companyName}: $${value.amount.toLocaleString()}`,
-          };
-        });
-
-      // If we have more companies than colors, cycle through the colors
-      colorScale = pieData.map(
-        (item, index) => selectedShades[index % selectedShades.length]
-      );
-    }
-
-    return { pieData, totalReceivable, totalPayable, colorScale };
-  }, [data, chartType]);
+  // Process data for the chart using utility function
+  const { pieData, totalReceivable, totalPayable, colorScale, invoiceIdMap } =
+    useMemo(() => {
+      return processInvoiceData(data, chartType);
+    }, [data, chartType]);
 
   // If no data, show empty state
   if (!data || data.length === 0) {
@@ -136,45 +65,21 @@ export const InvoicesChart = ({
   }
 
   // Determine chart title based on chartType
-  const displayTitle =
-    chartType === 'receivable'
-      ? '應收發票統計'
-      : chartType === 'payable'
-        ? '應付發票統計'
-        : chartTitle;
+  const displayTitle = getChartTitle(chartType, chartTitle);
 
   // Calculate total amount based on chart type
-  const totalAmount =
-    chartType === 'receivable'
-      ? totalReceivable
-      : chartType === 'payable'
-        ? totalPayable
-        : totalReceivable + totalPayable;
+  const totalAmount = getTotalAmount(chartType, totalReceivable, totalPayable);
 
   // Prepare legend data based on chart type and limit to top 5 items by amount
-  const legendData =
-    chartType === 'mixed'
-      ? [
-          {
-            name: `應收: $${totalReceivable.toLocaleString()}`,
-            symbol: { fill: '#00D09E' },
-            value: totalReceivable,
-          },
-          {
-            name: `應付: $${totalPayable.toLocaleString()}`,
-            symbol: { fill: '#0068FF' },
-            value: totalPayable,
-          },
-        ]
-      : pieData
-          .map(item => ({
-            name: `${item.x}: $${item.y.toLocaleString()}`,
-            symbol: { fill: item.color },
-            value: item.y,
-          }))
-          // Sort by amount (descending) and take top 5
-          .sort((a, b) => b.value - a.value)
-          .slice(0, 5);
+  const legendData = useMemo(() => {
+    return generateLegendData(
+      chartType,
+      totalReceivable,
+      totalPayable,
+      pieData,
+      invoiceIdMap
+    );
+  }, [chartType, totalReceivable, totalPayable, pieData, invoiceIdMap]);
 
   return (
     <View style={styles.container}>
@@ -212,13 +117,7 @@ export const InvoicesChart = ({
             <Text style={styles.totalAmount}>
               ${totalAmount.toLocaleString()}
             </Text>
-            <Text style={styles.totalLabel}>
-              {chartType === 'mixed'
-                ? '發票總額'
-                : chartType === 'receivable'
-                  ? '應收總額'
-                  : '應付總額'}
-            </Text>
+            <Text style={styles.totalLabel}>{getTotalLabel(chartType)}</Text>
           </View>
         </View>
 
@@ -232,7 +131,7 @@ export const InvoicesChart = ({
                   { backgroundColor: item.symbol.fill },
                 ]}
               />
-              <Text style={styles.legendText}>{item.name}</Text>
+              <LegendItem item={item} />
             </View>
           ))}
         </View>

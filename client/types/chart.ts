@@ -37,3 +37,26 @@ export interface GiftedChartDataPoint {
   dataPointColor: string; // 數據點顏色
   month?: string; // 月份標籤
 }
+
+// 圖表數據點類型
+export type ShowPayableReceivableType = 'payable' | 'receivable' | 'mixed';
+
+export interface PieChartDataResult {
+  pieData: Array<{
+    x: string;
+    y: number;
+    color: string;
+    label: string;
+    id?: string;
+  }>;
+  totalReceivable: number;
+  totalPayable: number;
+  colorScale: string[];
+  invoiceIdMap: Record<string, string>;
+}
+
+export interface LegendItem {
+  name: string;
+  symbol: { fill: string };
+  value: number;
+}
