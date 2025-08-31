@@ -14,12 +14,13 @@ export const getContracts = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        case_Name,
+        case_id,
         contract_number,
         contract_amount,
         note,
         created_at,
         user_id,
+        case:Cases(id, name),
         installments:Installments (
             installment_order,
             percentage,
@@ -75,12 +76,13 @@ export const getContract = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        case_Name,
+        case_id,
         contract_number,
         contract_amount,
         note,
         created_at,
         user_id,
+        case:Cases(id, name),
         installments:Installments(
             id,
             installment_order,
@@ -130,23 +132,40 @@ export const createContract = async (req: Request, res: Response) => {
     if (!userId) return;
 
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
-    const { case_Name, contract_number, contract_amount, note, installments } =
+    const { case_name, contract_number, contract_amount, note, installments } =
       snakeCaseData;
 
     // 驗證必要欄位
-    if (!case_Name || !contract_amount) {
+    if (!case_name || !contract_amount) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
       });
     }
+    
+    // 根據案件名稱查找案件ID
+    const { data: caseData, error: caseError } = await supabase
+      .from("Cases")
+      .select("id")
+      .eq("name", case_name)
+      .eq("user_id", userId);
+      
+    if (caseError || !caseData || caseData.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Case not found with the provided name",
+        error: caseError ? caseError.message : "No matching case found",
+      });
+    }
+    
+    const case_id = caseData[0].id;
 
     // 步驟 1: 創建合約
     const { data: contractData, error: contractError } = await supabase
       .from("Contracts")
       .insert([
         {
-          case_Name,
+          case_id,
           contract_number,
           contract_amount,
           note,
@@ -196,18 +215,19 @@ export const createContract = async (req: Request, res: Response) => {
       }
     }
 
-    // 步驟 3: 獲取完整的合約信息（包括分期付款項目）
+    // 步驟 3: 獲取完整的合約信息（包括分期付款項目和案件信息）
     const { data: completeContract, error: fetchError } = await supabase
       .from("Contracts")
       .select(
         `
         id,
-        case_Name,
+        case_id,
         contract_number,
         contract_amount,
         note,
         created_at,
         user_id,
+        case:Cases(id, name),
         installments:Installments(
             id,
             installment_order,
@@ -285,14 +305,32 @@ export const updateContract = async (req: Request, res: Response) => {
 
     // 轉換請求數據為 snake_case
     const snakeCaseData = snakecaseKeys(req.body, { deep: true });
-    const { case_Name, contract_number, contract_amount, note, installments } =
+    const { case_id, contract_number, contract_amount, note, installments } =
       snakeCaseData;
+      
+    // 檢查案件是否存在且屬於當前用戶
+    if (case_id) {
+      const { data: caseData, error: caseError } = await supabase
+        .from("Cases")
+        .select("id")
+        .eq("id", case_id)
+        .eq("user_id", userId)
+        .single();
+        
+      if (caseError) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid case ID or case not found",
+          error: caseError.message,
+        });
+      }
+    }
 
     // 更新合約基本信息
     const { error: updateError } = await supabase
       .from("Contracts")
       .update({
-        case_Name,
+        case_id,
         contract_number,
         contract_amount,
         note,
@@ -361,12 +399,13 @@ export const updateContract = async (req: Request, res: Response) => {
       .select(
         `
         id,
-        case_Name,
+        case_id,
         contract_number,
         contract_amount,
         note,
         created_at,
         user_id,
+        case:Cases(id, name),
         installments:Installments(
             id,
             installment_order,
