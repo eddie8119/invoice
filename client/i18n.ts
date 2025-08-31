@@ -1,12 +1,13 @@
-import * as Localization from 'expo-localization';
 import { I18n, Scope, TranslateOptions } from 'i18n-js';
 
 import { Language } from '@/constants/i18n';
-import button from './locales/button';
-import label from './locales/label';
-import placeholder from './locales/placeholder';
-import sign from './locales/sign';
-import title from './locales/title';
+import accounting from '@/locales/accounting';
+import button from '@/locales/button';
+import label from '@/locales/label';
+import placeholder from '@/locales/placeholder';
+import sign from '@/locales/sign';
+import tab from '@/locales/tab';
+import title from '@/locales/title';
 
 type Translation = {
   [key: string]: {
@@ -21,6 +22,8 @@ const translations: Record<Language, Translation> = {
     ...button[Language.EN],
     ...sign[Language.EN],
     ...title[Language.EN],
+    ...accounting[Language.EN],
+    ...tab[Language.EN],
   },
   [Language.ZH_TW]: {
     ...placeholder[Language.ZH_TW],
@@ -28,6 +31,8 @@ const translations: Record<Language, Translation> = {
     ...button[Language.ZH_TW],
     ...sign[Language.ZH_TW],
     ...title[Language.ZH_TW],
+    ...accounting[Language.ZH_TW],
+    ...tab[Language.ZH_TW],
   },
 };
 
