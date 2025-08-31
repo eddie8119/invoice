@@ -1,4 +1,5 @@
 import Loading from '@/components/core/Loading';
+import { ModalProvider } from '@/components/providers/ModalProvider';
 import { theme } from '@/constants/theme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import {
@@ -81,8 +82,10 @@ export default function RootLayout() {
           value={colorScheme === 'dark' ? AppLightTheme : AppLightTheme}
         >
           <PaperProvider>
-            <Slot />
-            <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
+            <ModalProvider>
+              <Slot />
+              <StatusBar style={colorScheme === 'dark' ? 'light' : 'light'} />
+            </ModalProvider>
           </PaperProvider>
         </ThemeProvider>
       </RootGuard>

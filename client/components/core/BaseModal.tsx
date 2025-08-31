@@ -1,7 +1,8 @@
 import { Heading } from '@/components/core/Heading';
+import { useModalAutoClose } from '@/context/ModalContext';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { useTheme } from '@react-navigation/native';
-import React, { useMemo } from 'react';
+import React, { useMemo, useId } from 'react';
 import {
   Modal,
   StyleProp,
@@ -34,10 +35,14 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   footerContainerStyle,
 }) => {
   const { colors } = useTheme();
+  const modalId = useId(); // Generate unique ID for this modal instance
   const containerStyles = useMemo(
     () => createContainerStyles(colors),
     [colors]
   );
+  
+  // Register this modal with the context to auto-close on navigation
+  useModalAutoClose(visible, onClose, modalId);
 
   return (
     <Modal

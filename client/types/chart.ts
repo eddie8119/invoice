@@ -59,4 +59,5 @@ export interface LegendItem {
   name: string;
   symbol: { fill: string };
   value: number;
+  id?: string;
 }
