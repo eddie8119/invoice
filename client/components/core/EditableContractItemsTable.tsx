@@ -29,11 +29,12 @@ interface EditableContractItemsTableProps {
   ) => void;
   onAddItem: () => void;
   onRemoveItem: (index: number) => void;
+  contractAmount: number | undefined;
 }
 
 export const EditableContractItemsTable: React.FC<
   EditableContractItemsTableProps
-> = ({ items, onItemChange, onAddItem, onRemoveItem }) => {
+> = ({ items, onItemChange, onAddItem, onRemoveItem, contractAmount }) => {
   const { colors } = useTheme();
 
   // Ensure we always have at least 3 rows
@@ -101,33 +102,33 @@ export const EditableContractItemsTable: React.FC<
                     }
                     onChangeText={text => {
                       const num = parseFloat(text);
-                      onItemChange(
-                        index,
-                        'percentage',
-                        isNaN(num) ? undefined : num
-                      );
+                      const percentage = isNaN(num) ? undefined : num;
+                      
+                      // Update percentage
+                      onItemChange(index, 'percentage', percentage);
+                      
+                      // Also update amount based on percentage and contractAmount
+                      if (percentage !== undefined && contractAmount) {
+                        const calculatedAmount = Math.round(contractAmount * (percentage / 100));
+                        onItemChange(index, 'amount', calculatedAmount);
+                      } else {
+                        onItemChange(index, 'amount', 0);
+                      }
                     }}
                     keyboardType="numeric"
                     placeholder="40"
                   />
                 </View>
 
-                {/* Amount */}
+                {/* Amount - Auto-calculated */}
                 <View style={[styles.tableCell, styles.colAmount]}>
-                  <TextInput
-                    style={styles.tableCellInput}
-                    value={item.amount === undefined ? '' : String(item.amount)}
-                    onChangeText={text => {
-                      const num = parseFloat(text);
-                      onItemChange(
-                        index,
-                        'amount',
-                        isNaN(num) ? undefined : num
-                      );
-                    }}
-                    keyboardType="numeric"
-                    placeholder="40000"
-                  />
+                  <View style={styles.installmentNumberContainer}>
+                    <Text style={styles.installmentNumberText}>
+                      {contractAmount && item.percentage
+                        ? Math.round(contractAmount * (item.percentage / 100))
+                        : '0'}
+                    </Text>
+                  </View>
                 </View>
 
                 {/* Payment Date */}

@@ -164,6 +164,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
             amount: (field as any).amount,
             paymentDate: (field as any).paymentDate,
           }))}
+          contractAmount={watch('contractAmount')}
           onItemChange={(index, field, value) => {
             // Map the field names from EditableContractItemsTable to the schema field names
             const fieldMap: Record<string, string> = {
