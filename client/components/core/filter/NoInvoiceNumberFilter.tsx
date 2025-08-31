@@ -1,7 +1,7 @@
 import { Filter, FilterOption } from '@/components/core/filter/Filter';
 import React from 'react';
 
-const statusOptions = ['所有', '已開立', '未開立'] as FilterOption[];
+const statusOptions = ['all', 'opened', 'unopened'] as FilterOption[];
 
 interface NoInvoiceNumberFilterProps {
   active: FilterOption;

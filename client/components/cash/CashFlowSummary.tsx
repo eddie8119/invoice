@@ -1,6 +1,7 @@
 import Loading from '@/components/core/Loading';
 import { SummaryCard } from '@/components/core/SummaryCard';
 import { useMonthlyBalance } from '@/hooks/useMonthlyBalance';
+import { t } from '@/i18n';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
 import { router } from 'expo-router';
@@ -49,7 +50,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
     <>
       {currentMonth && (
         <SummaryCard
-          label={`本月將${activeFilter}`}
+          label={`本月將${t(`accounting.${activeFilter}`)}`}
           amount={getAmountByFilter(currentMonth)}
           cardStyle={styles.card}
           textColor={textColor}
@@ -67,7 +68,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
       >
         {nextMonth && (
           <SummaryCard
-            label={`下月將${activeFilter}`}
+            label={`下月將${t(`accounting.${activeFilter}`)}`}
             amount={getAmountByFilter(nextMonth)}
             cardStyle={styles.card}
             textColor={textColor}
@@ -78,7 +79,7 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
         )}
         {futureMonth && (
           <SummaryCard
-            label={`${futureMonth.label}將${activeFilter}`}
+            label={`${futureMonth.label}將${t(`accounting.${activeFilter}`)}`}
             amount={getAmountByFilter(futureMonth)}
             cardStyle={styles.card}
             textColor={textColor}

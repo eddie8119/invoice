@@ -3,7 +3,7 @@ import { theme } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 
-const statusOptions = ['所有', '已付', '未付', '逾期'] as FilterOption[];
+const statusOptions = ['all', 'paid', 'unpaid', 'overdue'] as FilterOption[];
 
 interface InvoiceFilterProps {
   onFilterChange: (filter: FilterOption) => void;

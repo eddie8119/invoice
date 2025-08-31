@@ -2,6 +2,7 @@ import { CashFlowSummary } from '@/components/cash/CashFlowSummary';
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
 import { PayFilter } from '@/components/core/filter/PayFilter';
 import { SummaryCard } from '@/components/core/SummaryCard';
+import { theme } from '@/constants/theme';
 import { createContainerStyles } from '@/style/layouts/containers';
 import { InvoiceType } from '@/types/invoice';
 import { useTheme } from '@react-navigation/native';
@@ -20,7 +21,12 @@ export default function CashFlowPredictScreen() {
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
       <View style={[containerStyles.lowerSection, { gap: 16 }]}>
-        <SummaryCard label={`今日即時現金流`} amount="2000" cardStyle={{}} />
+        <SummaryCard
+          label={`今日即時現金流`}
+          amount="2000"
+          cardStyle={{}}
+          textColor={theme.colors.light.primary}
+        />
         <CashFlowChart />
         <PayFilter
           activeFilter={activeFilter}

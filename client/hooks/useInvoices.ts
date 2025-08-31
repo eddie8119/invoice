@@ -14,9 +14,9 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
   const [selectedMonth, setSelectedMonth] = useState(
     (new Date().getMonth() + 1).toString()
   );
-  const [activeStatusFilter, setActiveStatusFilter] = useState('所有'); // 付款狀態過濾
+  const [activeStatusFilter, setActiveStatusFilter] = useState('all'); // 付款狀態過濾
   const [activeInvoiceNumberFilter, setActiveInvoiceNumberFilter] =
-    useState<FilterOption>('所有'); // 發票號碼過濾
+    useState<FilterOption>('all'); // 發票號碼過濾
   const [filteredInvoices, setFilteredInvoices] = useState<Invoice[]>([]);
 
   const fetchInvoices = useCallback(async () => {
@@ -62,14 +62,14 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
 
     // 按付款狀態過濾
     let filteredByStatus = filteredByMonth;
-    if (activeStatusFilter !== '所有') {
-      if (activeStatusFilter === '已付') {
+    if (activeStatusFilter !== 'all') {
+      if (activeStatusFilter === 'paid') {
         filteredByStatus = filteredByMonth.filter(inv => inv.status === 'paid');
-      } else if (activeStatusFilter === '未付') {
+      } else if (activeStatusFilter === 'unpaid') {
         filteredByStatus = filteredByMonth.filter(
           inv => inv.status === 'unpaid'
         );
-      } else if (activeStatusFilter === '逾期') {
+      } else if (activeStatusFilter === 'overdue') {
         filteredByStatus = filteredByMonth.filter(
           inv => inv.status === 'overdue'
         );
@@ -78,13 +78,13 @@ export function useInvoices(invoiceType: InvoiceType, detailPageRoute: string) {
 
     // 按發票號碼過濾
     let finalFiltered = filteredByStatus;
-    if (activeInvoiceNumberFilter !== '所有') {
-      if (activeInvoiceNumberFilter === '已開立') {
+    if (activeInvoiceNumberFilter !== 'all') {
+      if (activeInvoiceNumberFilter === 'opened') {
         // 篩選有發票號碼的發票（非空字符串）
         finalFiltered = filteredByStatus.filter(
           inv => inv.invoiceNumber && inv.invoiceNumber.trim() !== ''
         );
-      } else if (activeInvoiceNumberFilter === '未開立') {
+      } else if (activeInvoiceNumberFilter === 'unopened') {
         // 篩選沒有發票號碼的發票（空字符串或null或undefined）
         finalFiltered = filteredByStatus.filter(
           inv => !inv.invoiceNumber || inv.invoiceNumber.trim() === ''

@@ -1,4 +1,5 @@
 import { theme } from '@/constants/theme';
+import { t } from '@/i18n';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -40,7 +41,7 @@ export const Filter = ({
                 active === option && { color: 'white' },
               ]}
             >
-              {option}
+              {t(`tab.${option}`)}
             </Text>
           </TouchableOpacity>
         ))}

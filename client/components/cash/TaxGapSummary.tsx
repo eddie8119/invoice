@@ -3,7 +3,6 @@ import { SummaryCard } from '@/components/core/SummaryCard';
 import { RevenueDetailModal } from '@/components/Modal/RevenueDetailModal';
 import { theme } from '@/constants/theme';
 import { useMonthlyInvoices } from '@/hooks/useMonthlyInvoices';
-
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
