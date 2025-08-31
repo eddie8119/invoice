@@ -1,4 +1,4 @@
-import { EditableItemsTable } from '@/components/core/EditableItemsTable';
+import { EditableContractItemsTable } from '@/components/core/EditableContractItemsTable';
 import { FormButtonGroup } from '@/components/core/FormButtonGroup';
 import { Input } from '@/components/core/Input';
 import { LabelText } from '@/components/core/LabelText';
@@ -37,6 +37,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
     reset,
     formState: { errors, isValid },
     trigger,
+    watch,
   } = useForm<CreateContractSchema>({
     resolver: zodResolver(createContractSchema),
     mode: 'onChange',
@@ -45,6 +46,7 @@ export const ContractForm: React.FC<ContractFormProps> = ({
       contractNumber: '',
       contractAmount: undefined,
       note: '',
+      installments: [],
     },
   });
 
@@ -53,6 +55,21 @@ export const ContractForm: React.FC<ContractFormProps> = ({
     control,
     name: 'installments',
   });
+
+  // 確保初始時至少有3行
+  useEffect(() => {
+    if (fields.length === 0) {
+      // 添加3個預設行
+      for (let i = 0; i < 3; i++) {
+        append({
+          installmentOrder: i + 1,
+          percentage: 0,
+          amount: 0,
+          paymentDate: '',
+        });
+      }
+    }
+  }, [fields.length, append]);
 
   // 當有 initialData 時，重設表單值
   useEffect(() => {
@@ -133,33 +150,44 @@ export const ContractForm: React.FC<ContractFormProps> = ({
                 onChange(formattedValue ? Number(formattedValue) : undefined);
               }}
               keyboardType="numeric"
-              error={errors.totalContractAmount?.message}
+              error={errors.contractAmount?.message}
             />
           )}
         />
 
-        {/* 動態表單項目 */}
-        <EditableItemsTable
-          items={fields}
+        {/* 動態表單項目 - 分期付款 */}
+        <EditableContractItemsTable
+          items={fields.map(field => ({
+            id: field.id,
+            installmentNumber: (field as any).installmentOrder,
+            percentage: (field as any).percentage,
+            amount: (field as any).amount,
+            paymentDate: (field as any).paymentDate,
+          }))}
           onItemChange={(index, field, value) => {
-            const currentItem = fields[index];
-            let processedValue: string | number | undefined = value;
-
-            if (field === 'installmentOrder' || field === 'percentage') {
-              const num = parseFloat(value);
-              // Use undefined for empty/invalid to trigger 'required' validation
-              processedValue = isNaN(num) ? undefined : num;
-            }
-
-            const updatedItem = {
-              ...currentItem,
-              [field]: processedValue,
+            // Map the field names from EditableContractItemsTable to the schema field names
+            const fieldMap: Record<string, string> = {
+              installmentNumber: 'installmentOrder',
+              percentage: 'percentage',
+              amount: 'amount',
+              paymentDate: 'paymentDate',
             };
 
-            update(index, updatedItem);
+            // Update the field using the mapped field name
+            update(index, {
+              ...(fields[index] as any),
+              [fieldMap[field]]: value,
+            });
           }}
-          onAddItem={handleAddItem}
-          onRemoveItem={remove}
+          onAddItem={() => {
+            append({
+              installmentOrder: fields.length + 1,
+              percentage: 0,
+              amount: 0,
+              paymentDate: new Date().toISOString().split('T')[0],
+            });
+          }}
+          onRemoveItem={index => remove(index)}
         />
 
         <Controller

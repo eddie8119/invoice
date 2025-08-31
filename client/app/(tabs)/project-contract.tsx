@@ -56,7 +56,7 @@ export default function ProjectContract() {
               { alignSelf: 'flex-end' },
               { backgroundColor: colors.primaryMainBlue, width: '100%' },
             ]}
-            text="建立合約費用"
+            text="+ 建立合約費用"
             variant="filled"
             size="medium"
             onPress={() => {
