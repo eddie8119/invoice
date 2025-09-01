@@ -47,7 +47,13 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
   }
 
   return (
-    <>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 16,
+      }}
+    >
       {currentMonth && (
         <SummaryCard
           label={`本月將${t(`accounting.${activeFilter}`)}`}
@@ -59,37 +65,18 @@ export const CashFlowSummary = ({ activeFilter }: CashFlowSummaryProps) => {
           }}
         />
       )}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 16,
-        }}
-      >
-        {nextMonth && (
-          <SummaryCard
-            label={`下月將${t(`accounting.${activeFilter}`)}`}
-            amount={getAmountByFilter(nextMonth)}
-            cardStyle={styles.card}
-            textColor={textColor}
-            onPress={() => {
-              handleCardPress(nextMonth.month);
-            }}
-          />
-        )}
-        {futureMonth && (
-          <SummaryCard
-            label={`${futureMonth.label}將${t(`accounting.${activeFilter}`)}`}
-            amount={getAmountByFilter(futureMonth)}
-            cardStyle={styles.card}
-            textColor={textColor}
-            onPress={() => {
-              handleCardPress(futureMonth.month);
-            }}
-          />
-        )}
-      </View>
-    </>
+      {nextMonth && (
+        <SummaryCard
+          label={`下月將${t(`accounting.${activeFilter}`)}`}
+          amount={getAmountByFilter(nextMonth)}
+          cardStyle={styles.card}
+          textColor={textColor}
+          onPress={() => {
+            handleCardPress(nextMonth.month);
+          }}
+        />
+      )}
+    </View>
   );
 };
 

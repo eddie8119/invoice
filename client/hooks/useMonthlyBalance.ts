@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 export function useMonthlyBalance() {
   const [isLoading, setIsLoading] = useState(true);
   const [monthlyBalance, setMonthlyBalance] = useState<any[]>([]);
-  const [monthsCount, setMonthsCount] = useState<number>(3);
+  const [monthsCount, setMonthsCount] = useState<number>(2);
 
   const fetchMonthlyBalance = async (monthsCount: number) => {
     setIsLoading(true);
