@@ -1,4 +1,5 @@
 import { CashFlowSummary } from '@/components/cash/CashFlowSummary';
+import { DatePicker } from '@/components/core/cash/DatePicker';
 import { CashFlowChart } from '@/components/core/chart/CashFlowChart';
 import { PayFilter } from '@/components/core/filter/PayFilter';
 import { SummaryCard } from '@/components/core/SummaryCard';
@@ -27,6 +28,7 @@ export default function CashFlowPredictScreen() {
           cardStyle={{}}
           textColor={theme.colors.light.primary}
         />
+        <DatePicker />
         <CashFlowChart />
         <PayFilter
           activeFilter={activeFilter}
