@@ -10,7 +10,7 @@ interface InvoiceFilterProps {
 }
 
 export const InvoiceFilter = ({ onFilterChange }: InvoiceFilterProps) => {
-  const [activeFilter, setActiveFilter] = useState<FilterOption>('所有');
+  const [activeFilter, setActiveFilter] = useState<FilterOption>('all');
   const colors = theme.colors.light;
 
   const handleFilterChange = (filter: FilterOption) => {

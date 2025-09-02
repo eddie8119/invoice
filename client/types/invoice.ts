@@ -37,7 +37,9 @@ export interface createInvoiceDetailResponse {
 export interface Invoice {
   id: string;
   company: CompanyDTO;
+  salesAmount: number;
   totalAmount: number;
+  isTax: boolean;
   createdAt: Date;
   paidAt: Date | null;
   dueDate: Date | null;
@@ -69,7 +71,9 @@ export interface InvoiceDetail {
   invoiceNumber: string;
   status: InvoiceStatus;
   note: string;
+  salesAmount: number;
   totalAmount: number;
+  isTax: boolean;
   dueDate: Date;
   type: InvoiceType;
   updatedAt: Date;

@@ -3,6 +3,7 @@ import { theme } from '@/constants/theme';
 import { pannelStyles } from '@/style/components/pannel';
 import { textStyles } from '@/style/components/text';
 import { Invoice } from '@/types/invoice';
+import { formatMoneyShow } from '@/utils/formatNumber';
 import { getRemainingDaysMessage } from '@/utils/getRemainingDaysMessage';
 import { getStatusColor, getStatusText } from '@/utils/invoice';
 import React, { useState } from 'react';
@@ -70,7 +71,10 @@ export const InvoiceList = ({
               <View style={styles.cardRight}>
                 <Text>
                   TWD$
-                  <Text style={styles.amount}>{invoice.totalAmount}</Text>
+                  <Text style={[styles.amount, { marginHorizontal: 6 }]}>
+                    {formatMoneyShow(invoice.totalAmount)}
+                  </Text>
+                  <Text>({invoice.isTax ? '含稅' : '不含稅'})</Text>
                 </Text>
                 <Text>建立日期: {invoice.createdAt.toLocaleDateString()}</Text>
 
