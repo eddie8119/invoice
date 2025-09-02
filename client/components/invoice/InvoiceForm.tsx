@@ -15,7 +15,7 @@ import {
 } from '@shared/schemas/createInvoice';
 import React, { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, Switch, Text, TextInput, View } from 'react-native';
 
 export interface InvoiceFormProps {
   initialData?: InvoiceFormData;
@@ -38,6 +38,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isValid },
     trigger,
   } = useForm<CreateInvoiceSchema>({
@@ -47,6 +49,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       caseName: '',
       company: '',
       invoiceNumber: '',
+      salesAmount: undefined,
       totalAmount: undefined,
       issueDate: new Date().toISOString().split('T')[0],
       dueDate: new Date().toISOString().split('T')[0],
@@ -74,13 +77,26 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     }
   }, [initialData, reset, trigger]);
 
-  const handleAddItem = () => {
-    append({
-      title: '',
-      quantity: undefined,
-      unitPrice: undefined,
-    });
-  };
+  // 監聽 salesAmount 和 isTax 的變化，自動計算 totalAmount
+  const salesAmount = watch('salesAmount');
+  const isTax = watch('isTax');
+
+  useEffect(() => {
+    if (salesAmount !== undefined) {
+      const calculatedTotal = isTax ? salesAmount * 1.05 : salesAmount;
+      setValue('totalAmount', Math.round(Number(calculatedTotal.toFixed(2))));
+    } else {
+      setValue('totalAmount', undefined);
+    }
+  }, [salesAmount, isTax, setValue]);
+
+  // const handleAddItem = () => {
+  //   append({
+  //     title: '',
+  //     quantity: undefined,
+  //     unitPrice: undefined,
+  //   });
+  // };
 
   const onCancel = () => {
     reset(initialData);
@@ -122,11 +138,11 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <Controller
           control={control}
-          name="totalAmount"
+          name="salesAmount"
           render={({ field: { onChange, value } }) => (
             <Input
-              label="發票總金額"
-              placeholder="輸入總金額"
+              label="銷售額"
+              placeholder="輸入銷售額"
               value={value?.toString()}
               onChangeText={text => {
                 // 允許數字和小數點
@@ -140,6 +156,56 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 onChange(formattedValue ? Number(formattedValue) : undefined);
               }}
               keyboardType="numeric"
+              error={errors.salesAmount?.message}
+            />
+          )}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text>有無含稅 (5%)</Text>
+          <Controller
+            control={control}
+            name="isTax"
+            render={({ field: { onChange, value } }) => (
+              <View
+                style={
+                  {
+                    backgroundColor: theme.colors.light.primaryLight,
+                    paddingVertical: 6,
+                    paddingHorizontal: 12,
+                    borderRadius: 20,
+                  } as any
+                }
+              >
+                <Switch
+                  value={value}
+                  onValueChange={onChange}
+                  trackColor={
+                    {
+                      false: theme.colors.dark,
+                      true: theme.colors.light,
+                    } as any
+                  }
+                  thumbColor="gray"
+                />
+              </View>
+            )}
+          />
+        </View>
+        <Controller
+          control={control}
+          name="totalAmount"
+          render={({ field: { value } }) => (
+            <Input
+              label="發票總金額 (自動計算)"
+              value={value?.toString()}
+              placeholder="自動帶入"
+              disabled={true}
               error={errors.totalAmount?.message}
             />
           )}

@@ -18,6 +18,7 @@ export const getInvoices = async (req: Request, res: Response) => {
       id,
       invoice_number,
       due_date,
+      sales_amount,
       total_amount,
       status,
       note,
@@ -26,7 +27,8 @@ export const getInvoices = async (req: Request, res: Response) => {
       paid_at,
       company:Companies(id, name),
       case:Cases(id, name),
-      type
+      type,
+      is_tax
     `
     );
 
@@ -164,7 +166,9 @@ export const createInvoice = async (req: Request, res: Response) => {
       company, // 公司名稱，要存到 Companies 表的 name 欄位
       invoice_number,
       case_name,
+      sales_amount,
       total_amount,
+      is_tax,
       issue_date,
       due_date,
       status = "unpaid",
@@ -174,7 +178,14 @@ export const createInvoice = async (req: Request, res: Response) => {
     } = snakeCaseData;
 
     // 驗證必要欄位
-    if (!company || !case_name || !total_amount || !issue_date || !due_date) {
+    if (
+      !company ||
+      !case_name ||
+      !sales_amount ||
+      !total_amount ||
+      !issue_date ||
+      !due_date
+    ) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields",
@@ -291,7 +302,9 @@ export const createInvoice = async (req: Request, res: Response) => {
           case_id,
           issue_date: new Date(issue_date), // String to Date
           due_date: new Date(due_date),
+          sales_amount,
           total_amount,
+          is_tax,
           status,
           note,
           type, // 發票類型（應收或應付）
@@ -389,6 +402,9 @@ export const updateInvoice = async (req: Request, res: Response) => {
       company,
       case_name,
       invoice_number,
+      sales_amount,
+      total_amount,
+      is_tax,
       status,
       type,
       due_date,
@@ -421,6 +437,9 @@ export const updateInvoice = async (req: Request, res: Response) => {
     if (status !== undefined) invoiceData.status = status;
     if (type !== undefined) invoiceData.type = type;
     if (note !== undefined) invoiceData.note = note;
+    if (sales_amount !== undefined) invoiceData.sales_amount = sales_amount;
+    if (total_amount !== undefined) invoiceData.total_amount = total_amount;
+    if (is_tax !== undefined) invoiceData.is_tax = is_tax;
 
     // 如果有項目更新，重新計算總金額
     if (invoice_items && Array.isArray(invoice_items)) {

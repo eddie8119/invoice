@@ -4,6 +4,8 @@ export const createInvoiceSchema = z.object({
   company: z.string().min(1, "公司名稱為必填"),
   caseName: z.string().min(1, "專案名稱為必填"),
   invoiceNumber: z.string().optional(),
+  isTax: z.boolean().default(false),
+  salesAmount: z.number().min(1, "總金額為必填"),
   totalAmount: z.number().min(1, "總金額為必填"),
   issueDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date string",
