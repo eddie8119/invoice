@@ -1,6 +1,9 @@
+import { ButtonText } from '@/components/core/ButtonText';
+import { invoiceSearchDateApi } from '@/services/api/invoiceSearchDate';
+import { formatDate } from '@/utils/formatTime';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useTheme } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -20,19 +23,24 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
   // 設定初始日期範圍（預設為當月第一天到最後一天）
   const today = new Date();
-  const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  const lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 
-  const [startDate, setStartDate] = useState<Date>(firstDayOfMonth);
-  const [endDate, setEndDate] = useState<Date>(lastDayOfMonth);
+  const [startDate, setStartDate] = useState<Date>(firstDay);
+  const [endDate, setEndDate] = useState<Date>(lastDay);
 
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  // 格式化日期顯示
-  const formatDate = (date: Date): string => {
-    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-  };
+  // 當 startDate 手動變更時，自動更新 endDate 2個月後 ux體驗
+  useEffect(() => {
+    const newEndDate = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 2,
+      0
+    );
+    setEndDate(newEndDate);
+  }, [startDate]);
 
   // 處理日期變更
   const handleStartDateChange = (event: any, selectedDate?: Date) => {
@@ -78,9 +86,17 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     }
   };
 
+  const submit = () => {
+    invoiceSearchDateApi.createInvoiceSearchDate({
+      startDate,
+      endDate,
+    });
+    console.log(startDate, endDate);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.card }]}>
-      <Text style={styles.title}>發票日期區間</Text>
+      <Text style={styles.title}>發票計算區間設定</Text>
 
       <View style={styles.dateRangeContainer}>
         {/* 開始日期選擇器 */}
@@ -99,7 +115,6 @@ export const DatePicker: React.FC<DatePickerProps> = ({
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
               onChange={handleStartDateChange}
               minimumDate={new Date(2020, 0, 1)}
-              maximumDate={new Date(2030, 11, 31)}
             />
           )}
         </View>
@@ -122,11 +137,17 @@ export const DatePicker: React.FC<DatePickerProps> = ({
               display={Platform.OS === 'ios' ? 'spinner' : 'default'}
               onChange={handleEndDateChange}
               minimumDate={startDate}
-              maximumDate={new Date(2030, 11, 31)}
             />
           )}
         </View>
       </View>
+      <ButtonText
+        style={[{ alignSelf: 'flex-end' }, { backgroundColor: colors.primary }]}
+        text="設定"
+        variant="filled"
+        size="medium"
+        onPress={submit}
+      />
     </View>
   );
 };
